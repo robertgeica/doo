@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const User = require("../../models/User");
 
-// @route         POST /register
+// @route         POST /api/register
 // @description   Register user
 // @access        Public
 router.post(
