@@ -25,7 +25,7 @@ const UserSchema = new Schema(
     ],
 
     profileId: { type: Object },
-    schemaVersion: { type: String, required },
+    schemaVersion: { type: String, required: true },
   },
   { timestamps: true }
 );
