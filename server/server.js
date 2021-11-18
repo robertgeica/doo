@@ -12,6 +12,8 @@ app.use(cors());
 app.use(express.json({ extended: false }));
 
 // routes
+app.use('/api/register', require('./routes/api/register'));
+
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
