@@ -29,8 +29,13 @@ router.post(
       let user = await User.findOne({ email });
       if (user)
         return res.status(400).json({ msg: "This email is already used." });
-      
-      user = new User({ email, password, schemaVersion: '1.0.0' });
+
+      user = new User({
+        email,
+        password,
+        isVerified: false,
+        schemaVersion: "1.0.0",
+      });
 
       // password encryption
       const salt = await bcrypt.genSalt(10);
@@ -52,6 +57,5 @@ router.post(
     }
   }
 );
-
 
 module.exports = router;
