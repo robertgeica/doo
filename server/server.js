@@ -6,6 +6,8 @@ const app = express();
 // connect database
 
 // apply middlewares
+app.use(cors());
+app.use(express.json({ extended: false }));
 
 // routes
 
