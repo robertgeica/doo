@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const connectDb = require('./config/database');
 
 const app = express();
 
 // connect database
+connectDb();
 
 // apply middlewares
 app.use(cors());
