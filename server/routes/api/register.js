@@ -17,14 +17,14 @@ router.post(
     check("password", "Enter a valid password").isLength({ min: 6 }),
   ],
   async (req, res) => {
+    const result = validationResult(req);
+    const hasErrors = !result.isEmpty();
+
+    if (hasErrors) return res.status(400).json({ error: result.array() });
+
     const { email, password } = req.body;
 
     try {
-      const result = validationResult(req);
-      const hasErrors = !result.isEmpty();
-
-      if (hasErrors) return res.status(400).json({ error: result.array() });
-
       // check for unique email
       let user = await User.findOne({ email });
       if (user)
