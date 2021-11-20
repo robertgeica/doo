@@ -32,4 +32,30 @@ yargs.command({
   },
 });
 
+// login user
+yargs.command({
+  command: "login",
+  describe: "login user",
+
+  async handler(argv) {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+    try {
+      const body = { email: argv._[1], password: argv._[2] };
+
+      const res = await axios.post(
+        "http://localhost:4000/api/user/login",
+        body,
+        config
+      );
+
+      keytar.setPassword("doocli", argv._[1], res.data.token);
+      console.log(res.data.token);
+    } catch (error) {
+      if (error) console.log(`Error: ${error}`);
+    }
+  },
+});
+
 yargs.parse();
