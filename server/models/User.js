@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    username: { type: String, unique: true },
+    schemaVersion: { type: String, required: true },
+    profileId: { type: Object },
+
     email: {
       type: String,
       required: true,
@@ -11,23 +15,14 @@ const UserSchema = new Schema(
     },
     emailVerificationToken: { type: String },
     emailVerificationExpire: { type: Date },
-    isVerified: { type: Boolean },
+    isVerifiedEmail: { type: Boolean },
 
     password: { type: String, required: true },
     passwordResetToken: { type: String },
     passwordResetExpire: { type: Date },
-
-    collections: [
-      {
-        collectionId: { type: Object, required: true },
-        collectionName: { type: String, required: true },
-      },
-    ],
-
-    profileId: { type: Object },
-    schemaVersion: { type: String, required: true },
   },
   { timestamps: true }
 );
 
-module.exports = User = mongoose.model("user", UserSchema);
+
+module.exports = User = mongoose.model("User", UserSchema);
