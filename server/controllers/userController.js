@@ -63,7 +63,6 @@ const authUser = asyncHandler(async (req, res) => {
 // @access        Private
 const updateUser = asyncHandler(async (req, res) => {
   const { profileId, settingsId, accountId } = req.body;
-
   const user = await User.findById(req.params.id);
 
   if (user) {
