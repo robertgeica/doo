@@ -57,4 +57,26 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user");
   }
 });
-module.exports = { registerUser, authUser };
+
+// @route         PUT /api/user
+// @description   Update user
+// @access        Private
+const updateUser = asyncHandler(async (req, res) => {
+  const { profileId, settingsId, accountId } = req.body;
+
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.profileId = profileId || user.profileId;
+    user.settingsId = settingsId || user.settingsId;
+    user.accountId = accountId || user.accountId;
+
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+module.exports = { registerUser, authUser, updateUser };
