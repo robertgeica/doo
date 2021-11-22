@@ -3,7 +3,7 @@ const router = express.Router();
 
 const protect = require('../middleware/auth');
 const { registerUser, authUser, updateUser, deleteUser } = require('../controllers/userController');
-const { createProfile } = require('../controllers/profileController');
+const { createProfile, updateProfile, deleteProfile } = require('../controllers/profileController');
 
 router
   .route('/register')
@@ -21,5 +21,10 @@ router
 router
   .route('/profile')
   .post(protect, createProfile)
+
+router
+  .route('/profile/:id')
+  .put(protect, updateProfile)
+  .delete(protect, deleteProfile)
 
 module.exports = router;
