@@ -22,4 +22,24 @@ const createProfile = asyncHandler(async (req, res, next) => {
   res.status(201).json(createdProfile);
 });
 
-module.exports = { createProfile };
+// @route         PUT /api/user/profile/:id
+// @description   Update a profile
+// @access        Private
+const updateProfile = asyncHandler(async (req, res, next) => {
+  const { username, image, name } = req.body;
+  const profile = await Profile.findById(req.params.id);
+
+  if (profile) {
+    profile.username = username || profile.username;
+    profile.image = image || profile.image;
+    profile.name = name || profile.name;
+
+    const updatedProfile = await profile.save();
+    res.json(updatedProfile);
+  } else {
+    return next(new ErrorHandler('Profile not found.', 404));
+  }
+});
+
+
+module.exports = { createProfile, updateProfile };
