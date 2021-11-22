@@ -1,15 +1,15 @@
 const Profile = require("../models/Profile");
 const asyncHandler = require("../utils/asyncHandler");
+const ErrorHandler = require('../utils/errorHandler');
 
 // @route         POST /api/user/profile
 // @description   Create a profile
 // @access        Private
-const createProfile = asyncHandler(async (req, res) => {
+const createProfile = asyncHandler(async (req, res, next) => {
   const profileExists = await Profile.find({ userId: req.user._id });
 
   if (profileExists.length !== 0) {
-    res.status(400);
-    throw new Error("Profile already exists");
+    return next(new ErrorHandler('Profile already exists.', 400));
   }
 
   const profile = new Profile({

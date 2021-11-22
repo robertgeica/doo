@@ -1,19 +1,19 @@
 const User = require("../models/User");
 const asyncHandler = require("../utils/asyncHandler");
+const ErrorHandler = require('../utils/errorHandler');
 const generateAuthToken = require("../utils/generateAuthToken");
 require("dotenv").config();
 
 // @route         POST /api/user/register
 // @description   Register user
 // @access        Public
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
+    return next(new ErrorHandler('User already exists.', 400));
   }
 
   const user = await User.create({
@@ -33,15 +33,14 @@ const registerUser = asyncHandler(async (req, res) => {
       authToken: generateAuthToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("Invalid user data");
+    return next(new ErrorHandler('Invalid user data.', 400));
   }
 });
 
 // @route         POST /api/user/login
 // @description   Login user
 // @access        Public
-const authUser = asyncHandler(async (req, res) => {
+const authUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -53,15 +52,14 @@ const authUser = asyncHandler(async (req, res) => {
       token: generateAuthToken(user._id),
     });
   } else {
-    res.status(401);
-    throw new Error("Invalid user");
+    return next(new ErrorHandler('Invalid user.', 401));
   }
 });
 
 // @route         PUT /api/user
 // @description   Update user
 // @access        Private
-const updateUser = asyncHandler(async (req, res) => {
+const updateUser = asyncHandler(async (req, res, next) => {
   const { profileId, settingsId, accountId } = req.body;
   const user = await User.findById(req.params.id);
 
@@ -73,23 +71,21 @@ const updateUser = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
     res.json(updatedUser);
   } else {
-    res.status(404);
-    throw new Error("User not found");
+    return next(new ErrorHandler('User not found.', 404));
   }
 });
 
 // @route         Delete /api/user/:id
 // @description   Delete user
 // @access        Private
-const deleteUser = asyncHandler(async (req, res) => {
+const deleteUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
     await user.remove()
     res.json({ message: 'User removed' })
   } else {
-    res.status(404)
-    throw new Error('Product not found')
+    return next(new ErrorHandler('User not found.', 404));
   }
 });
 module.exports = { registerUser, authUser, updateUser, deleteUser };
