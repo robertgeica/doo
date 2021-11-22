@@ -1,6 +1,10 @@
 const Profile = require("../models/Profile");
 const asyncHandler = require("../utils/asyncHandler");
 
+
+// @route         POST /api/user/profile
+// @description   Create a profile
+// @access        Private
 const createProfile = asyncHandler(async (req, res) => {
   const profileExists = await Profile.find({ userId: req.user._id });
 
