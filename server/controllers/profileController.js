@@ -41,5 +41,19 @@ const updateProfile = asyncHandler(async (req, res, next) => {
   }
 });
 
+// @route         Delete /api/profile/:id
+// @description   Delete profile
+// @access        Private
+const deleteProfile = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findById(req.params.id);
 
-module.exports = { createProfile, updateProfile };
+  if (profile) {
+    await profile.remove()
+    res.json({ message: 'Profile removed' })
+  } else {
+    return next(new ErrorHandler('Profile not found.', 404));
+  }
+});
+
+
+module.exports = { createProfile, updateProfile, deleteProfile };
