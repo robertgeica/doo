@@ -7,6 +7,8 @@ const UserSchema = new Schema(
   {
     schemaVersion: { type: String, required: true },
     profileId: { type: Object },
+    settingsId: { type: Object },
+    accountId: { type: Object },
 
     email: {
       type: String,
