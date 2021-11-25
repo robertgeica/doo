@@ -13,6 +13,7 @@ import {
 } from "../constants/userConstants";
 import setAuthToken from "../utils/setAuthToken";
 
+
 export const loadUser = () => async (dispatch) => {
 
   if (localStorage.token) {
@@ -32,6 +33,7 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: USER_LOAD_FAIL });
   }
 };
+
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -56,5 +58,31 @@ export const login = (email, password) => async (dispatch) => {
     localStorage.setItem("token", data.token);
   } catch (error) {
     dispatch({ type: USER_LOGIN_FAIL });
+  }
+};
+
+
+export const register = (email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_REGISTER_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      "http://localhost:4000/api/user/register",
+      { email, password },
+      config
+    );
+
+    dispatch({
+      type: USER_REGISTER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({ type: USER_REGISTER_FAIL });
   }
 };
