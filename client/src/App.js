@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
 import HomeScreen from './screens/HomeScreen';
 import Login from './screens/Login';
+import Register from './screens/Register';
 import { loadUser } from './actions/userActions';
 
 if (localStorage.token) setAuthToken(localStorage.token);
@@ -21,6 +22,7 @@ const App = () => {
       <Routes>
         <Route exact path='/' element={<HomeScreen />} />
         <Route exact path='/login' element={<Login />} />
+        <Route exact path='/register' element={<Register />} />
       </Routes>
     </BrowserRouter>
   )
