@@ -4,6 +4,23 @@ const ErrorHandler = require('../utils/errorHandler');
 const generateAuthToken = require("../utils/generateAuthToken");
 require("dotenv").config();
 
+// @route         GET /api/user
+// @description   Get logged in user
+// @access        Private
+const getUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('-password');
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      email: user.email,
+    });
+  } else {
+    return next(new ErrorHandler('Invalid', 401));
+  }
+});
+
+
 // @route         POST /api/user/register
 // @description   Register user
 // @access        Public
@@ -88,4 +105,4 @@ const deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler('User not found.', 404));
   }
 });
-module.exports = { registerUser, authUser, updateUser, deleteUser };
+module.exports = { getUser, registerUser, authUser, updateUser, deleteUser };
