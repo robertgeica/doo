@@ -14,8 +14,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(loadUser());
-  }, []);
-
+  });
 
   return (
     <BrowserRouter>
