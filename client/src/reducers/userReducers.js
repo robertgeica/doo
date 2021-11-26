@@ -24,7 +24,7 @@ export const userReducer = (state = userState, action) => {
     case USER_LOGIN_REQUEST:
     case USER_REGISTER_REQUEST:
     case USER_LOAD_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case USER_LOGIN_SUCCESS:
     case USER_REGISTER_SUCCESS:
     case USER_LOAD_SUCCESS:
@@ -33,6 +33,8 @@ export const userReducer = (state = userState, action) => {
     case USER_REGISTER_FAIL:
     case USER_LOAD_FAIL:
       return { loading: false, error: payload };
+    case USER_LOGOUT:
+      return { loading: false, user: null, error: null}
     default:
       return state;
   }

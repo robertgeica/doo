@@ -86,3 +86,9 @@ export const register = (email, password) => async (dispatch) => {
     dispatch({ type: USER_REGISTER_FAIL });
   }
 };
+
+
+export const logout = () => dispatch => {
+  localStorage.removeItem('token');
+  dispatch({ type: USER_LOGOUT })
+}
