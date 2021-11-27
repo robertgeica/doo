@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const protect = require('../middleware/auth');
-const { registerUser, authUser, updateUser, deleteUser, getUser, verifyEmail, sendVerificationEmail } = require('../controllers/userController');
+const { registerUser, authUser, updateUser, deleteUser, getUser, verifyEmail, sendVerificationEmail, sendResetPasswordEmail, resetPassword } = require('../controllers/userController');
 const { createProfile, updateProfile, deleteProfile } = require('../controllers/profileController');
 
 router
@@ -29,6 +29,14 @@ router
 router
   .route('/verifyemail/:id')
   .patch(protect, verifyEmail)
+
+router
+  .route('/resetpassword')
+  .patch(protect, sendResetPasswordEmail)
+
+router
+  .route('/resetpassword/:id')
+  .patch(protect, resetPassword)
 
 router
   .route('/profile')
