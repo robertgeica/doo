@@ -1,14 +1,17 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 const asyncHandler = require("../utils/asyncHandler");
-const ErrorHandler = require('../utils/errorHandler');
+const ErrorHandler = require("../utils/errorHandler");
 const generateAuthToken = require("../utils/generateAuthToken");
+const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
+sgMail.setApiKey(process.env.SG_API);
 
 // @route         GET /api/user
 // @description   Get logged in user
 // @access        Private
 const getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select('-password');
+  const user = await User.findById(req.user.id).select("-password");
 
   if (user) {
     res.json({
@@ -16,10 +19,9 @@ const getUser = asyncHandler(async (req, res, next) => {
       email: user.email,
     });
   } else {
-    return next(new ErrorHandler('Invalid', 401));
+    return next(new ErrorHandler("Invalid", 401));
   }
 });
-
 
 // @route         POST /api/user/register
 // @description   Register user
@@ -30,7 +32,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    return next(new ErrorHandler('User already exists.', 400));
+    return next(new ErrorHandler("User already exists.", 400));
   }
 
   const user = await User.create({
@@ -50,7 +52,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
       authToken: generateAuthToken(user._id),
     });
   } else {
-    return next(new ErrorHandler('Invalid user data.', 400));
+    return next(new ErrorHandler("Invalid user data.", 400));
   }
 });
 
@@ -69,7 +71,7 @@ const authUser = asyncHandler(async (req, res, next) => {
       token: generateAuthToken(user._id),
     });
   } else {
-    return next(new ErrorHandler('Invalid user.', 401));
+    return next(new ErrorHandler("Invalid user.", 401));
   }
 });
 
@@ -88,7 +90,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
     const updatedUser = await user.save();
     res.json(updatedUser);
   } else {
-    return next(new ErrorHandler('User not found.', 404));
+    return next(new ErrorHandler("User not found.", 404));
   }
 });
 
@@ -99,10 +101,69 @@ const deleteUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    await user.remove()
-    res.json({ message: 'User removed' })
+    await user.remove();
+    res.json({ message: "User removed" });
   } else {
-    return next(new ErrorHandler('User not found.', 404));
+    return next(new ErrorHandler("User not found.", 404));
   }
 });
-module.exports = { getUser, registerUser, authUser, updateUser, deleteUser };
+
+// @route         PATCH /api/user/verifyemail
+// @description   Send verification email
+// @access        Private
+const sendVerificationEmail = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("-password");
+
+  // generate token
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
+    expiresIn: "60m",
+  });
+
+  const emailData = {
+    from: "geicarobert@gmail.com",
+    to: user.email,
+    subject: `Verify your email`,
+    html: `
+    <p>http://localhost:3000/verifyemail/${token}</p>
+  `,
+  };
+
+  if (user) {
+    user.emailVerificationToken = token;
+
+    const sendEmail = await sgMail.send(emailData);
+    const updatedUser = await user.save();
+    return res.json(updatedUser);
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+});
+
+// @route         PUT /api/user/verifyemail/:token
+// @description   Verify email
+// @access        Private
+const verifyEmail = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("-password");
+
+  if(req.params.id === user.emailVerificationToken) {
+    user.isVerifiedEmail = true;
+    user.emailVerificationToken = '';
+    
+    const updatedUser = await user.save();
+    return res.json(updatedUser);
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+
+});
+
+
+module.exports = {
+  getUser,
+  registerUser,
+  authUser,
+  updateUser,
+  deleteUser,
+  verifyEmail,
+  sendVerificationEmail
+};
