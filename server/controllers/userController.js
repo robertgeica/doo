@@ -139,24 +139,72 @@ const sendVerificationEmail = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route         PUT /api/user/verifyemail/:token
+// @route         PATCH /api/user/verifyemail/:token
 // @description   Verify email
 // @access        Private
 const verifyEmail = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("-password");
 
-  if(req.params.id === user.emailVerificationToken) {
+  if (req.params.id === user.emailVerificationToken) {
     user.isVerifiedEmail = true;
-    user.emailVerificationToken = '';
-    
+    user.emailVerificationToken = "";
+
     const updatedUser = await user.save();
     return res.json(updatedUser);
   } else {
     return next(new ErrorHandler("Invalid", 401));
   }
-
 });
 
+// @route         PATCH /api/user/resetpassword
+// @description   Send reset password email
+// @access        Private
+const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("-password");
+
+  // generate token
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
+    expiresIn: "60m",
+  });
+
+  const emailData = {
+    from: "geicarobert@gmail.com",
+    to: user.email,
+    subject: `Reset your password`,
+    html: `
+    <p>http://localhost:3000/resetpassword/${token}</p>
+  `,
+  };
+
+  if (user) {
+    user.passwordResetToken = token;
+
+    const sendEmail = await sgMail.send(emailData);
+    const updatedUser = await user.save();
+    return res.json(updatedUser);
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+});
+
+
+// @route         PATCH /api/user/resetpassword/:token
+// @description   Reset Password
+// @access        Private
+const resetPassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("-password");
+  console.log(req.body)
+  if (req.params.id === user.passwordResetToken) {
+    user.passwordResetToken = "";
+    user.password = req.body.password;
+
+
+    const updatedUser = await user.save();
+    return res.json(updatedUser);
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+});
 
 module.exports = {
   getUser,
@@ -165,5 +213,7 @@ module.exports = {
   updateUser,
   deleteUser,
   verifyEmail,
-  sendVerificationEmail
+  sendVerificationEmail,
+  resetPassword,
+  sendResetPasswordEmail
 };
