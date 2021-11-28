@@ -5,12 +5,6 @@ const SettingsSchema = new Schema(
   {
     schemaVersion: { type: String, required: true },
     userId: { type: Object },
-    
-    notifications: [
-      {
-        notificationId: { type: Object, required: true }
-      }
-    ],
 
     preferences: {
       firstWeekDay: { type: Boolean },

@@ -10,6 +10,16 @@ const ProfileSchema = new Schema(
     image: { type: String },
     name: { type: String },
 
+    notifications: [
+      {
+        blockId: { type: Object },
+        blockTitle: { type: String },
+        notificationTitle: { type: String },
+        notificationsTrigger: { type: Date },
+        isRead: { type: Boolean }
+      }
+    ]
+
   },
   { timestamps: true }
 );
