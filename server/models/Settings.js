@@ -11,6 +11,11 @@ const SettingsSchema = new Schema(
       language: { type: String },
       dateFormat: { type: String },
       clockFormat: { type: Boolean }
+    },
+
+    theme: {
+      activeTheme: { type: Number },
+      customTheme: {}
     }
 
   },
