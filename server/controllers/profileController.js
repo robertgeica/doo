@@ -1,12 +1,29 @@
+const mongoose = require('mongoose');
 const Profile = require("../models/Profile");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorHandler = require('../utils/errorHandler');
 
-// @route         POST /api/user/profile
+// @route         GET /api/user/profile/:id
+// @description   Get profile
+// @access        Private
+const getProfile = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findById(req.params.id);
+
+  if (profile) {
+    res.json({
+      ...profile._doc
+    });
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+});
+
+// @route         POST /api/user/profile/:userId
 // @description   Create a profile
 // @access        Private
 const createProfile = asyncHandler(async (req, res, next) => {
-  const profileExists = await Profile.find({ userId: req.user._id });
+  const profileExists = await Profile.find({ userId: mongoose.Types.ObjectId(req.params.userId) });
+  console.log(profileExists.length)
 
   if (profileExists.length !== 0) {
     return next(new ErrorHandler('Profile already exists.', 400));
@@ -56,4 +73,4 @@ const deleteProfile = asyncHandler(async (req, res, next) => {
 });
 
 
-module.exports = { createProfile, updateProfile, deleteProfile };
+module.exports = { getProfile, createProfile, updateProfile, deleteProfile };
