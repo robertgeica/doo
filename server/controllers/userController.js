@@ -7,11 +7,11 @@ const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
 sgMail.setApiKey(process.env.SG_API);
 
-// @route         GET /api/user
-// @description   Get logged in user
+// @route         GET /api/user/:id
+// @description   Get user
 // @access        Private
 const getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("-password");
+  const user = await User.findById(req.params.id).select("-password");
 
   if (user) {
     res.json({
@@ -75,7 +75,7 @@ const authUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route         PUT /api/user
+// @route         PUT /api/user/:id
 // @description   Update user
 // @access        Private
 const updateUser = asyncHandler(async (req, res, next) => {
@@ -108,11 +108,11 @@ const deleteUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route         PATCH /api/user/verifyemail
+// @route         PATCH /api/user/sendverificationemail/:id
 // @description   Send verification email
 // @access        Private
 const sendVerificationEmail = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("-password");
+  const user = await User.findById(req.params.id).select("-password");
 
   // generate token
   const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
@@ -131,7 +131,7 @@ const sendVerificationEmail = asyncHandler(async (req, res, next) => {
   if (user) {
     user.emailVerificationToken = token;
 
-    const sendEmail = await sgMail.send(emailData);
+    await sgMail.send(emailData);
     const updatedUser = await user.save();
     return res.json(updatedUser);
   } else {
@@ -139,13 +139,15 @@ const sendVerificationEmail = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route         PATCH /api/user/verifyemail/:token
+// @route         PATCH /api/user/verifyemail/:id/:token
 // @description   Verify email
 // @access        Private
 const verifyEmail = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("-password");
+  const { id, token } = req.params;
+  
+  const user = await User.findById(id).select("-password");
 
-  if (req.params.id === user.emailVerificationToken) {
+  if (token === user.emailVerificationToken) {
     user.isVerifiedEmail = true;
     user.emailVerificationToken = "";
 
@@ -160,7 +162,7 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
 // @description   Send reset password email
 // @access        Private
 const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("-password");
+  const user = await User.findOne({ email: req.body.email }).select("-password");
 
   // generate token
   const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
@@ -169,7 +171,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
 
   const emailData = {
     from: "geicarobert@gmail.com",
-    to: user.email,
+    to: req.body.email,
     subject: `Reset your password`,
     html: `
     <p>http://localhost:3000/resetpassword/${token}</p>
@@ -179,7 +181,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
   if (user) {
     user.passwordResetToken = token;
 
-    const sendEmail = await sgMail.send(emailData);
+    await sgMail.send(emailData);
     const updatedUser = await user.save();
     return res.json(updatedUser);
   } else {
@@ -188,16 +190,16 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
 });
 
 
-// @route         PATCH /api/user/resetpassword/:token
+// @route         PATCH /api/user/resetpassword/:id/:token
 // @description   Reset Password
 // @access        Private
 const resetPassword = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("-password");
-  console.log(req.body)
-  if (req.params.id === user.passwordResetToken) {
+  const { id, token } = req.params;
+  const user = await User.findById(id).select("-password");
+
+  if (token === user.passwordResetToken) {
     user.passwordResetToken = "";
     user.password = req.body.password;
-
 
     const updatedUser = await user.save();
     return res.json(updatedUser);
