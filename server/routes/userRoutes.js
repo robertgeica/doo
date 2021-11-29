@@ -3,7 +3,8 @@ const router = express.Router();
 
 const protect = require('../middleware/auth');
 const { registerUser, authUser, updateUser, deleteUser, getUser, verifyEmail, sendVerificationEmail, sendResetPasswordEmail, resetPassword } = require('../controllers/userController');
-const { createProfile, updateProfile, deleteProfile, getProfile } = require('../controllers/profileController');
+const { getProfile, createProfile, updateProfile, deleteProfile } = require('../controllers/profileController');
+const { getSettings, createSettings, updateSettings, deleteSettings } = require('../controllers/settingsController');
 
 router
   .route('/register')
@@ -47,5 +48,15 @@ router
   .get(protect, getProfile)
   .patch(protect, updateProfile)
   .delete(protect, deleteProfile)
+
+router
+  .route('/settings/:userId')
+  .post(protect, createSettings)
+
+router
+  .route('/settings/:id')
+  .get(protect, getSettings)
+  .patch(protect, updateSettings)
+  .delete(protect, deleteSettings)
 
 module.exports = router;
