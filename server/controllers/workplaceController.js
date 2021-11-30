@@ -31,14 +31,14 @@ const createWorkplace = asyncHandler(async (req, res, next) => {
 
   const workplace = new Workplace({
     ...req.body,
-    userId: req.body.userId,
+    userId: req.params.userId,
     schemaVersion: "1.0.0",
   });
 
   const createdWorkplace = await workplace.save();
   updateUserWithWorkplace({
     params: {
-      userId: req.body.userId,
+      userId: req.params.userId,
       workplaceId: createdWorkplace._id,
       workplaceName: createdWorkplace.workplaceName,
     },
