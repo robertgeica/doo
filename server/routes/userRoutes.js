@@ -5,6 +5,7 @@ const protect = require('../middleware/auth');
 const { registerUser, authUser, updateUser, deleteUser, getUser, verifyEmail, sendVerificationEmail, sendResetPasswordEmail, resetPassword } = require('../controllers/userController');
 const { getProfile, createProfile, updateProfile, deleteProfile } = require('../controllers/profileController');
 const { getSettings, createSettings, updateSettings, deleteSettings } = require('../controllers/settingsController');
+const { getWorkplace, createWorkplace } = require('../controllers/workplaceController');
 
 router
   .route('/register')
@@ -58,5 +59,15 @@ router
   .get(protect, getSettings)
   .patch(protect, updateSettings)
   .delete(protect, deleteSettings)
+
+router
+  .route('/workplace/:userId')
+  .post(protect, createWorkplace)
+
+router
+  .route('/workplace/:id')
+  .get(protect, getWorkplace)
+
+
 
 module.exports = router;
