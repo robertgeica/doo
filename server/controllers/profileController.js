@@ -23,7 +23,6 @@ const getProfile = asyncHandler(async (req, res, next) => {
 // @access        Private
 const createProfile = asyncHandler(async (req, res, next) => {
   const profileExists = await Profile.find({ userId: mongoose.Types.ObjectId(req.params.userId) });
-  console.log(profileExists.length)
 
   if (profileExists.length !== 0) {
     return next(new ErrorHandler('Profile already exists.', 400));
@@ -31,7 +30,7 @@ const createProfile = asyncHandler(async (req, res, next) => {
 
   const profile = new Profile({
     ...req.body,
-    userId: req.user._id,
+    userId: req.userId,
     schemaVersion: "1.0.0",
   });
 

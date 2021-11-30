@@ -144,7 +144,6 @@ const sendVerificationEmail = asyncHandler(async (req, res, next) => {
 // @access        Private
 const verifyEmail = asyncHandler(async (req, res, next) => {
   const { id, token } = req.params;
-  
   const user = await User.findById(id).select("-password");
 
   if (token === user.emailVerificationToken) {
@@ -188,7 +187,6 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Invalid", 401));
   }
 });
-
 
 // @route         PATCH /api/user/resetpassword/:id/:token
 // @description   Reset Password

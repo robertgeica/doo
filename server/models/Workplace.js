@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const UserDataSchema = new Schema(
+const WorkplaceSchema = new Schema(
   {
     schemaVersion: { type: String, required: true },
     userId: { type: Object },
+
+    workplaceName: { type: String },
 
     collections: [
       {
@@ -24,4 +26,4 @@ const UserDataSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = UserData = mongoose.model("UserData", UserDataSchema);
+module.exports = Workplace = mongoose.model("Workplace", WorkplaceSchema);
