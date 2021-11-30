@@ -6,7 +6,7 @@ const WorkplaceSchema = new Schema(
     schemaVersion: { type: String, required: true },
     userId: { type: Object },
 
-    workplaceName: { type: String },
+    workplaceName: { type: String, required: true },
 
     collections: [
       {
