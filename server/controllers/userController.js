@@ -75,7 +75,7 @@ const authUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route         PUT /api/user/:id
+// @route         PATCH /api/user/:id
 // @description   Update user
 // @access        Private
 const updateUser = asyncHandler(async (req, res, next) => {
@@ -206,6 +206,24 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   }
 });
 
+const updateUserWithWorkplace = asyncHandler(async (req, res, next) => {
+  const { workplaceName, workplaceId, userId } = req.params;
+  const user = await User.findById(userId).select('-password');
+
+  if (user) {
+    const newWorkplace = {
+      workplaceId: workplaceId,
+      name: workplaceName
+    };
+    user.workplacesIds = [ ...user.workplacesIds, newWorkplace ];
+
+    const updatedUser = await user.save();
+    console.log(updatedUser)
+    return updatedUser;
+  }
+
+});
+
 module.exports = {
   getUser,
   registerUser,
@@ -215,5 +233,6 @@ module.exports = {
   verifyEmail,
   sendVerificationEmail,
   resetPassword,
-  sendResetPasswordEmail
+  sendResetPasswordEmail,
+  updateUserWithWorkplace
 };
