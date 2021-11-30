@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const AccountSchema = new Schema(
+const UserDataSchema = new Schema(
   {
     schemaVersion: { type: String, required: true },
     userId: { type: Object },
@@ -20,10 +20,8 @@ const AccountSchema = new Schema(
       }
     ],
 
-    latestNotifications: [],
-
   },
   { timestamps: true }
 );
 
-module.exports = Account = mongoose.model("Account", AccountSchema);
+module.exports = UserData = mongoose.model("UserData", UserDataSchema);
