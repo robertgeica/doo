@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 const Workplace = require("../models/Workplace");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorHandler = require("../utils/errorHandler");
@@ -31,7 +32,7 @@ const createWorkplace = asyncHandler(async (req, res, next) => {
 
   const workplace = new Workplace({
     ...req.body,
-    userId: req.params.userId,
+    userId: mongoose.Types.ObjectId(req.params.userId),
     schemaVersion: "1.0.0",
   });
 
