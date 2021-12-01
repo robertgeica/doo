@@ -47,7 +47,6 @@ const createSettings = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Cannot find user.", 404));
   }
 
-  res.status(201).json(createdSettings);
 });
 
 // @route         PUT /api/settings/profile/:id
