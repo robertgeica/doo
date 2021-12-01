@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 const Workplace = require("../models/Workplace");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorHandler = require("../utils/errorHandler");
-const { updateUserWithWorkplace } = require("./userController");
 
 // @route         GET /api/user/workplace/:id
 // @description   Get workplace
@@ -37,15 +36,22 @@ const createWorkplace = asyncHandler(async (req, res, next) => {
   });
 
   const createdWorkplace = await workplace.save();
-  updateUserWithWorkplace({
-    params: {
-      userId: req.params.userId,
-      workplaceId: createdWorkplace._id,
-      workplaceName: createdWorkplace.workplaceName,
-    },
-  });
 
-  res.status(201).json(createdWorkplace);
+  const user = await User.findById(mongoose.Types.ObjectId(req.params.userId)).select('-password');
+
+  if (user) {
+    const newWorkplace = {
+      workplaceId: createdWorkplace._id,
+      name: createdWorkplace.workplaceName
+    };
+    user.workplacesIds = [ ...user.workplacesIds, newWorkplace ];
+
+    const updatedUser = await user.save();
+
+    res.status(201).json({createdWorkplace, updatedUser});
+  } else {
+    return next(new ErrorHandler("Cannot find user.", 404));
+  }
 });
 
 // @route         PATCH /api/user/workplace/:id
