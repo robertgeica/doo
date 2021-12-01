@@ -31,11 +31,22 @@ const createSettings = asyncHandler(async (req, res, next) => {
 
   const settings = new Settings({
     ...req.body,
-    userId: req.user._id,
+    userId: mongoose.Types.ObjectId(req.params.userId),
     schemaVersion: "1.0.0",
   });
 
   const createdSettings = await settings.save();
+  const user = await User.findById(mongoose.Types.ObjectId(req.params.userId)).select('-password');
+
+  if (user) {
+    user.settingsId = createdSettings._id;
+    const updatedUser = await user.save();
+
+    res.status(201).json({createdSettings, updatedUser});
+  } else {
+    return next(new ErrorHandler("Cannot find user.", 404));
+  }
+
   res.status(201).json(createdSettings);
 });
 
