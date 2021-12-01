@@ -206,24 +206,6 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   }
 });
 
-const updateUserWithWorkplace = asyncHandler(async (req, res, next) => {
-  const { workplaceName, workplaceId, userId } = req.params;
-  const user = await User.findById(userId).select('-password');
-
-  if (user) {
-    const newWorkplace = {
-      workplaceId: workplaceId,
-      name: workplaceName
-    };
-    user.workplacesIds = [ ...user.workplacesIds, newWorkplace ];
-
-    const updatedUser = await user.save();
-    console.log(updatedUser)
-    return updatedUser;
-  }
-
-});
-
 module.exports = {
   getUser,
   registerUser,
@@ -234,5 +216,4 @@ module.exports = {
   sendVerificationEmail,
   resetPassword,
   sendResetPasswordEmail,
-  updateUserWithWorkplace
 };
