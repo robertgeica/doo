@@ -16,8 +16,7 @@ const getUser = asyncHandler(async (req, res, next) => {
 
   if (user) {
     res.json({
-      _id: user._id,
-      email: user.email,
+      ...user._doc
     });
   } else {
     return next(new ErrorHandler("Invalid", 401));
