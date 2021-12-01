@@ -6,6 +6,7 @@ const generateAuthToken = require("../utils/generateAuthToken");
 const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
 sgMail.setApiKey(process.env.SG_API);
+const axios = require("axios");
 
 // @route         GET /api/user/:id
 // @description   Get user
@@ -45,6 +46,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
   });
 
   if (user) {
+    await createProfile(user, email);
+    await createSettings(user);
     res.status(201).json({
       _id: user._id,
       email: user.email,
@@ -161,7 +164,9 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
 // @description   Send reset password email
 // @access        Private
 const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email }).select("-password");
+  const user = await User.findOne({ email: req.body.email }).select(
+    "-password"
+  );
 
   // generate token
   const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
@@ -205,6 +210,37 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Invalid", 401));
   }
 });
+
+const createProfile = async (user, email) => {
+  const url = `http://localhost:4000/api/user/profile/${user._id}`;
+  const profile = {
+    image: "",
+    name: email,
+    notifications: [],
+  };
+
+  let config = {
+    headers: {
+      Authorization: "Bearer " + generateAuthToken(user._id),
+    },
+  };
+
+  await axios.post(url, profile, config);
+};
+
+const createSettings = async (user) => {
+  const url = `http://localhost:4000/api/user/settings/${user._id}`;
+  const settings = {
+    preferences: {},
+    theme: {},
+  };
+  let config = {
+    headers: {
+      Authorization: "Bearer " + generateAuthToken(user._id),
+    },
+  };
+  await axios.post(url, settings, config);
+};
 
 module.exports = {
   getUser,
