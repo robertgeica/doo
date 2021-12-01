@@ -30,12 +30,21 @@ const createProfile = asyncHandler(async (req, res, next) => {
 
   const profile = new Profile({
     ...req.body,
-    userId: req.userId,
+    userId: mongoose.Types.ObjectId(req.params.userId),
     schemaVersion: "1.0.0",
   });
 
   const createdProfile = await profile.save();
-  res.status(201).json(createdProfile);
+  const user = await User.findById(mongoose.Types.ObjectId(req.params.userId)).select('-password');
+
+  if (user) {
+    user.profileId = createdProfile._id;
+    const updatedUser = await user.save();
+
+    res.status(201).json({createdProfile, updatedUser});
+  } else {
+    return next(new ErrorHandler("Cannot find user.", 404));
+  }
 });
 
 // @route         PUT /api/user/profile/:id
