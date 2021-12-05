@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const WorkplaceSchema = new Schema(
   {
-    schemaVersion: { type: String, required: true },
+    schemaVersion: { type: String, required: true, default: '1.0.0' },
     userId: { type: Object },
 
     workplaceName: { type: String, required: true },
