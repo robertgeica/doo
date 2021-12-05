@@ -31,7 +31,6 @@ const createProfile = asyncHandler(async (req, res, next) => {
   const profile = new Profile({
     ...req.body,
     userId: mongoose.Types.ObjectId(req.params.userId),
-    schemaVersion: "1.0.0",
   });
 
   const createdProfile = await profile.save();
