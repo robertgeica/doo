@@ -38,10 +38,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create({
     email,
     password,
-    emailVerificationToken: "",
-    isVerifiedEmail: false,
-    passwordResetToken: "",
-    schemaVersion: "1.0.0",
   });
 
   if (user) {

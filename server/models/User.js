@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    schemaVersion: { type: String, required: true },
+    schemaVersion: { type: String, required: true, default: '1.0.0' },
     profileId: { type: Object },
     settingsId: { type: Object },
     workplacesIds: [ 
@@ -20,12 +20,12 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
-    emailVerificationToken: { type: String },
+    emailVerificationToken: { type: String, default: '' },
     emailVerificationExpire: { type: Date },
-    isVerifiedEmail: { type: Boolean },
+    isVerifiedEmail: { type: Boolean, default: false },
 
     password: { type: String, required: true },
-    passwordResetToken: { type: String },
+    passwordResetToken: { type: String, default: '' },
     passwordResetExpire: { type: Date },
   },
   { timestamps: true }
