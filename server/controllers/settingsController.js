@@ -32,7 +32,6 @@ const createSettings = asyncHandler(async (req, res, next) => {
   const settings = new Settings({
     ...req.body,
     userId: mongoose.Types.ObjectId(req.params.userId),
-    schemaVersion: "1.0.0",
   });
 
   const createdSettings = await settings.save();

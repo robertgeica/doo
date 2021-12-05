@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const SettingsSchema = new Schema(
   {
-    schemaVersion: { type: String, required: true },
+    schemaVersion: { type: String, required: true, default: '1.0.0' },
     userId: { type: Object },
 
     preferences: {
