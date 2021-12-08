@@ -16,7 +16,7 @@ const getUser = asyncHandler(async (req, res, next) => {
 
   if (user) {
     res.json({
-      ...user._doc
+      ...user._doc,
     });
   } else {
     return next(new ErrorHandler("Invalid", 401));
@@ -27,15 +27,18 @@ const getUser = asyncHandler(async (req, res, next) => {
 // @description   Register user
 // @access        Public
 const registerUser = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+  const emailExists = await User.findOne({ email });
+  const usernameExists = await User.findOne({ username });
 
-  if (userExists) {
-    return next(new ErrorHandler("User already exists.", 400));
-  }
+  if (emailExists) 
+    return next(new ErrorHandler("Email already exists.", 400));
+  if (usernameExists)
+    return next(new ErrorHandler("Username already exists.", 400));
 
   const user = await User.create({
+    username,
     email,
     password,
   });
@@ -45,6 +48,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     await createSettings(user);
     res.status(201).json({
       _id: user._id,
+      username: user.username,
       email: user.email,
       password: user.password,
       authToken: generateAuthToken(user._id),
