@@ -1,30 +1,33 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import setAuthToken from './utils/setAuthToken';
-import HomeScreen from './screens/HomeScreen';
-import Login from './screens/Login';
-import Register from './screens/Register';
-import { loadUser } from './actions/userActions';
+import React, { useEffect, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import setAuthToken from "./utils/setAuthToken";
+import HomeScreen from "./screens/HomeScreen";
+import Loader from "./components/utils/Loader";
+import { loadUser } from "./actions/userActions";
+const LoginPage = React.lazy(() => import('./screens/Login'));
+const RegisterPage = React.lazy(() => import('./screens/Register'));
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
 const App = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(loadUser());
   });
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route exact path='/' element={<HomeScreen />} />
-        <Route exact path='/login' element={<Login />} />
-        <Route exact path='/register' element={<Register />} />
-      </Routes>
-    </BrowserRouter>
-  )
-}
+    <Suspense fallback={<Loader />}>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<HomeScreen />} />
+          <Route exact path="/login" element={<LoginPage />} />
+          <Route exact path="/register" element={<RegisterPage />} />
+        </Routes>
+      </BrowserRouter>
+    </Suspense>
+  );
+};
 
 export default App;
