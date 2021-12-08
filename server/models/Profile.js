@@ -6,7 +6,6 @@ const ProfileSchema = new Schema(
     schemaVersion: { type: String, required: true, default: '1.0.0' },
     userId: { type: Object },
 
-    username: { type: String },
     image: { type: String },
     name: { type: String },
 
