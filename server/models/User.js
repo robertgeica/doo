@@ -5,14 +5,14 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    schemaVersion: { type: String, required: true, default: '1.0.0' },
+    schemaVersion: { type: String, required: true, default: "1.0.0" },
     profileId: { type: Object },
     settingsId: { type: Object },
-    workplacesIds: [ 
+    workplacesIds: [
       {
         workplaceId: { type: Object },
-        name: { type: String }
-      }
+        name: { type: String },
+      },
     ],
 
     email: {
@@ -20,14 +20,14 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
-    username: { type: String },
-    
-    emailVerificationToken: { type: String, default: '' },
+    username: { type: String, required: true, unique: true },
+
+    emailVerificationToken: { type: String, default: "" },
     emailVerificationExpire: { type: Date },
     isVerifiedEmail: { type: Boolean, default: false },
 
     password: { type: String, required: true },
-    passwordResetToken: { type: String, default: '' },
+    passwordResetToken: { type: String, default: "" },
     passwordResetExpire: { type: Date },
   },
   { timestamps: true }
