@@ -13,6 +13,9 @@ app.use(express.json({ extended: false }));
 
 // routes
 app.use('/api/user', require('./routes/userRoutes'));
+app.use('/api/workplace', require('./routes/workplaceRoutes'));
+app.use('/api/collection', require('./routes/collectionRoutes'));
+
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
