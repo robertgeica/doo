@@ -50,11 +50,10 @@ const createProfile = asyncHandler(async (req, res, next) => {
 // @description   Update a profile
 // @access        Private
 const updateProfile = asyncHandler(async (req, res, next) => {
-  const { username, image, name } = req.body;
+  const { image, name } = req.body;
   const profile = await Profile.findById(req.params.id);
 
   if (profile) {
-    profile.username = username || profile.username;
     profile.image = image || profile.image;
     profile.name = name || profile.name;
 
