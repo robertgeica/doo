@@ -9,17 +9,15 @@ import {
   USER_REGISTER_FAIL,
   USER_LOAD_REQUEST,
   USER_LOAD_SUCCESS,
-  USER_LOAD_FAIL
+  USER_LOAD_FAIL,
 } from "../constants/userConstants";
 import setAuthToken from "../utils/setAuthToken";
 
-
 export const loadUser = () => async (dispatch) => {
-
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
-  
+
   try {
     dispatch({ type: USER_LOAD_REQUEST });
 
@@ -33,7 +31,6 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: USER_LOAD_FAIL });
   }
 };
-
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -57,12 +54,18 @@ export const login = (email, password) => async (dispatch) => {
     });
     localStorage.setItem("token", data.token);
   } catch (error) {
-    dispatch({ type: USER_LOGIN_FAIL });
+    console.log(error, error.response)
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
   }
 };
 
-
-export const register = (email, password) => async (dispatch) => {
+export const register = (username, email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
 
@@ -74,7 +77,7 @@ export const register = (email, password) => async (dispatch) => {
 
     const { data } = await axios.post(
       "http://localhost:4000/api/user/register",
-      { email, password },
+      { username, email, password },
       config
     );
 
@@ -87,8 +90,7 @@ export const register = (email, password) => async (dispatch) => {
   }
 };
 
-
-export const logout = () => dispatch => {
-  localStorage.removeItem('token');
-  dispatch({ type: USER_LOGOUT })
-}
+export const logout = () => (dispatch) => {
+  localStorage.removeItem("token");
+  dispatch({ type: USER_LOGOUT });
+};
