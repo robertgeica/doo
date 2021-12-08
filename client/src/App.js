@@ -5,10 +5,12 @@ import setAuthToken from "./utils/setAuthToken";
 import HomeScreen from "./screens/HomeScreen";
 import Loader from "./components/utils/Loader";
 import { loadUser } from "./actions/userActions";
+import './app.scss';
+
 const LoginPage = React.lazy(() => import('./screens/Login'));
 const RegisterPage = React.lazy(() => import('./screens/Register'));
-
 if (localStorage.token) setAuthToken(localStorage.token);
+
 
 const App = () => {
   const dispatch = useDispatch();
