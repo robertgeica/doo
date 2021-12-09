@@ -1,6 +1,11 @@
 // Import fonts
 
 // Global variables
+/* 
+main: #ecf0f1 / #dfe6e9 / #f1f2f6 / #ced6e0
+secondary: #2980b9
+third: #3498db
+*/
 
 // Breakpoints variables
 $bp-mobile-sm: 320px;
@@ -11,8 +16,51 @@ $bp-laptop: 1024px;
 $bp-desktop: 1400px;
 $bp-widescreen: 1920px;
 
-
 // Global styles for classes
+* {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+}
+
+.button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 10px;
+  background-color: #0099ff;
+  padding: 1em 4em;
+  margin-left: auto;
+  color: white;
+
+  &:hover {
+    background-color: darken($color: #0099ff, $amount: 10);
+  }
+}
+
+.wave-wrapper {
+  height: 100vh;
+  background: url(./assets/wave.svg) no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 6px;
+  padding: 0.6em;
+}
+
+.input:focus {
+  outline-color: #a0c9ff;
+}
+.input-container {
+  position: relative;
+}
 
 // Import other scss files
-
+@import "./screens/auth/auth.scss";
