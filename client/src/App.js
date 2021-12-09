@@ -7,8 +7,8 @@ import Loader from "./components/utils/Loader";
 import { loadUser } from "./actions/userActions";
 import './app.scss';
 
-const LoginPage = React.lazy(() => import('./screens/Login'));
-const RegisterPage = React.lazy(() => import('./screens/Register'));
+const LoginPage = React.lazy(() => import('./screens/auth/Login'));
+const RegisterPage = React.lazy(() => import('./screens/auth/Register'));
 if (localStorage.token) setAuthToken(localStorage.token);
 
 
