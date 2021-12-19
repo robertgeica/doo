@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs");
-const { registerUser, loginUser } = require("./actions");
+const { registerUser, loginUser, getUser, getWorkplaces } = require("./actions");
 
 // register user
 yargs.command({
@@ -22,5 +22,23 @@ yargs.command({
     loginUser(argv._[1], argv._[2]);
   },
 });
+
+yargs.command({
+  command: 'user',
+  describe: 'user',
+
+  async handler() {
+    getUser();
+  }
+});
+
+yargs.command({
+  command: 'workplace',
+  describe: 'workplace',
+
+  async handler() {
+    getWorkplaces();
+  }
+})
 
 yargs.parse();

@@ -36,11 +36,41 @@ const loginUser = async (email, password) => {
       config
     );
 
-    keytar.setPassword("doocli", password, res.data.token);
+    keytar.setPassword("doocli", "token", res.data.token);
+    keytar.setPassword("doocli", "userId", res.data._id);
   } catch (error) {
     if (error) console.log(`Error: ${error}`);
   }
 };
 
+const getUser = async () => {
+  const token = await keytar.getPassword("doocli", "token");
+  const userId = await keytar.getPassword("doocli", "userId");
 
-module.exports = { registerUser, loginUser };
+  // console.log(await keytar.findCredentials("doocli"))
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+  };
+  try {
+    const res = await axios.get(
+      `http://localhost:4000/api/user/${userId}`,
+      config
+    );
+
+    return res.data;
+  } catch (error) {
+    if (error) console.log(`Error: ${error}`);
+  }
+};
+
+const getWorkplaces = async () => {
+  const user = await getUser();
+  user.workplacesIds.forEach(wp => console.log(wp.name))
+  
+}
+
+module.exports = { registerUser, loginUser, getUser, getWorkplaces };
