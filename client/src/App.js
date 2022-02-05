@@ -9,6 +9,7 @@ import './app.scss';
 
 const LoginPage = React.lazy(() => import('./screens/auth/Login'));
 const RegisterPage = React.lazy(() => import('./screens/auth/Register'));
+const ResetPassword = React.lazy(() => import('./screens/auth/ResetPassword'));
 if (localStorage.token) setAuthToken(localStorage.token);
 
 
@@ -26,6 +27,7 @@ const App = () => {
           <Route exact path="/" element={<HomeScreen />} />
           <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/register" element={<RegisterPage />} />
+          <Route exact path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </BrowserRouter>
     </Suspense>
