@@ -1,10 +1,10 @@
-import React from 'react';
 
 const Loader = () => {
 
   return (
-    <div>
-      This is a loader
+    <div className="loader">
+      <div className="infinity-9"></div>
+      <span className="loader-text">I'm thinking ...</span>
     </div>
   )
 }
