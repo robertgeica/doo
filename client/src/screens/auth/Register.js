@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { register } from "../../actions/userActions";
+import Loader from '../../components/utils/Loader';
 
 const Register = (state) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const Register = (state) => {
   return (
     <div className="wave-wrapper">
       {error && <p>error: {error}</p>}
-      {loading && <p>Loading</p>}
+      {loading && <Loader />}
 
       <div className="auth-container">
         <h1 className="title">Register</h1>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 import { login } from "../../actions/userActions";
+import Loader from '../../components/utils/Loader';
 
 const Login = (state) => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const Login = (state) => {
   return (
     <div className="wave-wrapper">
       {error && <p>error: {error}</p>}
-      {loading && <p>Loading</p>}
+      {loading && <Loader />}
 
       <div className="auth-container">
         <h1 className="title">Login</h1>
@@ -56,6 +57,9 @@ const Login = (state) => {
             Login
           </button>
         </form>
+        <p>
+          Forgot your password? <Link to="/reset-password">Click here to reset!</Link>
+        </p>
         <p>
           New to Doo? <Link to="/register">Create a new account here!</Link>
         </p>
