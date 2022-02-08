@@ -2,14 +2,8 @@
 
 const yargs = require("yargs");
 const { registerUser, loginUser, getUser, logoutUser } = require("./api/auth");
-const {
-  addWorkplace,
-  getWorkplaces,
-  setWorkplace,
-  getWorkplace,
-} = require("./api/workplace");
 const { userAccountInfo } = require("./ui/user");
-const { renderWorkplaces, renderWorkplace } = require("./ui/workplace");
+const { addWorkplaceCmd, viewWorkplacesCmd, setWorkplaceCmd, viewWorkplaceCmd } = require('./commands/workplace')
 
 // register user
 yargs.command({
@@ -52,68 +46,23 @@ yargs.command({
   },
 });
 
-//add workplace
-yargs.command({
-  command: "aw",
-  describe: "add workplace",
+/* WORKPLACES */
+// doo aw (add workplace)
+yargs.command(addWorkplaceCmd);
 
-  async handler(argv) {
-    addWorkplace(argv._[1]);
-  },
-});
+// doo vws (view workplaces)
+yargs.command(viewWorkplacesCmd);
 
-//get workplaces
-yargs.command({
-  command: "vws",
-  describe: "view workplaces",
+// doo sw (set workplaces)
+yargs.command(setWorkplaceCmd);
 
-  async handler() {
-    const workplaces = await getWorkplaces();
-    renderWorkplaces(workplaces);
-  },
-});
+// doo vw (view workplace)
+yargs.command(viewWorkplaceCmd);
 
-//set workplaces
-yargs.command({
-  command: "sw",
-  describe: "set workplace",
+// doo uw (update workplace)
+yargs.command(updateWorkplaceCmd);
 
-  async handler(argv) {
-    setWorkplace(argv._[1]);
-  },
-});
-
-// view workplace
-yargs.command({
-  command: "vw",
-  describe: "view current workplace",
-
-  async handler() {
-    const crtWorkplace = await getWorkplace();
-    renderWorkplace(crtWorkplace);
-  },
-});
-
-// edit workplace
-// yargs.command({
-//   command: 'ew',
-//   describe: 'edit workplace',
-
-//   async handler(argv) {
-//     // editWorkplaceName(argv);
-//   }
-// })
-
-// delete workplace
-// yargs.command({
-//   command: 'dw',
-//   describe: 'delete workplace',
-
-//   async handler(argv) {
-//     // deleteWorkplace(argv._[1]);
-//   }
-// })
-
-
+// doo dw (delete workplace)
+yargs.command(deleteWorkplaceCmd);
 
 yargs.parse();
