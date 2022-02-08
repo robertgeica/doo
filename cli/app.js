@@ -1,50 +1,30 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs");
-const { registerUser, loginUser, getUser, logoutUser } = require("./api/auth");
-const { userAccountInfo } = require("./ui/user");
-const { addWorkplaceCmd, viewWorkplacesCmd, setWorkplaceCmd, viewWorkplaceCmd } = require('./commands/workplace')
+const {
+  addWorkplaceCmd,
+  viewWorkplacesCmd,
+  setWorkplaceCmd,
+  viewWorkplaceCmd,
+} = require("./commands/workplace");
+const {
+  registerUserCmd,
+  loginUserCmd,
+  logoutUserCmd,
+  connectedUserCmd,
+} = require("./commands/user");
 
-// register user
-yargs.command({
-  command: "register",
-  describe: "register user",
+// doo register (register user)
+yargs.command(registerUserCmd);
 
-  async handler(argv) {
-    registerUser(argv._[1], argv._[2]);
-  },
-});
+// doo login (login user)
+yargs.command(loginUserCmd);
 
-// login user
-yargs.command({
-  command: "login",
-  describe: "login user",
+// doo logout (logout user)
+yargs.command(logoutUserCmd);
 
-  async handler(argv) {
-    loginUser(argv._[1], argv._[2]);
-  },
-});
-
-// logout user
-yargs.command({
-  command: "logout",
-  describe: "logout user",
-
-  async handler() {
-    logoutUser();
-  },
-});
-
-// get user
-yargs.command({
-  command: "user",
-  describe: "user",
-
-  async handler() {
-    const user = await getUser();
-    userAccountInfo(user);
-  },
-});
+// doo user (get connected user)
+yargs.command(connectedUserCmd);
 
 /* WORKPLACES */
 // doo aw (add workplace)
@@ -60,9 +40,9 @@ yargs.command(setWorkplaceCmd);
 yargs.command(viewWorkplaceCmd);
 
 // doo uw (update workplace)
-yargs.command(updateWorkplaceCmd);
+// yargs.command(updateWorkplaceCmd);
 
 // doo dw (delete workplace)
-yargs.command(deleteWorkplaceCmd);
+// yargs.command(deleteWorkplaceCmd);
 
 yargs.parse();
