@@ -32,7 +32,7 @@ router.route("/login").post(authUser);
 
 router.route("/resetpassword").patch(sendResetPasswordEmail);
 
-router.route("/:id").get(protect, getUser);
+router.route("/").get(protect, getUser);
 router.route("/:id").patch(protect, updateUser).delete(protect, deleteUser);
 
 router
