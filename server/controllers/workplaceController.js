@@ -7,7 +7,7 @@ const ErrorHandler = require("../utils/errorHandler");
 // @description   Get workplace
 // @access        Private
 const getWorkplace = asyncHandler(async (req, res, next) => {
-  const workplace = await Workplace.findById(req.params.id);
+  const workplace = await Workplace.findById(mongoose.Types.ObjectId(req.params.id));
 
   if (workplace) {
     res.json({
