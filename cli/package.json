@@ -1,13 +1,13 @@
 {
   "name": "doocli",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "doo": "node app"
   },
-  "author": "",
+  "author": "robertgeica",
   "license": "ISC",
-  "description": "",
+  "description": "command-line interface part of doocli application",
   "dependencies": {
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
