@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs");
-const { registerUser, loginUser, getUser } = require('./api/auth');
-const { addWorkplace, getWorkplaces, setWorkplace, getWorkplace } = require('./api/workplace');
-const { userAccountInfo } = require('./ui/user');
-const { renderWorkplaces, renderWorkplace } = require('./ui/workplace');
+const { registerUser, loginUser, getUser, logoutUser } = require("./api/auth");
+const {
+  addWorkplace,
+  getWorkplaces,
+  setWorkplace,
+  getWorkplace,
+} = require("./api/workplace");
+const { userAccountInfo } = require("./ui/user");
+const { renderWorkplaces, renderWorkplace } = require("./ui/workplace");
 
 // register user
 yargs.command({
@@ -26,64 +31,89 @@ yargs.command({
   },
 });
 
+// logout user
+yargs.command({
+  command: "logout",
+  describe: "logout user",
+
+  async handler() {
+    logoutUser();
+  },
+});
+
 // get user
 yargs.command({
-  command: 'user',
-  describe: 'user',
+  command: "user",
+  describe: "user",
 
   async handler() {
     const user = await getUser();
     userAccountInfo(user);
-  }
+  },
 });
 
 //add workplace
 yargs.command({
-  command: 'aw',
-  describe: 'add workplace',
+  command: "aw",
+  describe: "add workplace",
 
   async handler(argv) {
     addWorkplace(argv._[1]);
-  }
-})
+  },
+});
 
 //get workplaces
 yargs.command({
-  command: 'vws',
-  describe: 'view workplaces',
+  command: "vws",
+  describe: "view workplaces",
 
   async handler() {
     const workplaces = await getWorkplaces();
     renderWorkplaces(workplaces);
-  }
-})
+  },
+});
 
 //set workplaces
 yargs.command({
-  command: 'sw',
-  describe: 'set workplace',
+  command: "sw",
+  describe: "set workplace",
 
   async handler(argv) {
     setWorkplace(argv._[1]);
-  }
-})
+  },
+});
 
 // view workplace
 yargs.command({
-  command: 'vw',
-  describe: 'view current workplace',
+  command: "vw",
+  describe: "view current workplace",
 
   async handler() {
     const crtWorkplace = await getWorkplace();
     renderWorkplace(crtWorkplace);
-  }
-})
+  },
+});
 
 // edit workplace
+// yargs.command({
+//   command: 'ew',
+//   describe: 'edit workplace',
+
+//   async handler(argv) {
+//     // editWorkplaceName(argv);
+//   }
+// })
 
 // delete workplace
+// yargs.command({
+//   command: 'dw',
+//   describe: 'delete workplace',
+
+//   async handler(argv) {
+//     // deleteWorkplace(argv._[1]);
+//   }
+// })
 
 
 
-/* logout user */
 yargs.parse();
