@@ -6,6 +6,7 @@ const {
   viewWorkplacesCmd,
   setWorkplaceCmd,
   viewWorkplaceCmd,
+  deleteWorkplaceCmd
 } = require("./commands/workplace");
 const {
   registerUserCmd,
@@ -14,6 +15,7 @@ const {
   connectedUserCmd,
 } = require("./commands/user");
 
+/* USER */
 // doo register (register user)
 yargs.command(registerUserCmd);
 
@@ -25,6 +27,7 @@ yargs.command(logoutUserCmd);
 
 // doo user (get connected user)
 yargs.command(connectedUserCmd);
+
 
 /* WORKPLACES */
 // doo aw (add workplace)
@@ -43,6 +46,6 @@ yargs.command(viewWorkplaceCmd);
 // yargs.command(updateWorkplaceCmd);
 
 // doo dw (delete workplace)
-// yargs.command(deleteWorkplaceCmd);
+yargs.command(deleteWorkplaceCmd);
 
 yargs.parse();
