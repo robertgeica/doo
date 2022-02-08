@@ -46,16 +46,17 @@ const createProfile = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route         PUT /api/user/profile/:id
+// @route         PATCH /api/user/profile/:id
 // @description   Update a profile
 // @access        Private
 const updateProfile = asyncHandler(async (req, res, next) => {
-  const { image, name } = req.body;
+  const { image, name, defaults } = req.body;
   const profile = await Profile.findById(req.params.id);
 
   if (profile) {
     profile.image = image || profile.image;
     profile.name = name || profile.name;
+    profile.defaults = defaults || profile.defaults;
 
     const updatedProfile = await profile.save();
     res.json(updatedProfile);
