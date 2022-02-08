@@ -20,7 +20,7 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
-    username: { type: String, required: true, unique: true },
+    username: { type: String, unique: true },
 
     emailVerificationToken: { type: String, default: "" },
     emailVerificationExpire: { type: Date },
