@@ -12,7 +12,7 @@ const axios = require("axios");
 // @description   Get user
 // @access        Private
 const getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id).select("-password");
+  const user = await User.findById(req.user._id).select("-password");
 
   if (user) {
     res.json({
@@ -30,15 +30,11 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
 
   const emailExists = await User.findOne({ email });
-  const usernameExists = await User.findOne({ username });
 
   if (emailExists) 
     return next(new ErrorHandler("Email already exists.", 400));
-  if (usernameExists)
-    return next(new ErrorHandler("Username already exists.", 400));
 
   const user = await User.create({
-    username,
     email,
     password,
   });
@@ -48,7 +44,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
     await createSettings(user);
     res.status(201).json({
       _id: user._id,
-      username: user.username,
       email: user.email,
       password: user.password,
       authToken: generateAuthToken(user._id),
@@ -178,7 +173,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
     to: req.body.email,
     subject: `Reset your password`,
     html: `
-    <p>http://localhost:3000/resetpassword/${token}</p>
+    <p>http://localhost:3000/resetpassword/${user._id}/${token}</p>
   `,
   };
 
@@ -187,7 +182,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
 
     await sgMail.send(emailData);
     const updatedUser = await user.save();
-    return res.json(updatedUser);
+    return res.json('email sent with success');
   } else {
     return next(new ErrorHandler("Invalid", 401));
   }
@@ -204,10 +199,10 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     user.passwordResetToken = "";
     user.password = req.body.password;
 
-    const updatedUser = await user.save();
-    return res.json(updatedUser);
+    await user.save();
+    return res.json('password changed with success');
   } else {
-    return next(new ErrorHandler("Invalid", 401));
+    return next(new ErrorHandler("Invalid token", 401));
   }
 });
 
