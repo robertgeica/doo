@@ -3,6 +3,7 @@ const {
   getWorkplaces,
   setWorkplace,
   getWorkplace,
+  deleteWorkplace
 } = require("../api/workplace");
 const { renderWorkplaces, renderWorkplace } = require("../ui/workplace");
 
@@ -45,7 +46,15 @@ const viewWorkplaceCmd = {
 };
 
 // const updateWorkplaceCmd = {};
-// const deleteWorkplaceCmd = {};
+
+const deleteWorkplaceCmd = {
+  command: "dw",
+  describe: "delete workplace",
+
+  async handler(argv) {
+    await deleteWorkplace(argv._[1]);
+  },
+};
 
 
 module.exports = {
@@ -53,4 +62,5 @@ module.exports = {
   viewWorkplacesCmd,
   setWorkplaceCmd,
   viewWorkplaceCmd,
+  deleteWorkplaceCmd
 };
