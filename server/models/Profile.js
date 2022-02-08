@@ -17,7 +17,13 @@ const ProfileSchema = new Schema(
         notificationsTrigger: { type: Date },
         isRead: { type: Boolean }
       }
-    ]
+    ],
+
+    defaults: {
+      workplace: { type: Object },
+      collection: { type: Object },
+      block: { type: Object }
+    }
 
   },
   { timestamps: true }
