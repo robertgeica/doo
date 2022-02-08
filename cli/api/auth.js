@@ -1,6 +1,6 @@
 const axios = require("axios");
 const keytar = require("keytar");
-const { apiSuccess, apiError } = require('../ui/api');
+const { apiSuccess, apiError } = require("../ui/api");
 
 const registerUser = async (email, password) => {
   const config = {
@@ -13,14 +13,10 @@ const registerUser = async (email, password) => {
   });
 
   try {
-    await axios.post(
-      "http://localhost:4000/api/user/register",
-      body,
-      config
-    );
+    await axios.post("http://localhost:4000/api/user/register", body, config);
     apiSuccess(`Hi, ${email}! Your account was created.`);
   } catch (error) {
-    if (error) apiError('Sorry, something went wrong.');
+    if (error) apiError("Sorry, something went wrong.");
   }
 };
 
@@ -42,7 +38,7 @@ const loginUser = async (email, password) => {
 
     apiSuccess(`Hi, ${email}! You are now logged in, enjoy our app!`);
   } catch (error) {
-    if (error) apiError('Sorry, something went wrong.');
+    if (error) apiError("Sorry, something went wrong.");
   }
 };
 
@@ -56,15 +52,20 @@ const getUser = async () => {
     },
   };
   try {
-    const res = await axios.get(
-      `http://localhost:4000/api/user`,
-      config
-    );
+    const res = await axios.get(`http://localhost:4000/api/user`, config);
 
-    return res.data; 
+    return res.data;
   } catch (error) {
-    if (error) apiError('Sorry, something went wrong.');
+    if (error) apiError("Sorry, something went wrong.");
   }
 };
 
-module.exports = { registerUser, loginUser, getUser };
+// logout user
+const logoutUser = async () => {
+  keytar.deletePassword("doocli", "token");
+  keytar.deletePassword("doocli", "userId");
+
+  apiSuccess(`Goodbye for now!`);
+};
+
+module.exports = { registerUser, loginUser, logoutUser, getUser };
