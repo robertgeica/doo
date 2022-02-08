@@ -10,6 +10,12 @@ import {
   USER_LOAD_REQUEST,
   USER_LOAD_SUCCESS,
   USER_LOAD_FAIL,
+  SEND_RESET_PASSWORD_EMAIL_REQUEST,
+  SEND_RESET_PASSWORD_EMAIL_SUCCESS,
+  SEND_RESET_PASSWORD_EMAIL_FAIL,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL
 } from "../constants/userConstants";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -94,3 +100,41 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("token");
   dispatch({ type: USER_LOGOUT });
 };
+
+export const sendResetPasswordEmail = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: SEND_RESET_PASSWORD_EMAIL_REQUEST });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const res = await axios.patch("http://localhost:4000/api/user/resetpassword", {email}, config);
+
+    dispatch({
+      type: SEND_RESET_PASSWORD_EMAIL_SUCCESS,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({ type: SEND_RESET_PASSWORD_EMAIL_FAIL });
+  }
+}
+
+export const resetPassword = (id, token, newPassword) => async (dispatch) => {
+  try {
+    dispatch({ type: RESET_PASSWORD_REQUEST });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const res = await axios.patch(`http://localhost:4000/api/user/resetpassword/${id}/${token}`, {password: newPassword}, config);
+
+    dispatch({
+      type: RESET_PASSWORD_SUCCESS,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({ type: RESET_PASSWORD_FAIL });
+  }
+}
