@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs");
-const { registerUser, loginUser, getUser } = require('./apiRequests/auth');
-const { addWorkplace, getWorkplaces, setWorkplace, getWorkplace } = require('./apiRequests/workplace');
+const { registerUser, loginUser, getUser } = require('./api/auth');
+const { addWorkplace, getWorkplaces, setWorkplace, getWorkplace } = require('./api/workplace');
 const { userAccountInfo } = require('./ui/user');
 const { renderWorkplaces, renderWorkplace } = require('./ui/workplace');
 
