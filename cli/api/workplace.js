@@ -107,7 +107,37 @@ const setWorkplace = async (name) => {
   }
 }
 
-// edit workplace
+// update workplace
+const updateWorkplace = async (name, newName) => {
+  const user = await getUser();
+  const token = await keytar.getPassword("doocli", "token");
+  const workplace = user.workplacesIds.filter(wp => wp.name === name);
+
+  if(user && workplace) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    };
+
+    const id = workplace[0].workplaceId;
+    try {
+
+      // console.log(res.data);
+      await axios.patch(
+        `http://localhost:4000/api/workplace/${id}`,
+        { workplaceName: newName },
+        config,
+      );
+        
+      console.log("workplace edited w success");
+    } catch (error) {
+      console.log(error);
+      if (error) apiError('Sorry, something went wrong.');
+    }
+  }
+}
 
 
 // delete workplace
@@ -139,4 +169,4 @@ const deleteWorkplace = async (name) => {
   }
 }
 
-module.exports = { getWorkplaces, getWorkplace, addWorkplace, setWorkplace, deleteWorkplace };
+module.exports = { getWorkplaces, getWorkplace, addWorkplace, setWorkplace, deleteWorkplace, updateWorkplace };
