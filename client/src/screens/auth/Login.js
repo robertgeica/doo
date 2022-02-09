@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 import { login } from "../../actions/userActions";
-import Loader from '../../components/utils/Loader';
+import Loader from '../../layout/utils/Loader';
 
 const Login = (state) => {
   const dispatch = useDispatch();

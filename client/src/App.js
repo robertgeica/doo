@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import HomeScreen from "./screens/HomeScreen";
-import Loader from "./components/utils/Loader";
+import Loader from "./layout/utils/Loader";
 import { loadUser } from "./actions/userActions";
 import './app.scss';
 

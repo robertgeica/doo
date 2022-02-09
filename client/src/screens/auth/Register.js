@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { register } from "../../actions/userActions";
-import Loader from '../../components/utils/Loader';
+import Loader from '../../layout/utils/Loader';
 
 const Register = (state) => {
   const dispatch = useDispatch();
