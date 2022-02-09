@@ -6,7 +6,8 @@ const {
   viewWorkplacesCmd,
   setWorkplaceCmd,
   viewWorkplaceCmd,
-  deleteWorkplaceCmd
+  deleteWorkplaceCmd,
+  editWorkplaceCmd
 } = require("./commands/workplace");
 const {
   registerUserCmd,
@@ -42,8 +43,8 @@ yargs.command(setWorkplaceCmd);
 // doo vw (view workplace)
 yargs.command(viewWorkplaceCmd);
 
-// doo uw (update workplace)
-// yargs.command(updateWorkplaceCmd);
+// doo ew (edit workplace)
+yargs.command(editWorkplaceCmd);
 
 // doo dw (delete workplace)
 yargs.command(deleteWorkplaceCmd);
