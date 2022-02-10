@@ -1,0 +1,23 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+
+  .aside {
+    width: 30vw;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+      border: 1px solid blue;
+      height: 5vh;
+      width: 100vw;
+    }
+
+    .main {
+      width: 100vw;
+    }
+  }
+}
