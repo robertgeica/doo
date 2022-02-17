@@ -21,7 +21,8 @@ const Dropdown = (props) => {
         <div
           className="dropdown-header"
           onClick={toggling}
-          contenteditable="true"
+          contentEditable="true"
+          suppressContentEditableWarning={true}
           onKeyDown={onChangeContent}
         >
           {defaultValue}

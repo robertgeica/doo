@@ -9,15 +9,17 @@
   .content {
     display: flex;
     flex-direction: column;
-
+    
     .header {
-      border: 1px solid blue;
+      border-bottom: 1px solid #fff;
       height: 5vh;
       width: 100vw;
+      padding: .3em;
     }
-
+    
     .main {
       width: 100vw;
+      padding: .5em;
     }
   }
 }

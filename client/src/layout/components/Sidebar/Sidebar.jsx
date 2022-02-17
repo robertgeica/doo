@@ -35,7 +35,6 @@ const Sidebar = (props) => {
   const userId = props.user._id;
 
   const addItem = (content) => {
-    console.log(content);
     return (
       <button
         className="showOnHover actionButton"
@@ -90,16 +89,12 @@ const Sidebar = (props) => {
 
       <div className="links">
         <div className="links-header">
-          <p>Favorites</p>
-          <button>+</button>
+          <p className="collections">Favorites</p>
         </div>
-        {/* {sideMenu(collections).map((item, index) => {
-          return <NavItem key={`${item.label}`} item={item} />;
-        })} */}
 
         <div className="links-header">
-          <p>Collections</p>
-          <button>+</button>
+          <p contentEditable="true" suppressContentEditableWarning={true} className="collections">Collections</p>
+          <button className="actionButton edit-collection">+</button>
         </div>
         {collections &&
           sideMenu(collections).map((item, index) => {

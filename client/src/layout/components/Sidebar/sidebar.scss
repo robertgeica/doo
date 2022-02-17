@@ -1,7 +1,6 @@
 .sidebar {
-  background-color: #0362bb;
+  background-color: #292e3a;
   height: 100vh;
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -54,4 +53,20 @@
 .actionButton:hover {
   background-color: #44a147;
 
+}
+
+.collections {
+  font-size: 1.1em;
+  padding: 0 .1em;
+  margin: 1em;
+  // margin: auto;
+}
+.edit-collection {
+  display: none;
+}
+
+.links-header:hover {
+  .edit-collection {
+    display: block;
+  }
 }
