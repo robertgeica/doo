@@ -54,7 +54,24 @@ const createBlock = asyncHandler(async (req, res, next) => {
   }
 });
 
+// @route         Delete /api/block/:id
+// @description   Delete block
+// @access        Private
+const deleteBlock = asyncHandler(async (req, res, next) => {
+  const block = await Block.findById(req.params.id);
+
+  if (block) {
+    await block.remove();
+
+    res.json({ message: "Block removed" });
+  } else {
+    return next(new ErrorHandler("Block not found.", 404));
+  }
+});
+
+
 module.exports = {
   getBlock,
   createBlock,
+  deleteBlock
 };
