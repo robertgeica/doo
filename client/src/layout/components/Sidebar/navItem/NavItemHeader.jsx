@@ -5,7 +5,7 @@ const resolveLinkPath = (childTo, parentTo) => `${parentTo}/${childTo}`;
 
 const NavItemHeader = (props) => {
   const { item } = props;
-  const { label, icon, to: headerToPath, children } = item;
+  const { label, to: headerToPath, children } = item;
   const location = useLocation();
 
   const [expanded, setExpand] = useState(
@@ -20,7 +20,7 @@ const NavItemHeader = (props) => {
   return (
     <>
       <button className="navItem navItemHeaderButton" onClick={onExpandChange}>
-        <img className="navIcon" src={logo} />
+        <img className="navIcon" src={logo} alt="logo" />
         <span className="navLabel">{label}</span>
         <span
           className={`${"navItemHeaderIcon"} ${
@@ -37,7 +37,7 @@ const NavItemHeader = (props) => {
           {children.map((item, index) => {
             const key = `${item.label}-${index}`;
 
-            const { label, icon, children } = item;
+            const { label, children } = item;
 
             if (children) {
               return (
@@ -59,7 +59,7 @@ const NavItemHeader = (props) => {
                 className="navItem"
                 activeclassname="activeNavItem"
               >
-                <img className="navIcon" src={logo} />
+                <img className="navIcon" src={logo} alt="logo" />
                 <span className="navLabel">{label}</span>
               </NavLink>
             );

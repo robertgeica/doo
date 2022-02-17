@@ -73,7 +73,8 @@ const Sidebar = (props) => {
 
   useEffect(() => {
     dispatch(loadWorkplace(defaultValue?.value));
-  }, []);
+    console.log('useeffect')
+  }, [dispatch, defaultValue?.value]);
 
   return (
     <nav className="sidebar">
