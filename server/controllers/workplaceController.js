@@ -32,15 +32,16 @@ const createWorkplace = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Workplace already exists.", 400));
   }
 
+  const userId = req.params.userId === String ? mongoose.Types.ObjectId(req.params.userId) : req.params.userId;
   const workplace = new Workplace({
     ...req.body,
-    userId: mongoose.Types.ObjectId(req.params.userId),
+    userId: userId,
   });
 
   const createdWorkplace = await workplace.save();
 
   const user = await User.findById(
-    mongoose.Types.ObjectId(req.params.userId)
+    userId
   ).select("-password");
 
   if (user) {
