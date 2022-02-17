@@ -51,7 +51,7 @@ const Sidebar = (props) => {
   );
 
   const deleteItem = (id) => {
-    return <button onClick={(id) => dispatch(deleteWorkplace(id))}>x</button>;
+    return <button onClick={() => dispatch(deleteWorkplace(id))}>x</button>;
   };
 
   useEffect(() => {
