@@ -64,4 +64,8 @@ body {
 
 // Import other scss files
 @import "./screens/auth/auth.scss";
-@import './layout/utils/loader.scss'
+@import './layout/utils/loader.scss';
+@import './layout/layout.scss';
+@import './layout/components/Sidebar/sidebar.scss';
+@import './layout/components/Sidebar/navItem/navItem.scss';
+@import './layout/components/dropdown.scss';
