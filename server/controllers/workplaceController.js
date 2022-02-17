@@ -1,5 +1,6 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 const Workplace = require("../models/Workplace");
+const User = require("../models/User");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorHandler = require("../utils/errorHandler");
 
@@ -7,7 +8,9 @@ const ErrorHandler = require("../utils/errorHandler");
 // @description   Get workplace
 // @access        Private
 const getWorkplace = asyncHandler(async (req, res, next) => {
-  const workplace = await Workplace.findById(mongoose.Types.ObjectId(req.params.id));
+  const workplace = await Workplace.findById(
+    mongoose.Types.ObjectId(req.params.id)
+  );
 
   if (workplace) {
     res.json({
@@ -36,18 +39,20 @@ const createWorkplace = asyncHandler(async (req, res, next) => {
 
   const createdWorkplace = await workplace.save();
 
-  const user = await User.findById(mongoose.Types.ObjectId(req.params.userId)).select('-password');
+  const user = await User.findById(
+    mongoose.Types.ObjectId(req.params.userId)
+  ).select("-password");
 
   if (user) {
     const newWorkplace = {
       workplaceId: createdWorkplace._id,
-      name: createdWorkplace.workplaceName
+      name: createdWorkplace.workplaceName,
     };
-    user.workplacesIds = [ ...user.workplacesIds, newWorkplace ];
+    user.workplacesIds = [...user.workplacesIds, newWorkplace];
 
     const updatedUser = await user.save();
 
-    res.status(201).json({createdWorkplace, updatedUser});
+    res.status(201).json({ createdWorkplace, updatedUser });
   } else {
     return next(new ErrorHandler("Cannot find user.", 404));
   }
@@ -70,9 +75,23 @@ const updateWorkplace = asyncHandler(async (req, res, next) => {
       : workplace.favorites;
 
     const updatedWorkplace = await workplace.save();
+
+    const user = await User.findById(
+      mongoose.Types.ObjectId(workplace.userId)
+    ).select("-password");
+    const newWorkplaces = user.workplacesIds.map((nw) => {
+      if (nw.workplaceId.equals(workplace._id)) {
+        nw.name = workplaceName || nw.name;
+      }
+      return nw;
+    });
+
+    user.workplacesIds = newWorkplaces || user.workplacesIds;
+    await user.save();
+
     res.json(updatedWorkplace);
   } else {
-    return next(new ErrorHandler("Profile not found.", 404));
+    return next(new ErrorHandler("Workplace not found.", 404));
   }
 });
 
@@ -84,6 +103,16 @@ const deleteWorkplace = asyncHandler(async (req, res, next) => {
 
   if (workplace) {
     await workplace.remove();
+
+    const user = await User.findById(
+      mongoose.Types.ObjectId(workplace.userId)
+    ).select("-password");
+    const newWorkplaces = user.workplacesIds.filter(
+      (item) => !item.workplaceId.equals(workplace._id)
+    );
+    user.workplacesIds = newWorkplaces || user.workplacesIds;
+    await user.save();
+
     res.json({ message: "Workplace removed" });
   } else {
     return next(new ErrorHandler("Workplace not found.", 404));
