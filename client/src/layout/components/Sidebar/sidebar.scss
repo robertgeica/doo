@@ -1,0 +1,39 @@
+.sidebar {
+  background-color: #0362bb;
+  height: 100vh;
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  .sidebar-top {
+    margin: 1em 0;
+    display: flex;
+    justify-content: center;
+
+    .main {
+      position: absolute;
+    }
+  }
+
+  .links {
+    max-height: 70%;
+    width: 100%;
+    margin: 1em 0;
+    overflow-y: auto;
+
+    .links-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    .user {
+      display: flex;
+    }
+  }
+}
