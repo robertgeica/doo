@@ -57,7 +57,7 @@ const NavItemHeader = (props) => {
                 key={key}
                 to={resolveLinkPath(item.to, props.item.to)}
                 className="navItem"
-                activeClassName="activeNavItem"
+                activeclassname="activeNavItem"
               >
                 <img className="navIcon" src={logo} />
                 <span className="navLabel">{label}</span>

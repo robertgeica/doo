@@ -11,7 +11,7 @@ const NavItem = (props) => {
   }
 
   return (
-    <NavLink exact to={to} className="navItem" activeClassName="activeNavItem">
+    <NavLink exact to={to} className="navItem" activeclassname="activeNavItem">
       <img className="navIcon" src={logo} />
       <span className="navLabel">{label}</span>
     </NavLink>
