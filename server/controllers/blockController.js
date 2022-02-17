@@ -8,6 +8,23 @@ const {
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorHandler = require("../utils/errorHandler");
 
+// @route         GET /api/user/block/:id
+// @description   Get block
+// @access        Private
+const getBlock = asyncHandler(async (req, res, next) => {
+  const block = await Block.findById(
+    mongoose.Types.ObjectId(req.params.id)
+  );
+  if (block) {
+    res.json({
+      block,
+    });
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+});
+
+
 // @route         POST /api/user/block/:userId
 // @description   Create collection
 // @access        Private
@@ -38,5 +55,6 @@ const createBlock = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
+  getBlock,
   createBlock,
 };
