@@ -84,7 +84,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
   if (user) {
     user.profileId = profileId || user.profileId;
     user.settingsId = settingsId || user.settingsId;
-    user.accountId = accountId || user.accountId;
+    user.username = username || user.username;
 
     const updatedUser = await user.save();
     res.json(updatedUser);
@@ -210,9 +210,10 @@ const resetPassword = asyncHandler(async (req, res, next) => {
 const createProfile = async (user, email) => {
   const url = `http://localhost:4000/api/user/profile/${user._id}`;
   const profile = {
-    image: "",
+    image: "user.png",
     name: email,
     notifications: [],
+    userId: user._id
   };
 
   let config = {
