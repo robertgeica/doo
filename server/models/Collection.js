@@ -29,7 +29,6 @@ const CollectionSchema = new Schema(
     blocks: [
       {
         blockId: { type: Object },
-        blockName: { type: String },
       },
     ],
   },
