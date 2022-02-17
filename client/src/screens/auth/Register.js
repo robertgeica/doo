@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import { register } from "../../actions/userActions";
 import Loader from '../../layout/utils/Loader';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const Dropdown = (props) => {
   const { options, value, onChange, placeholder, itemActions } = props;
@@ -8,7 +8,6 @@ const Dropdown = (props) => {
 
   const [defaultValue, setDefaultValue] = useState(value ? value.label : placeholder);
 
-  console.log(props);
   return (
     <div className="main">
       <div className="dropdown-container">

@@ -4,7 +4,6 @@ import NavItem from "./navItem/NavItem.jsx";
 import { connect } from "react-redux";
 import { sideMenu } from "./menu.config.js";
 import {
-  loadWorkplaces,
   loadWorkplace,
   addWorkplace,
   deleteWorkplace,
