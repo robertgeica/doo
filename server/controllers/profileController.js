@@ -51,12 +51,14 @@ const createProfile = asyncHandler(async (req, res, next) => {
 // @access        Private
 const updateProfile = asyncHandler(async (req, res, next) => {
   const { image, name, defaults } = req.body;
-  const profile = await Profile.findById(req.params.id);
+  const profile = await Profile.findById(mongoose.Types.ObjectId(req.params.id));
 
   if (profile) {
     profile.image = image || profile.image;
     profile.name = name || profile.name;
-    profile.defaults = defaults || profile.defaults;
+    profile.defaults.workplace = defaults.workplace || profile.defaults.workplace;
+    profile.defaults.collection = defaults.collection || profile.defaults.collection;
+    profile.defaults.block = defaults.block || profile.defaults.block;
 
     const updatedProfile = await profile.save();
     res.json(updatedProfile);
