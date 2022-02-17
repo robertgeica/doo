@@ -37,3 +37,21 @@
     }
   }
 }
+
+.actionButton {
+  border: 1px solid red;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.actionButton:hover {
+  background-color: #44a147;
+
+}

@@ -10,13 +10,23 @@ const Dropdown = (props) => {
     value ? value.label : placeholder
   );
 
+  const [content, setContent] = useState("");
+  const onChangeContent = (e) => {
+    setContent(e.target.textContent);
+  };
+
   return (
     <div className="main">
       <div className="dropdown-container">
-        <div className="dropdown-header" onClick={toggling}>
+        <div
+          className="dropdown-header"
+          onClick={toggling}
+          contenteditable="true"
+          onKeyDown={onChangeContent}
+        >
           {defaultValue}
           <div className="actions">
-            {itemActions ? itemActions?.addItem() : null}
+            {itemActions ? itemActions?.addItem(content) : null}
           </div>
         </div>
         {isOpen && (

@@ -33,25 +33,43 @@ const Sidebar = (props) => {
   });
   const defaultValue = options?.[0];
   const userId = props.user._id;
-  const addItem = () => (
-    <button
-      className="showOnHover"
-      onClick={() =>
-        dispatch(
-          addWorkplace({ workplace: { workplaceName: "testwp" } }, userId)
-        )
-      }
-    >
-      +
-    </button>
-  );
 
-  const updateItem = () => (
-    <button onClick={() => dispatch(updateWorkplace())}>e</button>
-  );
+  const addItem = (content) => {
+    console.log(content);
+    return (
+      <button
+        className="showOnHover actionButton"
+        onClick={() =>
+          dispatch(
+            addWorkplace({ workplace: { workplaceName: content } }, userId)
+          )
+        }
+      >
+        +
+      </button>
+    );
+  };
+
+  const updateItem = (e) => {
+    return (
+      <button
+        className="actionButton"
+        onClick={(e) => dispatch(updateWorkplace())}
+      >
+        e
+      </button>
+    );
+  };
 
   const deleteItem = (id) => {
-    return <button onClick={() => dispatch(deleteWorkplace(id))}>x</button>;
+    return (
+      <button
+        className="actionButton"
+        onClick={() => dispatch(deleteWorkplace(id))}
+      >
+        x
+      </button>
+    );
   };
 
   useEffect(() => {

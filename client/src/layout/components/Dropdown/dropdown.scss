@@ -43,13 +43,23 @@
   align-items: center;
 }
 
-.dropdown-list-item {
+.dropdown-list-item-container {
   padding-left: 1em;
   padding-right: 1em;
   padding-bottom: 0.4em;
   padding-top: 0.4em;
   list-style: none;
   cursor: pointer;
+
+  .item-actions {
+    display: none;
+  }
+}
+
+.dropdown-list-item-container:hover {
+  .item-actions {
+    display: block;
+  }
 }
 
 .dropdown-list-item-container:hover {
