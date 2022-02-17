@@ -6,14 +6,18 @@ const Dropdown = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggling = () => setIsOpen(!isOpen);
 
-  const [defaultValue, setDefaultValue] = useState(value ? value.label : placeholder);
+  const [defaultValue, setDefaultValue] = useState(
+    value ? value.label : placeholder
+  );
 
   return (
     <div className="main">
       <div className="dropdown-container">
-        {itemActions ? itemActions?.addItem() : null}
         <div className="dropdown-header" onClick={toggling}>
           {defaultValue}
+          <div className="actions">
+            {itemActions ? itemActions?.addItem() : null}
+          </div>
         </div>
         {isOpen && (
           <div className="dropdown-list-container">

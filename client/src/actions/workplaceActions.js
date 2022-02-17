@@ -64,7 +64,7 @@ export const addWorkplace = (workplace, userId) => async (dispatch) => {
 
     const data = await axios.post(
       `http://localhost:4000/api/workplace/${userId}`,
-      { ...workplace },
+      { ...workplace.workplace },
       config
     );
 

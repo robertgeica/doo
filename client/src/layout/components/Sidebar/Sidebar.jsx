@@ -9,6 +9,8 @@ import {
   deleteWorkplace,
   updateWorkplace,
 } from "../../../actions/workplaceActions.js";
+import { logout } from "../../../actions/userActions";
+
 const Dropdown = React.lazy(() => import("../Dropdown/Dropdown.js"));
 
 const Sidebar = (props) => {
@@ -30,9 +32,18 @@ const Sidebar = (props) => {
     };
   });
   const defaultValue = options?.[0];
-
+  const userId = props.user._id;
   const addItem = () => (
-    <button onClick={() => dispatch(addWorkplace())}>+</button>
+    <button
+      className="showOnHover"
+      onClick={() =>
+        dispatch(
+          addWorkplace({ workplace: { workplaceName: "testwp" } }, userId)
+        )
+      }
+    >
+      +
+    </button>
   );
 
   const updateItem = () => (
@@ -40,7 +51,7 @@ const Sidebar = (props) => {
   );
 
   const deleteItem = (id) => {
-    return <button onClick={() => dispatch(deleteWorkplace(id))}>x</button>;
+    return <button onClick={(id) => dispatch(deleteWorkplace(id))}>x</button>;
   };
 
   useEffect(() => {
@@ -74,17 +85,12 @@ const Sidebar = (props) => {
         </div>
         {collections &&
           sideMenu(collections).map((item, index) => {
-            return (
-              <NavItem
-                key={`${item.label}`}
-                item={item}
-              />
-            );
+            return <NavItem key={`${item.label}`} item={item} />;
           })}
       </div>
 
       <div className="actions">
-        <button>logout</button>
+        <button onClick={() => dispatch(logout())}>logout</button>
         <div className="user">
           <button>profile</button>
           <button>setari</button>
