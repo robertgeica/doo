@@ -4,10 +4,5 @@ export const sideMenu = (children) => [
     icon: "icon",
     to: "/",
   },
-  {
-    label: "Collections",
-    icon: "icon",
-    to: "/collections",
-    children: children,
-  },
+  ...children
 ];

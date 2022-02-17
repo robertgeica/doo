@@ -5,7 +5,6 @@ import logo from "./logo.png";
 
 const NavItem = (props) => {
   const { label, icon, to, children } = props.item;
-
   if (children) {
     return <NavItemHeader item={props.item} />;
   }

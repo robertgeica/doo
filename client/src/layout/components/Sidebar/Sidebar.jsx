@@ -72,9 +72,15 @@ const Sidebar = (props) => {
           <p>Collections</p>
           <button>+</button>
         </div>
-        {sideMenu(collections).map((item, index) => {
-          return <NavItem key={`${item.label}`} item={item} />;
-        })}
+        {collections &&
+          sideMenu(collections).map((item, index) => {
+            return (
+              <NavItem
+                key={`${item.label}`}
+                item={{ ...item, to: `collection/${item.to}` }}
+              />
+            );
+          })}
       </div>
 
       <div className="actions">
