@@ -19,7 +19,7 @@ const Sidebar = (props) => {
     return {
       label: collection.collectionName,
       icon: "icon",
-      to: `${collection.collectionId}`,
+      to: `collection/${collection.collectionId}`,
     };
   });
 
@@ -77,7 +77,7 @@ const Sidebar = (props) => {
             return (
               <NavItem
                 key={`${item.label}`}
-                item={{ ...item, to: `collection/${item.to}` }}
+                item={item}
               />
             );
           })}
