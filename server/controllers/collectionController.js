@@ -7,7 +7,9 @@ const ErrorHandler = require("../utils/errorHandler");
 // @description   Get collection
 // @access        Private
 const getCollection = asyncHandler(async (req, res, next) => {
-  const collection = await Collection.findById(mongoose.Types.ObjectId(req.params.id));
+  const collection = await Collection.findById(
+    mongoose.Types.ObjectId(req.params.id)
+  );
   if (collection) {
     res.json({
       collection,
@@ -73,17 +75,16 @@ const updateCollection = asyncHandler(async (req, res, next) => {
     const updatedCollection = await collection.save();
 
     const workplace = await Workplace.findById(collection.workplaceId);
-  
+
     if (workplace) {
-     
-      const newCollections = workplace.collections.map(coll => {
-        if(coll.collectionId.equals(collection._id)) {
-          coll.collectionName = name || coll.collectionName
-        };
+      const newCollections = workplace.collections.map((coll) => {
+        if (coll.collectionId.equals(collection._id)) {
+          coll.collectionName = name || coll.collectionName;
+        }
         return coll;
-      })
+      });
       workplace.collections = newCollections || workplace.collections;
-  
+
       await workplace.save();
     }
     res.json(updatedCollection);
@@ -101,9 +102,10 @@ const deleteCollection = asyncHandler(async (req, res, next) => {
   if (collection) {
     await collection.remove();
 
-
     const workplace = await Workplace.findById(collection.workplaceId);
-    const newCollections = workplace.collections.filter(item => !item.collectionId.equals(collection._id));
+    const newCollections = workplace.collections.filter(
+      (item) => !item.collectionId.equals(collection._id)
+    );
     workplace.collections = newCollections || workplace.collections;
     await workplace.save();
 
