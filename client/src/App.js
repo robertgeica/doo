@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import Loader from "./layout/utils/Loader";
@@ -10,18 +10,19 @@ if (localStorage.token) setAuthToken(localStorage.token);
 
 const App = () => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   useEffect(() => {
     dispatch(loadUser());
-  });
+
+    if(!localStorage.token) {
+      navigate('/welcome');
+    }
+  }, []);
 
   return (
     <Suspense fallback={<Loader />}>
-      <BrowserRouter>
-        <AppRoutes>
-
-        </AppRoutes>
-      </BrowserRouter>
+      <AppRoutes></AppRoutes>
     </Suspense>
   );
 };
