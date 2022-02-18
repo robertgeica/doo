@@ -149,10 +149,39 @@ const deleteCollection = async (name) => {
   }
 };
 
+const updateCollection = async (name, newName) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const workplace = await getWorkplace();
+  const collection = await workplace.collections.filter(collection => collection.collectionName === name);
+
+  if (collection) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const id = await collection[0].collectionId;
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/collection/${id}`,
+        { name: newName },
+        config
+      );
+
+      apiSuccess(`Collection ${newName} has been updated!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
 module.exports = {
   addCollection,
   getCollections,
   setCollection,
   getCollection,
   deleteCollection,
+  updateCollection
 };

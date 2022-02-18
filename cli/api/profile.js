@@ -1,6 +1,7 @@
 const axios = require("axios");
 const keytar = require("keytar");
 const { getUser } = require('./auth');
+const { apiError } = require('../ui/api');
 
 const getProfile = async () => {
   const user = await getUser();

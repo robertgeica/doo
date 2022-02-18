@@ -4,6 +4,7 @@ const {
   setCollection,
   getCollection,
   deleteCollection,
+  updateCollection
 } = require("../api/collection");
 const { renderCollections, renderCollection } = require("../ui/collection");
 
@@ -54,10 +55,20 @@ const deleteCollectionCmd = {
   },
 };
 
+const editCollectionCmd = {
+  command: "ec",
+  describe: "edit collection",
+
+  async handler(argv) {
+    await updateCollection(argv._[1], argv._[2]);
+  },
+};
+
 module.exports = {
   addCollectionCmd,
   viewCollectionsCmd,
   setCollectionCmd,
   viewCollectionCmd,
   deleteCollectionCmd,
+  editCollectionCmd
 };

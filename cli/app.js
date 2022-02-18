@@ -15,6 +15,7 @@ const {
   setCollectionCmd,
   viewCollectionCmd,
   deleteCollectionCmd,
+  editCollectionCmd
 } = require("./commands/collection");
 const {
   registerUserCmd,
@@ -69,7 +70,7 @@ yargs.command(setCollectionCmd);
 yargs.command(viewCollectionCmd);
 
 // doo ec (edit collection)
-// yargs.command(editCollectionCmd);
+yargs.command(editCollectionCmd);
 
 // doo dc (delete collection)
 yargs.command(deleteCollectionCmd);
