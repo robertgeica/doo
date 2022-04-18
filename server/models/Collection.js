@@ -26,11 +26,7 @@ const CollectionSchema = new Schema(
       },
     ],
 
-    blocks: [
-      {
-        blockId: { type: Object },
-      },
-    ],
+    blocks: [{ type: Object }],
   },
   { timestamps: true }
 );

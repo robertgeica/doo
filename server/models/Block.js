@@ -5,6 +5,7 @@ const BlockSchema = new Schema(
   {
     schemaVersion: { type: String, required: true, default: "1.0.0" },
     userId: { type: Object },
+    parentId: { type: Object, required: true },
 
     icon: { type: String },
     background: { type: String },
