@@ -63,7 +63,6 @@ const createCollection = asyncHandler(async (req, res, next) => {
 const updateCollection = asyncHandler(async (req, res, next) => {
   const { name, icon, background, comments, labels, blocks } = req.body;
   const collection = await Collection.findById(req.params.id);
-
   if (collection) {
     collection.name = name || collection.name;
     collection.icon = icon || collection.icon;

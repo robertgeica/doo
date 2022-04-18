@@ -1,5 +1,7 @@
 var mongoose = require("mongoose");
 const Block = require("../models/Block");
+const Collection = require('../models/Collection');
+
 const {
   TASK_BLOCK_TYPE,
   SIMPLE_BLOCK_TYPE,
@@ -12,9 +14,7 @@ const ErrorHandler = require("../utils/errorHandler");
 // @description   Get block
 // @access        Private
 const getBlock = asyncHandler(async (req, res, next) => {
-  const block = await Block.findById(
-    mongoose.Types.ObjectId(req.params.id)
-  );
+  const block = await Block.findById(mongoose.Types.ObjectId(req.params.id));
   if (block) {
     res.json({
       block,
@@ -23,7 +23,6 @@ const getBlock = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Invalid", 401));
   }
 });
-
 
 // @route         POST /api/user/block/:userId
 // @description   Create collection
@@ -47,6 +46,14 @@ const createBlock = asyncHandler(async (req, res, next) => {
   });
 
   await block.save();
+
+  const collection = await Collection.findById(
+    mongoose.Types.ObjectId(req.body.parentId)
+  );
+
+  collection.blocks = [...collection.blocks, block._id];
+  collection.save();
+
   if (block) {
     res.status(201).json({ block });
   } else {
@@ -60,18 +67,31 @@ const createBlock = asyncHandler(async (req, res, next) => {
 const deleteBlock = asyncHandler(async (req, res, next) => {
   const block = await Block.findById(req.params.id);
 
-  if (block) {
+  try {
     await block.remove();
+    
+    const collection = await Collection.findById(
+      mongoose.Types.ObjectId(block.parentId)
+    );
+      
+    const newBlocks = collection.blocks.filter(block => block.toString() !== req.params.id);
+
+    collection.blocks = newBlocks;
+    collection.save();
 
     res.json({ message: "Block removed" });
-  } else {
+  } catch (error) {
     return next(new ErrorHandler("Block not found.", 404));
+    
+  }
+  if (block) {
+
+  } else {
   }
 });
-
 
 module.exports = {
   getBlock,
   createBlock,
-  deleteBlock
+  deleteBlock,
 };
