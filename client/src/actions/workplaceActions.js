@@ -35,8 +35,7 @@ export const loadWorkplace = (id) => async (dispatch) => {
 };
 
 export const loadWorkplaces = (userWorkplaces) => async (dispatch) => {
-  console.log(userWorkplaces);
-
+  
   try {
     dispatch({ type: WORKPLACES_LOAD_REQUEST });
     const data = userWorkplaces.map((workplace) => {

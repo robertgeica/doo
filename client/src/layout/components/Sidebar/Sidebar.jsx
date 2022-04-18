@@ -25,7 +25,7 @@ const Sidebar = (props) => {
     };
   });
 
-  const options = user?.workplacesIds.map((workplace) => {
+  const options = user?.workplacesIds?.map((workplace) => {
     return {
       value: workplace.workplaceId,
       label: workplace.name,
@@ -73,7 +73,6 @@ const Sidebar = (props) => {
 
   useEffect(() => {
     dispatch(loadWorkplace(defaultValue?.value));
-    console.log('useeffect')
   }, [dispatch, defaultValue?.value]);
 
   return (

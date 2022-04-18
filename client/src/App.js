@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense } from "react";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import Loader from "./layout/utils/Loader";
@@ -14,7 +14,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(loadUser());
-
     if(!localStorage.token) {
       navigate('/welcome');
     }
