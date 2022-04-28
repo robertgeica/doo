@@ -31,8 +31,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
   const emailExists = await User.findOne({ email });
 
-  if (emailExists) 
-    return next(new ErrorHandler("Email already exists.", 400));
+  if (emailExists) return next(new ErrorHandler("Email already exists.", 400));
 
   const user = await User.create({
     username: username ? username : email,
@@ -43,6 +42,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
   if (user) {
     await createProfile(user, email);
     await createSettings(user);
+    await createDefaultWorkplace(user);
     res.status(201).json({
       _id: user._id,
       email: user.email,
@@ -60,7 +60,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const authUser = asyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
 
-  const user = username ? await User.findOne({ username }) : await User.findOne({ email });
+  const user = username
+    ? await User.findOne({ username })
+    : await User.findOne({ email });
 
   if (user && (await user.matchPasswords(password))) {
     res.json({
@@ -183,7 +185,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
 
     await sgMail.send(emailData);
     const updatedUser = await user.save();
-    return res.json('email sent with success');
+    return res.json("email sent with success");
   } else {
     return next(new ErrorHandler("Invalid", 401));
   }
@@ -201,7 +203,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     user.password = req.body.password;
 
     await user.save();
-    return res.json('password changed with success');
+    return res.json("password changed with success");
   } else {
     return next(new ErrorHandler("Invalid token", 401));
   }
@@ -213,7 +215,7 @@ const createProfile = async (user, email) => {
     image: "user.png",
     name: email,
     notifications: [],
-    userId: user._id
+    userId: user._id,
   };
 
   let config = {
@@ -237,6 +239,33 @@ const createSettings = async (user) => {
     },
   };
   await axios.post(url, settings, config);
+};
+
+const createDefaultWorkplace = async (user) => {
+  const url = `http://localhost:4000/api/user/workplace/${user._id}`;
+  const defaultWorkplace = {
+    userId: user._id,
+    workplaceName: "Untitled",
+    collections: [],
+    favorites: [],
+  };
+
+  const workplace = new Workplace(defaultWorkplace);
+  await workplace.save();
+
+  // update user
+  const userToUpdate = await User.findById(user._id).select("-password");
+  if (userToUpdate) {
+    const newWorkplace = {
+      workplaceId: workplace._id,
+      name: workplace.workplaceName,
+    };
+    userToUpdate.workplacesIds = [...userToUpdate.workplacesIds, newWorkplace];
+
+    await userToUpdate.save();
+  } else {
+    return next(new ErrorHandler("Cannot find user.", 404));
+  }
 };
 
 module.exports = {
