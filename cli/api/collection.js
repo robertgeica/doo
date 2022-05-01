@@ -152,7 +152,9 @@ const deleteCollection = async (name) => {
 const updateCollection = async (name, newName) => {
   const token = await keytar.getPassword("doocli", "token");
   const workplace = await getWorkplace();
-  const collection = await workplace.collections.filter(collection => collection.collectionName === name);
+  const collection = await workplace.collections.filter(
+    (collection) => collection.collectionName === name
+  );
 
   if (collection) {
     const config = {
@@ -177,11 +179,48 @@ const updateCollection = async (name, newName) => {
   }
 };
 
+const addCollectionComment = async ( content) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const user = await getUser();
+  const {collection} = await getCollection();
+
+  if (collection) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const id = await collection._id;
+
+    const body = {
+      comments: [
+       ...collection.comments,
+        { accountId: user._id, accountName: user.username, content: content },
+      ],
+    };
+
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/collection/${id}`,
+        body,
+        config
+      );
+
+      apiSuccess(`Collection ${name} has been updated with your comment!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
 module.exports = {
   addCollection,
   getCollections,
   setCollection,
   getCollection,
   deleteCollection,
-  updateCollection
+  updateCollection,
+  addCollectionComment,
 };

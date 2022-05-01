@@ -1,8 +1,13 @@
 const chalk = require("chalk");
+const keytar = require("keytar");
 const { error, success, normal, pending } = require('./colors');
 
 
-const userAccountInfo = (user) => {
+const userAccountInfo = async (user) => {
+  const isConnectedUser = await checkConnectedUser();
+  if (!isConnectedUser) {
+    return ;
+  }
   console.log(chalk.hex(normal)(`Hi! You are logged in with ${user.email}.`));
 
   const isVerifiedAccount = user.isVerifiedEmail === true ? true : false;
@@ -17,4 +22,14 @@ const userAccountInfo = (user) => {
 
   console.log(output)
 };
-module.exports = { userAccountInfo };
+
+const checkConnectedUser = async () => {
+  const token = await keytar.getPassword("doocli", "token");
+  
+  if(!token) {
+    console.log(chalk.hex(error)(`Please login first!`));
+    return false;
+  }
+  return true;
+}
+module.exports = { userAccountInfo, checkConnectedUser };
