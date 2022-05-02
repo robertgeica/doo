@@ -27,4 +27,13 @@ const renderCollection = ({ collection }) => {
   );
 };
 
-module.exports = { renderCollections, renderCollection };
+const renderCollectionComments = (collection) => {
+  const { comments } = collection;
+  console.log(`Comments in ${chalk.hex(workplace).bold(collection.name)} collection:`)
+  comments.forEach((comment) => {
+      console.log(`${comment.content}`, chalk.bold(`by ${comment.accountName}`));
+  });
+
+};
+
+module.exports = { renderCollections, renderCollection, renderCollectionComments };

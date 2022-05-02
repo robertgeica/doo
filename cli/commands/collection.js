@@ -7,7 +7,7 @@ const {
   updateCollection,
   addCollectionComment
 } = require("../api/collection");
-const { renderCollections, renderCollection } = require("../ui/collection");
+const { renderCollections, renderCollection, renderCollectionComments } = require("../ui/collection");
 
 const addCollectionCmd = {
   command: "ac",
@@ -65,6 +65,17 @@ const editCollectionCmd = {
   },
 };
 
+// viewCollectionCommentsCmd
+const viewCollectionCommentsCmd = {
+  command: "vcc",
+  describe: "view collection comments",
+
+  async handler() {
+    const { collection } = await getCollection();
+    renderCollectionComments(await collection);
+  },
+}
+
 // addCollectionCommentCmd
 const addCollectionCommentCmd = {
   command: "acc",
@@ -75,6 +86,16 @@ const addCollectionCommentCmd = {
   },
 };
 
+// deleteCollectionCommentCmd
+// const deleteCollectionCommentCmd = {
+//   command: "dcc",
+//   describe: "add collection comment",
+
+//   async handler(argv) {
+//     await addCollectionComment(argv._[1], argv._[2]);
+//   },
+// };
+
 module.exports = {
   addCollectionCmd,
   viewCollectionsCmd,
@@ -82,5 +103,7 @@ module.exports = {
   viewCollectionCmd,
   deleteCollectionCmd,
   editCollectionCmd,
-  addCollectionCommentCmd
+  viewCollectionCommentsCmd,
+  addCollectionCommentCmd,
+  // deleteCollectionCommentCmd
 };
