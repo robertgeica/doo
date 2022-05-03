@@ -5,9 +5,12 @@ const {
   getCollection,
   deleteCollection,
   updateCollection,
-  addCollectionComment
+  addCollectionComment,
+  deleteCollectionComment,
+  addCollectionLabel,
+  deleteCollectionLabel
 } = require("../api/collection");
-const { renderCollections, renderCollection, renderCollectionComments } = require("../ui/collection");
+const { renderCollections, renderCollection, renderCollectionComments, renderCollectionLabels } = require("../ui/collection");
 
 const addCollectionCmd = {
   command: "ac",
@@ -86,15 +89,43 @@ const addCollectionCommentCmd = {
   },
 };
 
-// deleteCollectionCommentCmd
-// const deleteCollectionCommentCmd = {
-//   command: "dcc",
-//   describe: "add collection comment",
 
-//   async handler(argv) {
-//     await addCollectionComment(argv._[1], argv._[2]);
-//   },
-// };
+const deleteCollectionCommentCmd = {
+  command: "dcc",
+  describe: "add collection comment",
+
+  async handler(argv) {
+    await deleteCollectionComment(argv._[1]);
+  },
+};
+
+const viewCollectionLabelsCmd = {
+  command: "vcl",
+  describe: "view collection comments",
+
+  async handler() {
+    const { collection } = await getCollection();
+    renderCollectionLabels(await collection);
+  },
+}
+
+const addCollectionLabelCmd = {
+  command: 'acl',
+  describe: 'add collection label',
+
+  async handler(argv) {
+    await addCollectionLabel(argv._[1], argv._[2]);
+  }
+}
+
+const deleteCollectionLabelCmd = {
+  command: 'dcl',
+  describe: 'delete collection label',
+
+  async handler(argv) {
+    await deleteCollectionLabel(argv._[1]);
+  }
+}
 
 module.exports = {
   addCollectionCmd,
@@ -105,5 +136,8 @@ module.exports = {
   editCollectionCmd,
   viewCollectionCommentsCmd,
   addCollectionCommentCmd,
-  // deleteCollectionCommentCmd
+  deleteCollectionCommentCmd,
+  viewCollectionLabelsCmd,
+  addCollectionLabelCmd,
+  deleteCollectionLabelCmd
 };

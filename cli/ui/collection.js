@@ -23,17 +23,27 @@ const renderCollection = ({ collection }) => {
   console.log(
     `${icon} ${chalk.hex(workplace).bold(`@${collection.name}`)}`,
     `\t${collection.blocks.length} blocks`,
-    `\t${collection.comments.length} comments`
+    `\t${collection.comments.length} comments`,
+    `\t${collection.labels.length} labels`
   );
 };
 
 const renderCollectionComments = (collection) => {
   const { comments } = collection;
   console.log(`Comments in ${chalk.hex(workplace).bold(collection.name)} collection:`)
-  comments.forEach((comment) => {
-      console.log(`${comment.content}`, chalk.bold(`by ${comment.accountName}`));
+  comments.forEach((comment, index) => {
+      console.log(`${index}. ${comment.content}`, chalk.bold(`by ${comment.accountName}`));
   });
 
 };
 
-module.exports = { renderCollections, renderCollection, renderCollectionComments };
+const renderCollectionLabels = (collection) => {
+  const { labels } = collection;
+  console.log(`Labels in ${chalk.hex(workplace).bold(collection.name)} collection:`)
+  labels.forEach((label, index) => {
+      console.log(chalk.hex(label.color)(`${index}. ${label.text}`));
+  });
+
+};
+
+module.exports = { renderCollections, renderCollection, renderCollectionComments, renderCollectionLabels };

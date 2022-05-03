@@ -18,7 +18,10 @@ const {
   editCollectionCmd,
   viewCollectionCommentsCmd,
   addCollectionCommentCmd,
-  // deleteCollectionCommentCmd
+  deleteCollectionCommentCmd,
+  viewCollectionLabelsCmd,
+  addCollectionLabelCmd,
+  deleteCollectionLabelCmd
 } = require("./commands/collection");
 const {
   registerUserCmd,
@@ -85,12 +88,15 @@ yargs.command(viewCollectionCommentsCmd);
 yargs.command(addCollectionCommentCmd);
 
 // doo dcc (delete collection comment)
-// yargs.command(deleteCollectionCommentCmd);
+yargs.command(deleteCollectionCommentCmd);
+
+// doo vcl (view collection labels)
+yargs.command(viewCollectionLabelsCmd);
 
 // doo acl (add collection label)
-// yargs.command(addCollectionLabelCmd);
+yargs.command(addCollectionLabelCmd);
 
 // doo dcl (delete collection label)
-// yargs.command(deleteCollectionLabelCmd);
+yargs.command(deleteCollectionLabelCmd);
 
 yargs.parse();

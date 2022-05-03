@@ -215,6 +215,103 @@ const addCollectionComment = async ( content) => {
   }
 };
 
+const deleteCollectionComment = async ( commentIndex) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const { collection } = await getCollection();
+  const filteredComments = await collection.comments.filter(
+    (comm, index) => index !== commentIndex
+  );
+
+  if (collection) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const id = await collection._id;
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/collection/${id}`,
+        { comments: filteredComments },
+        config
+      );
+
+      apiSuccess(`Collection ${collection.name} has been updated!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
+const addCollectionLabel = async ( text, color) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const user = await getUser();
+  const {collection} = await getCollection();
+
+  if (collection) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const id = await collection._id;
+
+    const body = {
+      labels: [
+       ...collection.labels,
+        { text, color },
+      ],
+    };
+
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/collection/${id}`,
+        body,
+        config
+      );
+
+      apiSuccess(`Collection ${collection.name} has been updated with your label!`);
+    } catch (error) {
+      console.log(error)
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
+const deleteCollectionLabel = async ( labelIndex) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const { collection } = await getCollection();
+  const filteredLabels = await collection.labels.filter(
+    (comm, index) => index !== labelIndex
+  );
+
+  if (collection) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const id = await collection._id;
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/collection/${id}`,
+        { labels: filteredLabels },
+        config
+      );
+
+      apiSuccess(`Collection ${collection.name} has been updated!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
 module.exports = {
   addCollection,
   getCollections,
@@ -223,4 +320,7 @@ module.exports = {
   deleteCollection,
   updateCollection,
   addCollectionComment,
+  deleteCollectionComment,
+  addCollectionLabel,
+  deleteCollectionLabel
 };
