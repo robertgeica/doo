@@ -5,15 +5,11 @@ const {
   getBlock,
   createBlock,
   deleteBlock,
+  getBlocks,
 } = require("../controllers/blockController");
 
-router
-  .route("/:userId")
-  .post(protect, createBlock);
-  
-router
-  .route("/:id")
-  .get(protect, getBlock)
-  .delete(protect, deleteBlock);
+router.route("/:userId").post(protect, createBlock).get(getBlocks);
+
+router.route("/:id").get(protect, getBlock).delete(protect, deleteBlock);
 
 module.exports = router;

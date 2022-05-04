@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 const Block = require("../models/Block");
-const Collection = require('../models/Collection');
+const Collection = require("../models/Collection");
 
 const {
   TASK_BLOCK_TYPE,
@@ -69,12 +69,14 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
 
   try {
     await block.remove();
-    
+
     const collection = await Collection.findById(
       mongoose.Types.ObjectId(block.parentId)
     );
-      
-    const newBlocks = collection.blocks.filter(block => block.toString() !== req.params.id);
+
+    const newBlocks = collection.blocks.filter(
+      (block) => block.toString() !== req.params.id
+    );
 
     collection.blocks = newBlocks;
     collection.save();
@@ -82,16 +84,30 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
     res.json({ message: "Block removed" });
   } catch (error) {
     return next(new ErrorHandler("Block not found.", 404));
-    
   }
   if (block) {
-
   } else {
   }
 });
 
+// @route         GET /api/user/block/:userid
+// @description   Get block
+// @access        Private
+const getBlocks = asyncHandler(async (req, res, next) => {
+  // const blocks = await Block.findById(mongoose.Types.ObjectId(req.params.id));
+  const blocks = await Block.find({ '_id': { $in: req.body.ids } });
+  console.log(blocks)
+  if (blocks) {
+    res.json({
+      blocks,
+    });
+  } else {
+    return next(new ErrorHandler("Invalid", 401));
+  }
+});
 module.exports = {
   getBlock,
   createBlock,
   deleteBlock,
+  getBlocks,
 };
