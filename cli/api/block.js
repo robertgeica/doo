@@ -96,7 +96,37 @@ const getBlocks = async () => {
   }
 }
 
+const setBlock = async (name) => {
+  const user = await getUser();
+  const token = await keytar.getPassword("doocli", "token");
+  const { blocks } = await getBlocks();
+  const block = blocks.filter((block) => block.blockName == name)[0];
+  if (user && block) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const blockId = block._id;
+    const profileId = user.profileId;
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/user/profile/${profileId}`,
+        { defaults: { block: blockId } },
+        config
+      );
+
+      apiSuccess(`Block ${block.blockName} has been set to default!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
 module.exports = {
   addBlock,
-  getBlocks
+  getBlocks,
+  setBlock
 };
