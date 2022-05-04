@@ -1,12 +1,13 @@
 // const {  renderBlock } = require("../ui/block");
 var inquirer = require("inquirer");
-const { addBlock, getBlocks, setBlock } = require("../api/block");
+const { addBlock, getBlocks, setBlock, getBlock, deleteBlock, updateBlock } = require("../api/block");
 const { getProfile } = require("../api/profile");
-const { renderBlocks } = require('../ui/block');
+const { renderBlocks, renderBlock } = require('../ui/block');
 const {
   simpleBlockOptions,
   complexBlockOptions,
   taskBlockOptions,
+  editTaskBlockOptions
 } = require("./block-types");
 
 const addBlockCmd = {
@@ -50,8 +51,57 @@ const setBlockCmd = {
     setBlock(argv._[1]);
   },
 };
+
+const viewBlockCmd = {
+  command: "vb",
+  describe: "view block",
+
+  async handler() {
+    const { block } = await getBlock();
+    renderBlock(block);
+  },
+};
+
+const deleteBlockCmd = {
+  command: "db",
+  describe: "delete block",
+
+  async handler(argv) {
+    await deleteBlock(argv._[1]);
+  },
+};
+
+
+const editBlockCmd = {
+  command: "eb",
+  describe: "edit block",
+
+  async handler(argv) {
+    const blockName = argv._[0];
+
+    inquirer
+      .prompt([ ...editTaskBlockOptions, ])
+      .then((answers) => {
+        const editOptions = answers.block.map(option => {return {name: option}})
+
+        inquirer
+        .prompt([ ...editOptions])
+        .then((result) => {
+          updateBlock(result);
+        })
+        .catch((error) => console.log(error));
+  
+      });
+
+  },
+};
+
+
 module.exports = {
   addBlockCmd,
   viewBlocksCmd,
-  setBlockCmd
+  setBlockCmd,
+  viewBlockCmd,
+  deleteBlockCmd,
+  editBlockCmd
 };

@@ -23,7 +23,7 @@ const {
   addCollectionLabelCmd,
   deleteCollectionLabelCmd,
 } = require("./commands/collection");
-const { addBlockCmd, viewBlocksCmd, setBlockCmd } = require('./commands/block');
+const { addBlockCmd, viewBlocksCmd, setBlockCmd, viewBlockCmd, deleteBlockCmd, editBlockCmd } = require('./commands/block');
 
 const {
   registerUserCmd,
@@ -108,12 +108,15 @@ yargs.command(viewBlocksCmd);
 yargs.command(setBlockCmd);
 
 // doo vb (view block)
+yargs.command(viewBlockCmd);
 
 // doo ab (add block)
 yargs.command(addBlockCmd);
 
 // doo db (delete block)
+yargs.commands(deleteBlockCmd);
 
-// doo ub (update block)
+// doo eb (edit block)
+yargs.command(editBlockCmd);
 
 yargs.parse();

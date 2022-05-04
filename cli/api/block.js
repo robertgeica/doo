@@ -3,7 +3,7 @@ const keytar = require("keytar");
 const { getUser } = require("./auth");
 const { apiSuccess, apiError } = require("../ui/api");
 // const { getWorkplace } = require("../api/workplace");
-// const { getProfile } = require("./profile");
+const { getProfile } = require("./profile");
 const { getCollection } = require("./collection");
 
 const addBlock = async (blockName, blockType, blockContent) => {
@@ -85,7 +85,7 @@ const getBlocks = async () => {
     };
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/block/${user._id}`,
+        `http://localhost:4000/api/block/`,
         config,
       );
 
@@ -125,8 +125,98 @@ const setBlock = async (name) => {
   }
 };
 
+const getBlock = async () => {
+  const token = await keytar.getPassword("doocli", "token");
+  const user = await getUser();
+  const profile = await getProfile();
+
+  const blockId = profile.defaults.block;
+  if (user) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`,
+      }
+    };
+    try {
+      const res = await axios.get(
+        `http://localhost:4000/api/block/${blockId}`,
+        config,
+      );
+      return res.data;
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+}
+
+const deleteBlock = async (name) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const { blocks } = await getBlocks();
+
+  const block = blocks.filter(block => block.blockName !== name);
+  const blockId = block[0]._id;
+
+  if (block) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      await axios.delete(
+        `http://localhost:4000/api/block/${blockId}`,
+        config
+      );
+
+      apiSuccess(`Block ${name} has been deleted!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
+const updateBlock = async (updatedFields) => {
+  const token = await keytar.getPassword("doocli", "token");
+  const { block } = await getBlock();
+
+  // console.log(block, updatedFields);
+
+  const newBlock = {
+    ...block,
+    blockName: updatedFields.blockName,
+    blockContent: { ...block.blockContent, ...updatedFields },
+  }
+  delete newBlock.blockContent.blockName;
+  if (block) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/block/${block._id}`,
+        {block: newBlock},
+        config
+      );
+
+      apiSuccess(`Block ${block.blockName} has been updated!`);
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+};
+
 module.exports = {
   addBlock,
   getBlocks,
-  setBlock
+  setBlock,
+  getBlock,
+  deleteBlock,
+  updateBlock
 };

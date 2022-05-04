@@ -5,7 +5,6 @@ const renderBlocks = (blocks, blockId) => {
   console.log(
     chalk.hex(normal)(`These are your blocks in current collection:`)
   );
-
   blocks.forEach((block) => {
     const icon = "💽";
     console.log(
@@ -27,4 +26,22 @@ const renderBlocks = (blocks, blockId) => {
   );
 };
 
-module.exports = { renderBlocks };
+const renderBlock = (block) => {
+  const icon = "💽";
+  console.log(
+    `${icon} ${chalk.hex(workplace).bold(`@${block.blockName}`)}`,
+    `\t${block.blockContent.status}`,
+    `\t${block.blockContent.priority}`,
+    `\t${block.blockContent.estimation}`,
+    `\t${block.blockType} type`,
+    `\t${block.blockContent.deadline}`,
+    `\t${block.blockContent.description}`,
+    `\n${block.comments.length} comments`,
+    `\t${block.blockContent.labels.length} labels`,
+    `\t${block.blockContent.sessions.length} sessions`,
+    `\t${block.blockContent.milestones.length} milestones`,
+    `\t${block.blockContent.blocks.length} blocks`,
+  );
+}
+
+module.exports = { renderBlocks, renderBlock };
