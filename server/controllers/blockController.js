@@ -29,7 +29,7 @@ const getBlock = asyncHandler(async (req, res, next) => {
 // @access        Private
 const createBlock = asyncHandler(async (req, res, next) => {
   const blockType = req.body.blockType;
-  const blockContent = {
+  const blockContent = req.body.blockContent || {
     simple: SIMPLE_BLOCK_TYPE,
     complex: COMPLEX_BLOCK_TYPE,
     task: TASK_BLOCK_TYPE,
@@ -41,7 +41,7 @@ const createBlock = asyncHandler(async (req, res, next) => {
 
   const block = new Block({
     ...req.body,
-    blockContent: blockTypeSchema(blockType),
+    blockContent: req.body.blockContent || blockTypeSchema(blockType),
     userId: mongoose.Types.ObjectId(req.params.userId),
   });
 

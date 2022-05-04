@@ -1,16 +1,16 @@
 const TASK_BLOCK_TYPE = {
   schemaVersion: "1.0.0",
-  description: "desc",
-  status: "none",
-  priority: "1",
-  deadline: "01/01/2000",
-  estimation: "1h",
+  description: "",
+  status: "",
+  priority: "",
+  deadline: "",
+  estimation: "",
   labels: [],
   sessions: [],
   milestiones: [],
   isRecurrent: {
-    date: "01/01/2000",
-    time: "01/01/2000",
+    date: "",
+    time: "",
     days: {
       monday: false,
       tuesday: false,
