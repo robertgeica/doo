@@ -6,10 +6,12 @@ const {
   createBlock,
   deleteBlock,
   getBlocks,
+  updateBlock
 } = require("../controllers/blockController");
 
-router.route("/:userId").post(protect, createBlock).get(getBlocks);
+router.route("/").get(getBlocks);
+router.route("/:userId").post(protect, createBlock);
 
-router.route("/:id").get(protect, getBlock).delete(protect, deleteBlock);
+router.route("/:id").get(protect, getBlock).delete(protect, deleteBlock).patch(protect, updateBlock);
 
 module.exports = router;

@@ -94,9 +94,7 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
 // @description   Get block
 // @access        Private
 const getBlocks = asyncHandler(async (req, res, next) => {
-  // const blocks = await Block.findById(mongoose.Types.ObjectId(req.params.id));
-  const blocks = await Block.find({ '_id': { $in: req.body.ids } });
-  console.log(blocks)
+  const blocks = await Block.find({ _id: { $in: req.body.ids } });
   if (blocks) {
     res.json({
       blocks,
@@ -105,9 +103,29 @@ const getBlocks = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Invalid", 401));
   }
 });
+
+// @route         PATCH /api/user/block/:id
+// @description   Update block
+// @access        Private
+const updateBlock = asyncHandler(async (req, res, next) => {
+  const { block } = req.body;
+
+  const blockToUpdate = await Block.findById(req.params.id);
+  if (blockToUpdate) {
+    blockToUpdate.blockName = block.blockName;
+    blockToUpdate.blockContent = block.blockContent;
+
+    await blockToUpdate.save();
+    res.json(block);
+  } else {
+    return next(new ErrorHandler("Block not found.", 404));
+  }
+});
+
 module.exports = {
   getBlock,
   createBlock,
   deleteBlock,
   getBlocks,
+  updateBlock,
 };
