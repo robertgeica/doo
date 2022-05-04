@@ -6,9 +6,11 @@ const complexBlockOptions = [
 ];
 
 const taskBlockOptions = [
-  {name: 'Priority'}, {name: 'Estimation'}, 
+  {name: 'priority'}, {name: 'estimation'}, 
 ]
 
+
+  
 module.exports = {
   simpleBlockOptions,
   complexBlockOptions,

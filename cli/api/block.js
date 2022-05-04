@@ -67,6 +67,36 @@ const addBlock = async (blockName, blockType, blockContent) => {
   }
 };
 
+const getBlocks = async () => {
+  const token = await keytar.getPassword("doocli", "token");
+  const user = await getUser();
+  const { collection } = await getCollection();
+
+  const blocks =  collection.blocks;
+  // console.log('get blocks api', blocks)
+
+  if (user) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`,
+      },
+      data: { ids: blocks}
+    };
+    try {
+      const res = await axios.get(
+        `http://localhost:4000/api/block/${user._id}`,
+        config,
+      );
+
+      return res.data;
+    } catch (error) {
+      if (error) apiError("Sorry, something went wrong.");
+    }
+  }
+}
+
 module.exports = {
   addBlock,
+  getBlocks
 };

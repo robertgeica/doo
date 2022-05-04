@@ -1,7 +1,7 @@
 // const {  renderBlock } = require("../ui/block");
-const yargsInteractive = require("yargs-interactive");
 var inquirer = require("inquirer");
-const { addBlock } = require("../api/block");
+const { addBlock, getBlocks } = require("../api/block");
+const { renderBlocks } = require('../ui/block');
 const {
   simpleBlockOptions,
   complexBlockOptions,
@@ -30,6 +30,17 @@ const addBlockCmd = {
   },
 };
 
+const viewBlocksCmd = {
+  command: "vbs",
+  describe: "view blocks",
+
+  async handler() {
+    const blocks = await getBlocks();
+    renderBlocks(blocks);
+  },
+};
+
 module.exports = {
   addBlockCmd,
+  viewBlocksCmd
 };
