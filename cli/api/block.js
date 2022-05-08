@@ -178,15 +178,15 @@ const deleteBlock = async (name) => {
   }
 };
 
-const updateBlock = async (updatedFields) => {
+const updateBlock = async (updatedFields, blockName) => {
   const token = await keytar.getPassword("doocli", "token");
+  // if blockName, call other api route
   const { block } = await getBlock();
 
-  // console.log(block, updatedFields);
 
   const newBlock = {
     ...block,
-    blockName: updatedFields.blockName,
+    blockName: updatedFields.blockName || block.blockName,
     blockContent: { ...block.blockContent, ...updatedFields },
   }
   delete newBlock.blockContent.blockName;

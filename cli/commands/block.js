@@ -77,7 +77,7 @@ const editBlockCmd = {
   describe: "edit block",
 
   async handler(argv) {
-    const blockName = argv._[0];
+    const blockName = argv._[1];
 
     inquirer
       .prompt([ ...editTaskBlockOptions, ])
@@ -87,7 +87,7 @@ const editBlockCmd = {
         inquirer
         .prompt([ ...editOptions])
         .then((result) => {
-          updateBlock(result);
+          updateBlock(result, blockName);
         })
         .catch((error) => console.log(error));
   
