@@ -11,6 +11,7 @@ const SendResetPassword = React.lazy(() =>
   import("../screens/auth/SendResetPassword")
 );
 const ResetPassword = React.lazy(() => import("../screens/auth/ResetPassword"));
+const CollectionScreen = React.lazy(() => import("../screens/CollectionScreen"));
 if (localStorage.token) setAuthToken(localStorage.token);
 
 const AppRoutes = (props) => {
@@ -18,6 +19,7 @@ const AppRoutes = (props) => {
     <Layout>
       <Routes>
         <Route exact path="/" element={<HomeScreen />} />
+        <Route exact path="/collection/:id" element={<CollectionScreen />} />
       </Routes>
     </Layout>
   ) : (

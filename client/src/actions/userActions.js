@@ -35,6 +35,8 @@ export const loadUser = () => async (dispatch) => {
     });
   } catch (error) {
     dispatch({ type: USER_LOAD_FAIL });
+    localStorage.removeItem("token");
+
   }
 };
 

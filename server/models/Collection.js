@@ -21,7 +21,7 @@ const CollectionSchema = new Schema(
 
     labels: [
       {
-        text: { type: String },
+        label: { type: String },
         color: { type: String },
       },
     ],

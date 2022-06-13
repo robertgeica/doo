@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import NavItem from "./navItem/NavItem.jsx";
 import { connect } from "react-redux";
@@ -10,8 +10,13 @@ import {
   updateWorkplace,
 } from "../../../actions/workplaceActions.js";
 import { logout } from "../../../actions/userActions";
+import {
+  loadCollections,
+  addCollection,
+  deleteCollection
+} from "../../../actions/collectionActions.js";
 
-const Dropdown = React.lazy(() => import("../Dropdown/Dropdown.js"));
+const EditableDropdown = React.lazy(() => import("../Dropdown/EditableDropdown.js"));
 
 const Sidebar = (props) => {
   const dispatch = useDispatch();
@@ -31,13 +36,17 @@ const Sidebar = (props) => {
       label: workplace.name,
     };
   });
-  const defaultValue = options?.[0];
+  const [defaultValue, setDefaultValue] = useState(options[0]);
   const userId = props.user._id;
+
+  const selectItem = (id) => {
+    setDefaultValue(options?.filter((item) => id == item.value));
+  };
 
   const addItem = (content) => {
     return (
       <button
-        className="showOnHover actionButton"
+        className="actionButton"
         onClick={() =>
           dispatch(
             addWorkplace({ workplace: { workplaceName: content } }, userId)
@@ -49,11 +58,14 @@ const Sidebar = (props) => {
     );
   };
 
-  const updateItem = (e) => {
+  const updateItem = (content, workplaceId) => {
+    console.log(content, workplaceId);
     return (
       <button
         className="actionButton"
-        onClick={(e) => dispatch(updateWorkplace())}
+        onClick={(e) =>
+          dispatch(updateWorkplace({ workplaceName: content }, workplaceId))
+        }
       >
         e
       </button>
@@ -73,32 +85,67 @@ const Sidebar = (props) => {
 
   useEffect(() => {
     dispatch(loadWorkplace(defaultValue?.value));
-  }, [dispatch, defaultValue?.value]);
+  }, []);
+
+  const [collectionName, setCollectionName] = useState("");
+  const onCollectionInputChange = (e) => {
+    setCollectionName(e.target.textContent);
+  };
+
+  const removeCollection = (id) => {
+    dispatch(deleteCollection(id));
+  }
 
   return (
     <nav className="sidebar">
       <div className="sidebar-top">
-        <Dropdown
+        <EditableDropdown
           options={options}
           value={defaultValue ? defaultValue : ""}
-          onChange={(e) => dispatch(loadWorkplace(e.target.id))}
+          onChange={(e) =>
+            dispatch(loadWorkplace(e.target.childNodes[0].id || e.target.id))
+          }
           placeholder="Select option"
-          itemActions={{ addItem, updateItem, deleteItem }}
+          itemActions={{ addItem, updateItem, deleteItem, selectItem }}
         />
       </div>
 
       <div className="links">
         <div className="links-header">
-          <p className="collections">Favorites</p>
-        </div>
-
-        <div className="links-header">
-          <p contentEditable="true" suppressContentEditableWarning={true} className="collections">Collections</p>
-          <button className="actionButton edit-collection">+</button>
+          <div
+            contentEditable="true"
+            suppressContentEditableWarning={true}
+            className="collections"
+            onInput={onCollectionInputChange}
+          >
+            Collection
+          </div>
+          <button
+            className="actionButton edit-collection"
+            onClick={(e) =>
+              dispatch(
+                addCollection(
+                  {
+                    collection: {
+                      workplaceId: workplace?.workplace._id,
+                      name: collectionName,
+                      icon: "icon.png",
+                      background: "default",
+                    },
+                  },
+                  userId
+                )
+              )
+            }
+          >
+            +
+          </button>
         </div>
         {collections &&
           sideMenu(collections).map((item, index) => {
-            return <NavItem key={`${item.label}`} item={item} />;
+            return <>
+            <NavItem key={`${item.to}`} item={item} deleteCollection={removeCollection} />
+            </>;
           })}
       </div>
 

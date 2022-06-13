@@ -1,7 +1,7 @@
 const TASK_BLOCK_TYPE = {
   schemaVersion: "1.0.0",
   description: "",
-  status: "",
+  status: {color: '', label: ''},
   priority: "",
   deadline: "",
   estimation: "",

@@ -9,9 +9,18 @@ const NavItem = (props) => {
     return <NavItemHeader item={props.item} />;
   }
   return (
-    <NavLink exact={to} to={to} className="navItem" activeclassname="activeNavItem">
-      <img className="navIcon" src={logo} alt="logo" />
-      <span className="navLabel">{label}</span>
+    <NavLink
+      exact={to}
+      to={to}
+      className="navItem"
+      activeclassname="activeNavItem"
+    >
+        <img className="navIcon" src={logo} alt="logo" />
+        <span className="navLabel">{label}</span>
+
+      <div>
+        <button className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}>de</button>
+      </div>
     </NavLink>
   );
 };

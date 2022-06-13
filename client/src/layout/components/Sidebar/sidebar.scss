@@ -38,8 +38,7 @@
 }
 
 .actionButton {
-  border: 1px solid red;
-  background-color: #292e3a;
+  background-color: #4b556a;
   border: none;
   color: white;
   text-align: center;
@@ -51,17 +50,27 @@
 }
 
 .actionButton:hover {
-  background-color: #2f3542;
+  background-color: #313846;
 
 }
+
 
 .collections {
   font-size: 1.1em;
-  padding: 0 .1em;
   margin: 1em;
-  // margin: auto;
+  border: 0;
+  color: #fff;
+  padding: 0.4em 1em;
+  font-weight: 500;
+  background-color: #3a4151;
+  cursor: caret;
+  display: flex;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
 }
-.edit-collection {
+.delete-collection {
   display: none;
 }
 
@@ -69,4 +78,11 @@
   .edit-collection {
     display: block;
   }
+}
+
+.delete-collection:hover {
+  .edit-collection {
+    display: block;
+  }
+
 }

@@ -51,7 +51,7 @@ const createBlock = asyncHandler(async (req, res, next) => {
     mongoose.Types.ObjectId(req.body.parentId)
   );
 
-  collection.blocks = [...collection.blocks, block._id];
+  collection.blocks = [...collection.blocks, block._id.toString()];
   collection.save();
 
   if (block) {
@@ -112,8 +112,9 @@ const updateBlock = asyncHandler(async (req, res, next) => {
 
   const blockToUpdate = await Block.findById(req.params.id);
   if (blockToUpdate) {
-    blockToUpdate.blockName = block.blockName;
-    blockToUpdate.blockContent = block.blockContent;
+    blockToUpdate.blockName = req.body.blockName;
+    blockToUpdate.blockContent = req.body.blockContent;
+    blockToUpdate.comments = req.body.comments;
 
     await blockToUpdate.save();
     res.json(block);

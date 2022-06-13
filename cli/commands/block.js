@@ -71,7 +71,6 @@ const deleteBlockCmd = {
   },
 };
 
-
 const editBlockCmd = {
   command: "eb",
   describe: "edit block",

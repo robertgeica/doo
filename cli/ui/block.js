@@ -16,7 +16,6 @@ const renderBlocks = (blocks, blockId) => {
       `\t${block.blockContent.status}`,
       `\t${block.blockContent.priority}`,
       `\t${block.blockContent.estimation}`,
-      `\t${block.blockType} type`,
       `\t${block.comments.length} comments`
     );
   });

@@ -2,7 +2,8 @@
   padding: 0.8rem 1.25rem;
   text-decoration: none;
   display: flex;
-  align-items: center;
+  // align-items: center;
+  justify-content: space-between;
 }
 
 .navItem:hover {

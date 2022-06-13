@@ -12,6 +12,8 @@ const NavItemHeader = (props) => {
     location.pathname.includes(headerToPath)
   );
 
+  console.log(location.pathname, headerToPath);
+
   const onExpandChange = (e) => {
     e.preventDefault();
     setExpand((expanded) => !expanded);

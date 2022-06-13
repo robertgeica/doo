@@ -1,0 +1,138 @@
+.block-container {
+  border: 1px solid #606776;
+  max-width: 50%;
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+}
+
+.block-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block-name {
+  &:hover {
+    color: grey;
+    cursor: pointer;
+  }
+}
+
+.block-item {
+  align-items: center;
+  margin: 0.5em;
+
+  &:hover {
+    color: grey;
+    cursor: pointer;
+  }
+}
+
+.block-actions {
+  display: flex;
+}
+
+/* modal */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.7em;
+  border-bottom: 1px solid black;
+  align-items: center;
+
+  svg {
+    color: black;
+    cursor: pointer;
+    font-size: 1.3em;
+  }
+}
+.modal-header-actions {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.action-item {
+  margin: 0 0.2em;
+}
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 1.5em;
+  margin: 0.2em;
+}
+
+.label-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    input {
+      margin: 0 0.2em;
+    }
+  }
+}
+
+.checkbox {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.comments-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2em 2em;
+  margin: .2em 0;
+  border: 1px solid grey;
+  border-radius: 15px;
+}
+
+.comment-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+
+  
+  button {
+    padding: .6em;
+    
+  }
+
+  textarea, button {
+    margin: .2em;
+  }
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.modal-side {
+  width: calc(100% - 200px);
+
+}
+
+.modal-blocks {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: .5em 1em;
+  align-items: center;
+}

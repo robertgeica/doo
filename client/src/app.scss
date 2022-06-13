@@ -26,7 +26,7 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: #2f3542;
-  color: #fff;
+  color: grey;
 }
 
 .button {
@@ -34,7 +34,7 @@ body {
   border: 0;
   border-radius: 10px;
   background-color: #0099ff;
-  padding: 1em 4em;
+  padding: 1em 3em;
   margin-left: auto;
   color: white;
 
@@ -72,3 +72,4 @@ body {
 @import './layout/components/Sidebar/sidebar.scss';
 @import './layout/components/Sidebar/navItem/navItem.scss';
 @import './layout/components/Dropdown/dropdown.scss';
+@import './layout/components/Block/block.scss';
