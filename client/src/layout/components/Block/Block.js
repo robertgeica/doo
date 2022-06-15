@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaRegComments } from "react-icons/fa";
-import { TbRadiusBottomLeft, TbRotateClockwise2 } from "react-icons/tb";
-import { BsCalendar2Date } from "react-icons/bs";
 import {
-  AiOutlineClockCircle,
   AiOutlineCloseCircle,
   AiOutlineDelete,
   AiOutlineSave,
@@ -15,23 +12,18 @@ import {
   loadBlocks,
   loadSubBlocks,
 } from "../../../actions/blockActions";
-import { useDispatch, connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
-
-import Box from "@mui/material/Box";
-import Popper from "@mui/material/Popper";
-
-import DateTimePicker from "./DateTimePicker";
-import Estimation from "./Estimation";
-import Priority from "./Priority";
 import Status from "./Status";
-import Recurrent from "./Recurrent";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import SubBlock from "./SubBlock";
 import AddBlockInput from "./AddBlockInput";
 import { loadCollection } from "../../../actions/collectionActions";
+import BlockActions from "./BlockActions";
+import BlockComments from "./BlockComments";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+
 const Block = (props) => {
   const { block, collection, user, subBlocks } = props;
   const dispatch = useDispatch();
@@ -86,14 +78,6 @@ const Block = (props) => {
     setNewBlock(block);
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
   const saveIcon = () => (
     <div className="action-item">
       {(isDifferentBlockName || isDifferentBlockContent) && (
@@ -101,8 +85,6 @@ const Block = (props) => {
       )}
     </div>
   );
-
-  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     if (isOpen && block.blockContent.blocks.length !== 0) {
@@ -115,7 +97,7 @@ const Block = (props) => {
       <Modal
         isOpen={isOpen}
         onRequestClose={closeModal}
-        contentLabel="Example Modal"
+        contentLabel="Block modal"
         ariaHideApp={false}
       >
         <div className="modal-header">
@@ -130,30 +112,13 @@ const Block = (props) => {
               />
             </div>
             <div className="action-item">{saveIcon()}</div>
-
-            <Status
-              block={newBlock}
+            <BlockActions
+              newBlock={newBlock}
               collection={collection}
               onChange={onChange}
               saveIcon={saveIcon}
               showIcon
-            />
-            <Priority
-              block={newBlock}
-              onChange={onChange}
-              saveIcon={saveIcon}
-              showIcon
-            />
-            <Estimation
-              block={newBlock}
-              onChange={onChange}
-              saveIcon={saveIcon}
-            />
-            <DateTimePicker block={block} onChange={onChange} />
-
-            <Recurrent
-              block={newBlock}
-              onChange={onChange}
+              block={block}
               onUpdateBlock={onUpdateBlock}
             />
           </div>
@@ -178,74 +143,7 @@ const Block = (props) => {
               }
             />
 
-            <div className="comments-container">
-              <p>Comments</p>
-              <div className="comment-input-container">
-                <textarea
-                  onChange={(e) => setNewComment(e.target.value)}
-                  className="input comment-input"
-                  style={{
-                    width: "100%",
-                    height: "4em",
-                    resize: "vertical",
-                    padding: "10px 7px",
-                  }}
-                  placeholder="Add a comment..."
-                />
-                <div className="grey-bar">
-                  {newComment.length !== 0 && (
-                    <button
-                      className="button"
-                      onClick={(e) => {
-                        dispatch(
-                          updateBlock(
-                            {
-                              ...newBlock,
-                              comments: [
-                                ...newBlock.comments,
-                                {
-                                  content: newComment,
-                                  accountId: user._id,
-                                  accountName: user.username,
-                                },
-                              ],
-                            },
-                            newBlock._id
-                          )
-                        );
-                      }}
-                    >
-                      comment
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {newBlock.comments.map((comment) => (
-                <div className="comment-container">
-                  <div style={{ width: "95%" }}>
-                    <span>{comment.accountName}</span>
-                    <p>{comment.content}</p>
-                  </div>
-                  <MdDeleteOutline
-                    style={{ fontSize: "1.2em", cursor: "pointer" }}
-                    onClick={(e) =>
-                      dispatch(
-                        updateBlock(
-                          {
-                            ...newBlock,
-                            comments: newBlock.comments.filter(
-                              (com) => com.content !== comment.content
-                            ),
-                          },
-                          newBlock._id
-                        )
-                      )
-                    }
-                  />
-                </div>
-              ))}
-            </div>
+            <BlockComments block={newBlock} user={user} />
           </div>
 
           <div className="modal-blocks">
@@ -259,8 +157,9 @@ const Block = (props) => {
                     sub_block={sub_block}
                     user={user}
                     collection={collection}
+
                   />
-                ))
+                  ))
               : ""}
 
             <AddBlockInput
@@ -296,33 +195,16 @@ const Block = (props) => {
         </div>
 
         <div className="block-actions">
-          <div className="block-item">
-            <Priority
-              block={newBlock}
-              onChange={onChange}
-              saveIcon={saveIcon}
-            />
-          </div>
-          <div className="block-item">
-            <Estimation
-              block={newBlock}
-              onChange={onChange}
-              saveIcon={saveIcon}
-            />
-            {/* estimation */}
-          </div>
-          <div className="block-item">
-            <DateTimePicker
-              block={block}
-              onChange={onChange}
-              saveIcon={saveIcon}
-            />
-            {/* deadline */}
-          </div>
-          <div className="block-item" type="button">
-            <Recurrent block={block} onChange={onChange} saveIcon={saveIcon} />
-            {/* isRecurrent */}
-          </div>
+          <BlockActions
+            newBlock={newBlock}
+            collection={collection}
+            onChange={onChange}
+            saveIcon={saveIcon}
+            hideStatusIcon
+            block={block}
+            onUpdateBlock={onUpdateBlock}
+          />
+
           <div className="block-item">
             {block.comments.length} <FaRegComments />
           </div>

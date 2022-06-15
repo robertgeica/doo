@@ -45,7 +45,7 @@ function TabPanel(props) {
   );
 }
 
-const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
+const Priority = ({ collection, block, onChange, saveIcon, showIcon, hideStatusIcon }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -65,7 +65,7 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
   const [newLabel, setNewLabel] = React.useState({ color: "", label: "" });
   
   return (
-    <div className="action-item">
+    <div className="action-item" style={{display: hideStatusIcon ? 'none' : 'block'}}>
       {showIcon ? (
         <MdOutlineLabel aria-describedby={id} onClick={handleClick} />
       ) : (

@@ -27,6 +27,7 @@ const Priority = ({ block, onChange, saveIcon, showIcon }) => {
     medium: <FcMediumPriority />,
     high: <FcHighPriority />,
   };
+
   return (
     <div className="action-item">
       {showIcon ? (
