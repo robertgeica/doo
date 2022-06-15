@@ -29,9 +29,12 @@ import Recurrent from "./Recurrent";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import AddBlockInput from "./AddBlockInput";
+import BlockActions from "./BlockActions";
+import Block from './Block';
+
 
 const SubBlock = (props) => {
-  const { sub_block, parentId, user, collection } = props;
+  const { sub_block, parentId, user, collection, subBlocks } = props;
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
@@ -100,13 +103,14 @@ const SubBlock = (props) => {
       dispatch(loadSubBlocks(sub_block.blockContent.blocks));
     }
   }, [isOpen]);
+  
   return (
     <div className="sub-block-container">
       <div key={sub_block?._id}>
         <Modal
           isOpen={isOpen}
           onRequestClose={closeModal}
-          contentLabel="Example Modal"
+          contentLabel="Block modal"
           ariaHideApp={false}
         >
           <div className="modal-header">
@@ -117,30 +121,15 @@ const SubBlock = (props) => {
                 />
               </div>
               <div className="action-item">{saveIcon()}</div>
-
-              <Status
-                block={sub_block}
+              <BlockActions
+                newBlock={newBlock}
                 collection={collection}
                 onChange={onChange}
                 saveIcon={saveIcon}
-                showIcon
-              />
-              <Priority
+                showStatusIcon
+                showPriorityIcon
+                hideStatusIcon={false}
                 block={sub_block}
-                onChange={onChange}
-                saveIcon={saveIcon}
-                showIcon
-              />
-              <Estimation
-                block={sub_block}
-                onChange={onChange}
-                saveIcon={saveIcon}
-              />
-              <DateTimePicker block={sub_block} onChange={onChange} />
-
-              <Recurrent
-                block={sub_block}
-                onChange={onChange}
                 onUpdateBlock={onUpdateBlock}
               />
             </div>
@@ -237,13 +226,25 @@ const SubBlock = (props) => {
 
             <div className="modal-blocks">
               <h2>subtasks</h2>
-              {/* <SubBlock
-                parentId={sub_block?._id}
-                subBlocks={sub_block}
-                user={user}
-                collection={collection}
-                // userId={user._id}
-              /> */}
+              {typeof subBlocks !== "undefined" &&
+              subBlocks?.length !== 0 &&
+              subBlocks !== null
+                ? subBlocks.map((sub_block) => (
+                    <SubBlock
+                      parentId={sub_block._id}
+                      sub_block={sub_block}
+                      user={user}
+                      collection={collection}
+                    />
+                  ))
+                : ""}
+
+              <AddBlockInput
+                parentId={sub_block._id}
+                userId={user._id}
+                fullWidth
+                isBlockParent
+              />
             </div>
           </div>
         </Modal>
@@ -262,47 +263,20 @@ const SubBlock = (props) => {
           </div>
 
           <div className="block-actions">
-            <div className="block-item">
-              <Priority
-                block={sub_block}
-                onChange={onChange}
-                saveIcon={saveIcon}
-              />
-            </div>
-            <div className="block-item">
-              <Estimation
-                block={sub_block}
-                onChange={onChange}
-                saveIcon={saveIcon}
-              />
-              {/* estimation */}
-            </div>
-            <div className="block-item">
-              <DateTimePicker
-                block={sub_block}
-                onChange={onChange}
-                saveIcon={saveIcon}
-              />
-              {/* deadline */}
-            </div>
-            <div className="block-item" type="button">
-              <Recurrent
-                block={sub_block}
-                onChange={onChange}
-                saveIcon={saveIcon}
-              />
-              {/* isRecurrent */}
-            </div>
+            <BlockActions
+              newBlock={newBlock}
+              collection={collection}
+              onChange={onChange}
+              saveIcon={saveIcon}
+              // showStatusIcon
+              // showPriorityIcon
+              hideStatusIcon
+              block={sub_block}
+              onUpdateBlock={onUpdateBlock}
+            />
           </div>
         </div>
       </div>
-
-      {/* <AddBlockInput
-        parentId={parentId}
-        userId={userId}
-        fullWidth
-        isBlockParent
-      /> */}
     </div>
   );
 };

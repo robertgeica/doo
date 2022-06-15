@@ -23,7 +23,6 @@ import BlockActions from "./BlockActions";
 import BlockComments from "./BlockComments";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-
 const Block = (props) => {
   const { block, collection, user, subBlocks } = props;
   const dispatch = useDispatch();
@@ -157,9 +156,8 @@ const Block = (props) => {
                     sub_block={sub_block}
                     user={user}
                     collection={collection}
-
                   />
-                  ))
+                ))
               : ""}
 
             <AddBlockInput
@@ -200,7 +198,7 @@ const Block = (props) => {
             collection={collection}
             onChange={onChange}
             saveIcon={saveIcon}
-            hideStatusIcon
+            hideStatusIcon={false}
             block={block}
             onUpdateBlock={onUpdateBlock}
           />

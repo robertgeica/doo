@@ -24,8 +24,8 @@ export default function BlockActions({
           collection={collection}
           onChange={onChange}
           saveIcon={saveIcon}
-          showIcon={showStatusIcon}
-          hideStatusIcon
+          showIcon={showStatusIcon || true}
+          hideStatusIcon={hideStatusIcon}
         />
       </div>
       <div className="block-item">
