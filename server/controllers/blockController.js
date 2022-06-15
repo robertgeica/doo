@@ -150,6 +150,7 @@ const updateBlock = asyncHandler(async (req, res, next) => {
     blockToUpdate.blockName = req.body.blockName;
     blockToUpdate.blockContent = req.body.blockContent;
     blockToUpdate.comments = req.body.comments;
+    blockToUpdate.icon = req.body.icon;
 
     await blockToUpdate.save();
     res.json(block);

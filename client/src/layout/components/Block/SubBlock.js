@@ -12,6 +12,7 @@ import {
   deleteBlock,
   updateBlock,
   loadSubBlocks,
+  loadBlock,
 } from "../../../actions/blockActions";
 import { useDispatch, connect } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
@@ -21,17 +22,19 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import AddBlockInput from "./AddBlockInput";
 import BlockActions from "./BlockActions";
-import Block from './Block';
-
+import Block from "./Block";
 
 const SubBlock = (props) => {
-  const { sub_block, parentId, user, collection, subBlocks } = props;
+  const { parentId, user, collection, subBlocks, sub_block } = props;
+  // const sub_block = props.block;
+  console.log(props);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
   const [newBlock, setNewBlock] = useState(sub_block);
+  console.log(newBlock.blockName, sub_block.blockName);
 
   const onChange = (value, key) => {
     if (key.split(".")[1] === "isRecurrent") {
@@ -87,14 +90,16 @@ const SubBlock = (props) => {
     </div>
   );
 
-  const [newComment, setNewComment] = useState("");
+  const [showBlocks, setShowBlocks] = useState(false);
 
   useEffect(() => {
     if (isOpen && sub_block.blockContent.blocks.length !== 0) {
-      dispatch(loadSubBlocks(sub_block.blockContent.blocks));
+      console.log(sub_block.blockName);
+      // dispatch(loadBlock(sub_block));
+      // dispatch(loadSubBlocks(sub_block.blockContent.blocks));
     }
-  }, [isOpen]);
-  
+  }, [showBlocks, props.block]);
+
   return (
     <div className="sub-block-container">
       <div key={sub_block?._id}>
@@ -108,7 +113,7 @@ const SubBlock = (props) => {
             <div className="modal-header-actions">
               <div className="action-item">
                 <AiOutlineDelete
-                  onClick={() => dispatch(deleteBlock(sub_block?._id, 'block'))}
+                  onClick={() => dispatch(deleteBlock(sub_block?._id, "block"))}
                 />
               </div>
               <div className="action-item">{saveIcon()}</div>
@@ -145,8 +150,11 @@ const SubBlock = (props) => {
                 }
               />
 
-             
-            <BlockComments block={newBlock} user={user} collection={collection}/>
+              <BlockComments
+                block={newBlock}
+                user={user}
+                collection={collection}
+              />
             </div>
 
             <div className="modal-blocks">
@@ -184,8 +192,16 @@ const SubBlock = (props) => {
             padding: "0.5em",
           }}
         >
-          <div className="block-name" onClick={openModal}>
-            {sub_block?.blockName}
+          <div
+            className="block-name"
+            onClick={() => {
+              openModal();
+              setShowBlocks(!showBlocks);
+              // dispatch(loadSubBlocks(sub_block.blockContent.blocks));
+              // dispatch(loadBlock(sub_block));
+            }}
+          >
+            {newBlock?.blockName}
           </div>
 
           <div className="block-actions">
@@ -207,4 +223,8 @@ const SubBlock = (props) => {
   );
 };
 
-export default SubBlock;
+const mapStateToProps = (state) => ({
+  block: state.blockReducer.block,
+});
+
+export default connect(mapStateToProps)(SubBlock);

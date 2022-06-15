@@ -11,6 +11,7 @@ import {
   updateBlock,
   loadBlocks,
   loadSubBlocks,
+  loadBlock,
 } from "../../../actions/blockActions";
 import { useDispatch } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
@@ -21,8 +22,8 @@ import AddBlockInput from "./AddBlockInput";
 import { loadCollection } from "../../../actions/collectionActions";
 import BlockActions from "./BlockActions";
 import BlockComments from "./BlockComments";
+import Emoji from "../Emoji";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
 const Block = (props) => {
   const { block, collection, user, subBlocks } = props;
   const dispatch = useDispatch();
@@ -85,6 +86,9 @@ const Block = (props) => {
     </div>
   );
 
+  const onIconUpdate = (emoji) => {
+    dispatch(updateBlock({ ...newBlock, icon: emoji }, newBlock._id));
+  };
 
   // useEffect(() => {
   //   if (isOpen && newBlock.blockContent.blocks.length !== 0) {
@@ -185,14 +189,19 @@ const Block = (props) => {
             width: "30%",
           }}
         >
-          <div
-            className="block-name"
-            onClick={() => {
-              openModal();
-              dispatch(loadSubBlocks(newBlock.blockContent.blocks));
-            }}
-          >
-            {block.blockName}
+          <div style={{display: 'flex'}}>
+            <Emoji parent={newBlock} onUpdate={onIconUpdate} />
+            <div
+              className="block-name"
+              onClick={() => {
+                openModal();
+                dispatch(loadSubBlocks(newBlock.blockContent.blocks));
+
+                dispatch(loadBlock(newBlock));
+              }}
+            >
+              {block.blockName}
+            </div>
           </div>
 
           <Status

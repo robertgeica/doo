@@ -79,6 +79,7 @@ const updateCollection = asyncHandler(async (req, res, next) => {
       const newCollections = workplace.collections.map((coll) => {
         if (coll.collectionId.equals(collection._id)) {
           coll.collectionName = name || coll.collectionName;
+          coll.icon = icon || coll.icon
         }
         return coll;
       });

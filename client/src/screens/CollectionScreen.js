@@ -8,6 +8,7 @@ import Block from "../layout/components/Block/Block";
 import AddBlockInput from "../layout/components/Block/AddBlockInput";
 import { AiOutlineSave } from "react-icons/ai";
 import { loadWorkplace } from "../actions/workplaceActions";
+import Emoji from "../layout/components/Emoji";
 
 const CollectionScreen = (props) => {
   const { collectionState, blockState } = props;
@@ -28,31 +29,42 @@ const CollectionScreen = (props) => {
     }
   }, [collection?.blocks]);
 
+
+  const onIconUpdate = (emoji) => {
+    dispatch(
+      updateCollection(
+        { ...collection, icon: emoji },
+        collection._id
+      )
+    );
+  }
   return (
     <div>
-      <div
-        contentEditable
-        suppressContentEditableWarning
-        onInput={(e) => setNewCollectionName(e.target.textContent)}
-        className="collection-input"
-      >
-        {collection?.name}
-        {newCollectionName !== null &&
-          newCollectionName !== collection?.name && (
-            <AiOutlineSave
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                dispatch(
-                  updateCollection(
-                    { ...collection, name: newCollectionName },
-                    collection._id
-                  )
-                ).then(() => dispatch(loadWorkplace(collection.workplaceId)))
-              }
-            />
-          )}
+      <div style={{ display: "flex", maxWidth: '70%' }}>
+        <Emoji parent={collection} onUpdate={onIconUpdate}/>
+        <div
+          contentEditable
+          suppressContentEditableWarning
+          onInput={(e) => setNewCollectionName(e.target.textContent)}
+          className="collection-input"
+        >
+          {collection?.name}
+          {newCollectionName !== null &&
+            newCollectionName !== collection?.name && (
+              <AiOutlineSave
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  dispatch(
+                    updateCollection(
+                      { ...collection, name: newCollectionName },
+                      collection._id
+                    )
+                  ).then(() => dispatch(loadWorkplace(collection.workplaceId)))
+                }
+              />
+            )}
+        </div>
       </div>
-
       {blockState?.blocks?.map((block) => (
         <Block
           collection={collection}
@@ -63,6 +75,7 @@ const CollectionScreen = (props) => {
         />
       ))}
 
+      {/* <Emoji collection={collection} bid={collection?._id} /> */}
       <AddBlockInput parentId={collection?._id} userId={props.auth.user._id} />
     </div>
   );

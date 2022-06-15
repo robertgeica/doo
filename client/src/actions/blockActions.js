@@ -20,6 +20,7 @@ import {
   SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
+
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {
     dispatch({ type: SUB_BLOCKS_LOAD_REQUEST });
@@ -42,15 +43,15 @@ export const loadSubBlocks = (blockIds) => async (dispatch) => {
   }
 };
 
-export const loadBlock = (id) => async (dispatch) => {
+export const loadBlock = (block) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_LOAD_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:4000/api/block/${id}`);
+    // const { data } = await axios.get(`http://localhost:4000/api/block/${id}`);
 
     dispatch({
       type: BLOCK_LOAD_SUCCESS,
-      payload: data,
+      payload: block,
     });
   } catch (error) {
     dispatch({ type: BLOCK_LOAD_FAIL });
