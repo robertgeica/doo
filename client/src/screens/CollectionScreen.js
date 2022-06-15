@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 import { logout } from "../actions/userActions";
-import { loadCollection } from "../actions/collectionActions";
+import { loadCollection, updateCollection } from "../actions/collectionActions";
 import { loadBlocks, addBlock } from "../actions/blockActions";
 import Block from "../layout/components/Block/Block";
+import AddBlockInput from "../layout/components/Block/AddBlockInput";
+import { AiOutlineSave } from "react-icons/ai";
 
 const CollectionScreen = (props) => {
   const { collectionState, blockState } = props;
@@ -12,6 +14,8 @@ const CollectionScreen = (props) => {
 
   const dispatch = useDispatch();
   const params = useParams();
+
+  const [newCollectionName, setNewCollectionName] = useState(null);
 
   useEffect(() => {
     dispatch(loadCollection(params.id));
@@ -23,10 +27,40 @@ const CollectionScreen = (props) => {
     }
   }, [collection?.blocks]);
 
-  // console.log(collection)
+  console.log(collection, newCollectionName);
+
   return (
     <div>
-      <h1>{collection?.name}</h1>
+      <div
+        contentEditable
+        suppressContentEditableWarning
+        style={{
+          maxWidth: "70%",
+          fontSize: "2em",
+          fontWeight: "600",
+          padding: ".2em 0",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+        onInput={(e) => setNewCollectionName(e.target.textContent)}
+      >
+        {collection?.name}
+        {newCollectionName !== null &&
+          newCollectionName !== collection?.name && (
+            <AiOutlineSave
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                dispatch(
+                  updateCollection(
+                    { ...collection, name: newCollectionName },
+                    collection._id
+                  )
+                )
+              }
+            />
+          )}
+      </div>
+
       {blockState?.blocks?.map((block) => (
         <Block
           collection={collection}
@@ -37,22 +71,10 @@ const CollectionScreen = (props) => {
         />
       ))}
 
-      <input
-        type="text"
-        name="name"
-        id="add-block"
-        className="collections"
-        placeholder="Add new block"
-        onKeyDown={(e) => {
-          e.key === "Enter" &&
-            dispatch(
-              addBlock({
-                parentId: collection._id,
-                userId: props.auth.user._id,
-                blockName: e.target.value,
-              })
-            );
-        }}
+      <AddBlockInput
+        parentId={collection?._id}
+        userId={props.auth.user._id}
+        style={{ maxWidth: "70%", border: "1px solid red" }}
       />
     </div>
   );

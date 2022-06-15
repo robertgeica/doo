@@ -15,9 +15,10 @@ import {
   BLOCK_DELETE_REQUEST,
   BLOCK_DELETE_SUCCESS,
   BLOCK_DELETE_FAIL,
-  SUB_BLOCKS_LOAD_REQUEST, SUB_BLOCKS_LOAD_SUCCESS, SUB_BLOCKS_LOAD_FAIL
+  SUB_BLOCKS_LOAD_REQUEST,
+  SUB_BLOCKS_LOAD_SUCCESS,
+  SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
-
 
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {
@@ -29,9 +30,8 @@ export const loadSubBlocks = (blockIds) => async (dispatch) => {
     await axios
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((data) => {
-
-        const formatedData = data.map(item => item.data.block);
-        console.log(formatedData)
+        const formatedData = data.map((item) => item.data.block);
+        console.log(formatedData);
         dispatch({
           type: SUB_BLOCKS_LOAD_SUCCESS,
           payload: formatedData,
@@ -42,14 +42,11 @@ export const loadSubBlocks = (blockIds) => async (dispatch) => {
   }
 };
 
-
 export const loadBlock = (id) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_LOAD_REQUEST });
 
-    const { data } = await axios.get(
-      `http://localhost:4000/api/block/${id}`
-    );
+    const { data } = await axios.get(`http://localhost:4000/api/block/${id}`);
 
     dispatch({
       type: BLOCK_LOAD_SUCCESS,
@@ -70,8 +67,7 @@ export const loadBlocks = (blockIds) => async (dispatch) => {
     await axios
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((data) => {
-
-        const formatedData = data.map(item => item.data.block);
+        const formatedData = data.map((item) => item.data.block);
         dispatch({
           type: BLOCKS_LOAD_SUCCESS,
           payload: formatedData,
@@ -82,7 +78,6 @@ export const loadBlocks = (blockIds) => async (dispatch) => {
   }
 };
 
-      
 export const addBlock = (block) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_ADD_REQUEST });
@@ -94,7 +89,12 @@ export const addBlock = (block) => async (dispatch) => {
     };
     const data = await axios.post(
       `http://localhost:4000/api/block/${block.userId}`,
-      { parentId: block.parentId, userId: block.userId, blockName: block.blockName, blockType: 'task' },
+      {
+        parentId: block.parentId,
+        userId: block.userId,
+        blockName: block.blockName,
+        blockType: block.blockType || 'task',
+      },
       config
     );
 

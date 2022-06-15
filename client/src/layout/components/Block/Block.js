@@ -243,7 +243,12 @@ const Block = (props) => {
               ? subBlocks.map((sub_block) => (
                   <div
                     className="block-row"
-                    style={{ flexDirection: "column", margin: "0 0 1em 0" }}
+                    style={{
+                      flexDirection: "column",
+                      margin: "0 0 1em 0",
+                      border: "1px solid grey",
+                      padding: "0.5em",
+                    }}
                   >
                     <div className="block-name" onClick={openModal}>
                       {sub_block.blockName}
