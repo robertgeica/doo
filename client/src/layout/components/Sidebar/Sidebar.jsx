@@ -44,7 +44,8 @@ const Sidebar = (props) => {
       label: workplace.name,
     };
   });
-  const [defaultValue, setDefaultValue] = useState(options[0]);
+
+  const [defaultValue, setDefaultValue] = useState(typeof options === 'undefined' ? {} : options[0]);
   const userId = props.user._id;
 
   const selectItem = (id) => {
@@ -85,8 +86,8 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-    dispatch(loadWorkplace(defaultValue?.value));
-  }, []);
+      dispatch(loadWorkplace(defaultValue?.value));
+  }, [defaultValue]);
 
   const [collectionName, setCollectionName] = useState("");
   const onCollectionInputChange = (e) => {

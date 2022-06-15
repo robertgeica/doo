@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Navigate, Link } from "react-router-dom";
+import { Navigate, Link, useNavigate } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 import { login } from "../../actions/userActions";
 import Loader from '../../layout/utils/Loader';
 
 const Login = (state) => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const [userData, setUserData] = useState({
     email: "",
@@ -16,7 +17,8 @@ const Login = (state) => {
   const { loading, error, user } = state.auth;
 
   if (user) {
-    return <Navigate replace to="/" />;
+    console.log('navigated')
+    return navigate('/');
   }
 
   const onChange = (e) =>

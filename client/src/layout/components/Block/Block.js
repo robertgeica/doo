@@ -246,7 +246,8 @@ const Block = (props) => {
                   <SubBlock
                     parentId={block._id}
                     sub_block={sub_block}
-                    userId={user._id}
+                    user={user}
+                    collection={collection}
                   />
                 ))
               : ""}

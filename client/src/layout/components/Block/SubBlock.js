@@ -31,12 +31,75 @@ import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import AddBlockInput from "./AddBlockInput";
 
 const SubBlock = (props) => {
-  const { sub_block, parentId, userId } = props;
+  const { sub_block, parentId, user, collection } = props;
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
+  const [newBlock, setNewBlock] = useState(sub_block);
+
+  const onChange = (value, key) => {
+    if (key.split(".")[1] === "isRecurrent") {
+      const newIsRecurrent = {
+        ...newBlock.blockContent.isRecurrent,
+        [value.id]: value.value,
+      };
+      const newBlockContent = {
+        ...newBlock.blockContent,
+        isRecurrent: newIsRecurrent,
+      };
+      setNewBlock({
+        ...sub_block,
+        blockContent: newBlockContent,
+      });
+      return;
+    }
+
+    if (key.split(".")[0] === "blockContent") {
+      setNewBlock({
+        ...sub_block,
+        blockContent: { ...sub_block.blockContent, [key.split(".")[1]]: value },
+      });
+      return;
+    }
+
+    setNewBlock({ ...sub_block, [key]: value });
+  };
+
+  const isDifferentBlockName = sub_block.blockName !== newBlock.blockName;
+  const isDifferentBlockContent =
+    JSON.stringify(sub_block.blockContent) !==
+    JSON.stringify(newBlock.blockContent);
+
+  const onUpdateBlock = () => {
+    dispatch(updateBlock(newBlock, newBlock._id));
+    setNewBlock(sub_block);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
+  const saveIcon = () => (
+    <div className="action-item">
+      {(isDifferentBlockName || isDifferentBlockContent) && (
+        <AiOutlineSave onClick={() => onUpdateBlock()} />
+      )}
+    </div>
+  );
+
+  const [newComment, setNewComment] = useState("");
+
+  useEffect(() => {
+    if (isOpen && sub_block.blockContent.blocks.length !== 0) {
+      dispatch(loadSubBlocks(sub_block.blockContent.blocks));
+    }
+  }, [isOpen]);
   return (
     <div className="sub-block-container">
       <div key={sub_block?._id}>
@@ -53,35 +116,32 @@ const SubBlock = (props) => {
                   onClick={() => dispatch(deleteBlock(sub_block?._id))}
                 />
               </div>
-              {/* <div className="action-item">{saveIcon()}</div> */}
+              <div className="action-item">{saveIcon()}</div>
 
               <Status
                 block={sub_block}
-                // collection={collection}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
+                collection={collection}
+                onChange={onChange}
+                saveIcon={saveIcon}
                 showIcon
               />
-              {/* <Priority
+              <Priority
                 block={sub_block}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
+                onChange={onChange}
+                saveIcon={saveIcon}
                 showIcon
-              /> */}
-              {/* <Estimation
-                block={sub_block}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
-              /> */}
-              <DateTimePicker
-                block={sub_block}
-                // onChange={onChange}
               />
+              <Estimation
+                block={sub_block}
+                onChange={onChange}
+                saveIcon={saveIcon}
+              />
+              <DateTimePicker block={sub_block} onChange={onChange} />
 
               <Recurrent
                 block={sub_block}
-                // onChange={onChange}
-                // onUpdateBlock={onUpdateBlock}
+                onChange={onChange}
+                onUpdateBlock={onUpdateBlock}
               />
             </div>
 
@@ -93,25 +153,23 @@ const SubBlock = (props) => {
                 style={{ color: "black" }}
                 contentEditable
                 suppressContentEditableWarning={true}
-                // onInput={(e) =>
-                // onChange(e.target.textContent, "blockName")
-                // }
+                onInput={(e) => onChange(e.target.textContent, "blockName")}
               >
                 {sub_block?.blockName}
               </h1>
 
               <DefaultEditor
-                value={sub_block?.blockContent.description}
-                // onChange={(e) =>
-                // onChange(e.target.value, "blockContent.description")
-                // }
+                value={newBlock?.blockContent?.description}
+                onChange={(e) =>
+                  onChange(e.target.value, "blockContent.description")
+                }
               />
 
               <div className="comments-container">
                 <p>Comments</p>
                 <div className="comment-input-container">
                   <textarea
-                    // onChange={(e) => setNewComment(e.target.value)}
+                    onChange={(e) => setNewComment(e.target.value)}
                     className="input comment-input"
                     style={{
                       width: "100%",
@@ -121,33 +179,33 @@ const SubBlock = (props) => {
                     }}
                     placeholder="Add a comment..."
                   />
-                  {/* <div className="grey-bar">
-                          {newComment.length !== 0 && (
-                            <button
-                              className="button"
-                              onClick={(e) => {
-                                dispatch(
-                                  updateBlock(
-                                    {
-                                      ...sub_block?,
-                                      comments: [
-                                        ...sub_block?.comments,
-                                        {
-                                          content: newComment,
-                                          // accountId: user._id,
-                                          // accountName: user.username,
-                                        },
-                                      ],
-                                    },
-                                    sub_block?._id
-                                  )
-                                );
-                              }}
-                            >
-                              comment
-                            </button>
-                          )}
-                        </div> */}
+                  <div className="grey-bar">
+                    {newComment.length !== 0 && (
+                      <button
+                        className="button"
+                        onClick={(e) => {
+                          dispatch(
+                            updateBlock(
+                              {
+                                ...sub_block,
+                                comments: [
+                                  ...sub_block?.comments,
+                                  {
+                                    content: newComment,
+                                    accountId: user._id,
+                                    accountName: user.username,
+                                  },
+                                ],
+                              },
+                              sub_block?._id
+                            )
+                          );
+                        }}
+                      >
+                        comment
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {sub_block?.comments.map((comment) => (
@@ -180,10 +238,12 @@ const SubBlock = (props) => {
             <div className="modal-blocks">
               <h2>subtasks</h2>
               {/* <SubBlock
-                      parentId={sub_block?._id}
-                      subBlocks={sub_block}
-                      // userId={user._id}
-                    /> */}
+                parentId={sub_block?._id}
+                subBlocks={sub_block}
+                user={user}
+                collection={collection}
+                // userId={user._id}
+              /> */}
             </div>
           </div>
         </Modal>
@@ -203,36 +263,33 @@ const SubBlock = (props) => {
 
           <div className="block-actions">
             <div className="block-item">
-              <AiOutlineDelete
-                onClick={() => dispatch(deleteBlock(sub_block?._id))}
-              />
               <Priority
                 block={sub_block}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
+                onChange={onChange}
+                saveIcon={saveIcon}
               />
             </div>
             <div className="block-item">
               <Estimation
                 block={sub_block}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
+                onChange={onChange}
+                saveIcon={saveIcon}
               />
               {/* estimation */}
             </div>
             <div className="block-item">
               <DateTimePicker
                 block={sub_block}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
+                onChange={onChange}
+                saveIcon={saveIcon}
               />
               {/* deadline */}
             </div>
             <div className="block-item" type="button">
               <Recurrent
                 block={sub_block}
-                // onChange={onChange}
-                // saveIcon={saveIcon}
+                onChange={onChange}
+                saveIcon={saveIcon}
               />
               {/* isRecurrent */}
             </div>
