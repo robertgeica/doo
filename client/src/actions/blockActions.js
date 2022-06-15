@@ -15,7 +15,33 @@ import {
   BLOCK_DELETE_REQUEST,
   BLOCK_DELETE_SUCCESS,
   BLOCK_DELETE_FAIL,
+  SUB_BLOCKS_LOAD_REQUEST, SUB_BLOCKS_LOAD_SUCCESS, SUB_BLOCKS_LOAD_FAIL
 } from "../constants/blockConstants";
+
+
+export const loadSubBlocks = (blockIds) => async (dispatch) => {
+  try {
+    dispatch({ type: SUB_BLOCKS_LOAD_REQUEST });
+    const endpoints = blockIds.map(
+      (id) => `http://localhost:4000/api/block/${id}`
+    );
+
+    await axios
+      .all(endpoints.map((endpoint) => axios.get(endpoint)))
+      .then((data) => {
+
+        const formatedData = data.map(item => item.data.block);
+        console.log(formatedData)
+        dispatch({
+          type: SUB_BLOCKS_LOAD_SUCCESS,
+          payload: formatedData,
+        });
+      });
+  } catch (error) {
+    dispatch({ type: SUB_BLOCKS_LOAD_FAIL });
+  }
+};
+
 
 export const loadBlock = (id) => async (dispatch) => {
   try {

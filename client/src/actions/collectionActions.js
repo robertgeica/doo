@@ -36,7 +36,6 @@ export const loadCollection = (id) => async (dispatch) => {
 
 // load collections
 export const loadCollections = (userCollections) => async (dispatch) => {
-  
   try {
     dispatch({ type: COLLECTIONS_LOAD_REQUEST });
     const data = userCollections.map((collection) => {
@@ -54,7 +53,6 @@ export const loadCollections = (userCollections) => async (dispatch) => {
 
 // add collection
 export const addCollection = (collection, userId) => async (dispatch) => {
-  console.log(collection.collection)
   try {
     dispatch({ type: COLLECTION_ADD_REQUEST });
 

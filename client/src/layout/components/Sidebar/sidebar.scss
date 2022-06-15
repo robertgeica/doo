@@ -1,10 +1,10 @@
 .sidebar {
-  background-color: #292e3a;
+  background-color: #f9f9f9;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
+
   .sidebar-top {
     margin: 1em 0;
     display: flex;
@@ -25,12 +25,49 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      &:hover {
+        background-color: #eaeaea;
+        div {
+          background-color: #eaeaea;
+        }
+        svg {
+          background-color: #eaeaea;
+          &:hover {
+            color: #3597d3;
+          }
+        }
+      
+      }
+
+      svg {
+        height: 100%;
+        font-size: 1.3em;
+      }
     }
   }
 
   .actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    align-content:center ;
+    background-color: #f9f9f9;
+
+    svg {
+      // height: 100%;
+      font-size: 1.7em;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      margin-bottom: .5em;
+    }
+
+    svg {
+      &:hover {
+        color: #3597d3;
+      }
+    }
+
     .user {
       display: flex;
     }
@@ -38,31 +75,24 @@
 }
 
 .actionButton {
-  background-color: #4b556a;
+  background-color: #fff;
   border: none;
-  color: white;
+  color: #000;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  transition-duration: 0.4s;
+  // transition-duration: 0.4s;
   cursor: pointer;
   margin-left: 5px;
 }
 
-.actionButton:hover {
-  background-color: #313846;
-
-}
-
-
 .collections {
   font-size: 1.1em;
-  margin: 1em;
   border: 0;
-  color: #fff;
+  // color: #fff;
   padding: 0.4em 1em;
   font-weight: 500;
-  background-color: #3a4151;
+  background-color: #f9f9f9;
   cursor: caret;
   display: flex;
   width: 100%;
@@ -84,5 +114,4 @@
   .edit-collection {
     display: block;
   }
-
 }

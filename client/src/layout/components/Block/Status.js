@@ -71,7 +71,8 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
         <div
           aria-describedby={id}
           onClick={handleClick}
-          style={{ backgroundColor: block.blockContent.status?.color }}
+          style={{ backgroundColor: block.blockContent.status?.color, cursor: 'pointer' }}
+          className="label"
         >
           {block.blockContent.status.label}
         </div>
@@ -106,6 +107,7 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
+                      cursor: 'pointer'
                     }}
                   >
                     <p

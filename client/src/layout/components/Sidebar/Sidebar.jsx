@@ -13,10 +13,17 @@ import { logout } from "../../../actions/userActions";
 import {
   loadCollections,
   addCollection,
-  deleteCollection
+  deleteCollection,
 } from "../../../actions/collectionActions.js";
-
-const EditableDropdown = React.lazy(() => import("../Dropdown/EditableDropdown.js"));
+import {
+  MdDeleteOutline,
+  MdEdit,
+  MdAddCircleOutline,
+  MdOutlinePowerSettingsNew,
+} from "react-icons/md";
+const EditableDropdown = React.lazy(() =>
+  import("../Dropdown/EditableDropdown.js")
+);
 
 const Sidebar = (props) => {
   const dispatch = useDispatch();
@@ -45,41 +52,34 @@ const Sidebar = (props) => {
 
   const addItem = (content) => {
     return (
-      <button
+      <MdAddCircleOutline
         className="actionButton"
-        onClick={() =>
+        onClick={(e) => {
           dispatch(
             addWorkplace({ workplace: { workplaceName: content } }, userId)
-          )
-        }
-      >
-        +
-      </button>
+          );
+        }}
+      />
     );
   };
 
   const updateItem = (content, workplaceId) => {
-    console.log(content, workplaceId);
     return (
-      <button
+      <MdEdit
         className="actionButton"
         onClick={(e) =>
           dispatch(updateWorkplace({ workplaceName: content }, workplaceId))
         }
-      >
-        e
-      </button>
+      />
     );
   };
 
   const deleteItem = (id) => {
     return (
-      <button
+      <MdDeleteOutline
         className="actionButton"
         onClick={() => dispatch(deleteWorkplace(id))}
-      >
-        x
-      </button>
+      />
     );
   };
 
@@ -94,7 +94,7 @@ const Sidebar = (props) => {
 
   const removeCollection = (id) => {
     dispatch(deleteCollection(id));
-  }
+  };
 
   return (
     <nav className="sidebar">
@@ -120,9 +120,9 @@ const Sidebar = (props) => {
           >
             Collection
           </div>
-          <button
+          <MdAddCircleOutline
             className="actionButton edit-collection"
-            onClick={(e) =>
+            onClick={(e) => {
               dispatch(
                 addCollection(
                   {
@@ -135,26 +135,26 @@ const Sidebar = (props) => {
                   },
                   userId
                 )
-              )
-            }
-          >
-            +
-          </button>
+              );
+            }}
+          />
         </div>
         {collections &&
           sideMenu(collections).map((item, index) => {
-            return <>
-            <NavItem key={`${item.to}`} item={item} deleteCollection={removeCollection} />
-            </>;
+            return (
+              <>
+                <NavItem
+                  key={`${item.to}`}
+                  item={item}
+                  deleteCollection={removeCollection}
+                />
+              </>
+            );
           })}
       </div>
 
       <div className="actions">
-        <button onClick={() => dispatch(logout())}>logout</button>
-        <div className="user">
-          <button>profile</button>
-          <button>setari</button>
-        </div>
+        <MdOutlinePowerSettingsNew onClick={() => dispatch(logout())} />
       </div>
     </nav>
   );

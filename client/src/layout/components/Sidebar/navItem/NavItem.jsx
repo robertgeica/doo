@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import NavItemHeader from "./NavItemHeader.jsx";
+import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from 'react-icons/md';
 import logo from "./logo.png";
 
 const NavItem = (props) => {
@@ -19,7 +20,7 @@ const NavItem = (props) => {
         <span className="navLabel">{label}</span>
 
       <div>
-        <button className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}>de</button>
+        <MdEdit className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}/>
       </div>
     </NavLink>
   );

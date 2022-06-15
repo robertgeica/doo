@@ -13,6 +13,7 @@ import {
   deleteBlock,
   updateBlock,
   loadBlocks,
+  loadSubBlocks,
 } from "../../../actions/blockActions";
 import { useDispatch, connect } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
@@ -25,14 +26,13 @@ import Estimation from "./Estimation";
 import Priority from "./Priority";
 import Status from "./Status";
 import Recurrent from "./Recurrent";
-import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState } from "draft-js";
+import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Block = (props) => {
-  const { block, collection, user } = props;
+  const { block, collection, user, subBlocks } = props;
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -97,6 +97,10 @@ const Block = (props) => {
 
   const [newComment, setNewComment] = useState("");
 
+  useEffect(() => {
+    isOpen && dispatch(loadSubBlocks(block.blockContent.blocks));
+  }, [isOpen]);
+
   return (
     <div className="block-container">
       <Modal
@@ -151,7 +155,7 @@ const Block = (props) => {
               suppressContentEditableWarning={true}
               onInput={(e) => onChange(e.target.textContent, "blockName")}
             >
-              {block.blockName}
+              {newBlock.blockName}
             </h1>
 
             <DefaultEditor
@@ -162,65 +166,188 @@ const Block = (props) => {
             />
 
             <div className="comments-container">
-              {newBlock.comments.map((comment) => (
-                <div className="comment-container">
-                  <p>{comment.content}</p>
-                  <p>{comment.accountName}</p>
-                </div>
-              ))}
-              <div className="comment-input">
+              <p>Comments</p>
+              <div className="comment-input-container">
                 <textarea
                   onChange={(e) => setNewComment(e.target.value)}
-                  className="input"
-                  style={{ width: "8em" }}
-                />
-                <button
-                  className="button"
-                  onClick={() => {
-                    dispatch(
-                      updateBlock(
-                        {
-                          ...newBlock,
-                          comments: [
-                            ...newBlock.comments,
-                            {
-                              content: newComment,
-                              accountId: user._id,
-                              accountName: user.username,
-                            },
-                          ],
-                        },
-                        newBlock._id
-                      )
-                    );
+                  className="input comment-input"
+                  style={{
+                    width: "100%",
+                    height: "4em",
+                    resize: "vertical",
+                    padding: "10px 7px",
                   }}
-                >
-                  Add comment
-                </button>
+                  placeholder="Add a comment..."
+                />
+                <div className="grey-bar">
+                  {newComment.length !== 0 && (
+                    <button
+                      className="button"
+                      onClick={(e) => {
+                        dispatch(
+                          updateBlock(
+                            {
+                              ...newBlock,
+                              comments: [
+                                ...newBlock.comments,
+                                {
+                                  content: newComment,
+                                  accountId: user._id,
+                                  accountName: user.username,
+                                },
+                              ],
+                            },
+                            newBlock._id
+                          )
+                        );
+                      }}
+                    >
+                      comment
+                    </button>
+                  )}
+                </div>
               </div>
+
+              {newBlock.comments.map((comment) => (
+                <div className="comment-container">
+                  <div style={{ width: "95%" }}>
+                    <span>{comment.accountName}</span>
+                    <p>{comment.content}</p>
+                  </div>
+                  <MdDeleteOutline
+                    style={{ fontSize: "1.2em", cursor: "pointer" }}
+                    onClick={(e) =>
+                      dispatch(
+                        updateBlock(
+                          {
+                            ...newBlock,
+                            comments: newBlock.comments.filter(
+                              (com) => com.content !== comment.content
+                            ),
+                          },
+                          newBlock._id
+                        )
+                      )
+                    }
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="modal-blocks">
             <h2>subtasks</h2>
-            <p>block 1</p>
+            {typeof subBlocks !== "undefined" &&
+            subBlocks?.length !== 0 &&
+            subBlocks !== null
+              ? subBlocks.map((sub_block) => (
+                  <div
+                    className="block-row"
+                    style={{ flexDirection: "column", margin: "0 0 1em 0" }}
+                  >
+                    <div className="block-name" onClick={openModal}>
+                      {sub_block.blockName}
+                    </div>
+
+                    <div className="block-actions">
+                      <div className="block-item">
+                        <Priority
+                          block={sub_block}
+                          onChange={onChange}
+                          saveIcon={saveIcon}
+                        />
+                      </div>
+                      <div className="block-item">
+                        <Estimation
+                          block={sub_block}
+                          onChange={onChange}
+                          saveIcon={saveIcon}
+                        />
+                        {/* estimation */}
+                      </div>
+                      <div className="block-item">
+                        <DateTimePicker
+                          block={sub_block}
+                          onChange={onChange}
+                          saveIcon={saveIcon}
+                        />
+                        {/* deadline */}
+                      </div>
+                      <div className="block-item" type="button">
+                        <Recurrent
+                          block={sub_block}
+                          onChange={onChange}
+                          saveIcon={saveIcon}
+                        />
+                        {/* isRecurrent */}
+                      </div>
+                    </div>
+                  </div>
+
+                  // <div className={`sub-block ${block.blockContent.priority}`}>
+                  //   <div>
+                  //     <div className="sub-block-header">
+                  //       {/* {subtask.icon ? <i>subtask.icon</i> : ''} */}
+                  //       <p
+                  //       // onClick={e => setNewBlock(sub_block)}
+                  //       >
+                  //         {sub_block.blockName}
+                  //       </p>
+                  //       <div className="additional-details">
+                  //         <Priority
+                  //           block={sub_block}
+                  //           onChange={onChange}
+                  //           saveIcon={saveIcon}
+                  //         />
+                  //         <Estimation
+                  //           block={sub_block}
+                  //           onChange={onChange}
+                  //           saveIcon={saveIcon}
+                  //         />
+                  //         {/* estimation */}
+                  //         <DateTimePicker
+                  //           block={sub_block}
+                  //           onChange={onChange}
+                  //           saveIcon={saveIcon}
+                  //         />
+                  //         {/* deadline */}
+                  //         <Recurrent
+                  //           block={sub_block}
+                  //           onChange={onChange}
+                  //           saveIcon={saveIcon}
+                  //         />
+                  //         {/* isRecurrent */}
+                  //       </div>
+                  //     </div>
+                  //   </div>
+                  // </div>
+                ))
+              : ""}
           </div>
         </div>
       </Modal>
 
       <div className="block-row">
-        <div className="block-name" onClick={openModal}>
-          {block.blockName}
-        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "30%",
+          }}
+        >
+          <div className="block-name" onClick={openModal}>
+            {block.blockName}
+          </div>
 
-        {/* <div style={{backgroundColor: block.blockContent.status.color}}>{block.blockContent.status.label}</div> */}
-        <Status
-          block={newBlock}
-          collection={collection}
-          onChange={onChange}
-          saveIcon={saveIcon}
-          showIcon={false}
-        />
+          <Status
+            block={newBlock}
+            collection={collection}
+            onChange={onChange}
+            saveIcon={saveIcon}
+            showIcon={false}
+          />
+        </div>
 
         <div className="block-actions">
           <div className="block-item">

@@ -14,6 +14,9 @@ import {
   BLOCK_DELETE_REQUEST,
   BLOCK_DELETE_SUCCESS,
   BLOCK_DELETE_FAIL,
+  SUB_BLOCKS_LOAD_REQUEST,
+  SUB_BLOCKS_LOAD_SUCCESS,
+  SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
 const blockState = {
@@ -21,6 +24,7 @@ const blockState = {
   error: null,
   block: null,
   blocks: null,
+  subBlocks: null,
 };
 
 export const blockReducer = (state = blockState, action) => {
@@ -32,6 +36,7 @@ export const blockReducer = (state = blockState, action) => {
     case BLOCK_ADD_REQUEST:
     case BLOCK_DELETE_REQUEST:
     case BLOCK_UPDATE_REQUEST:
+    case SUB_BLOCKS_LOAD_REQUEST:
       return { ...state, loading: true };
 
     case BLOCK_LOAD_SUCCESS:
@@ -40,11 +45,15 @@ export const blockReducer = (state = blockState, action) => {
     case BLOCKS_LOAD_SUCCESS:
       return { ...state, loading: false, blocks: payload };
 
+    case SUB_BLOCKS_LOAD_SUCCESS:
+      return { ...state, loading: false, subBlocks: payload };
+
     case BLOCK_LOAD_FAIL:
     case BLOCKS_LOAD_FAIL:
     case BLOCK_ADD_FAIL:
     case BLOCK_DELETE_FAIL:
     case BLOCK_UPDATE_FAIL:
+    case SUB_BLOCKS_LOAD_FAIL:
       return { loading: false, error: payload };
 
     default:

@@ -4,26 +4,44 @@
   display: flex;
   // align-items: center;
   justify-content: space-between;
+  svg {
+    background-color: #f9f9f9;
+  }
+
+  &:hover {
+    div {
+
+      background-color: #3597d3;
+
+      svg {
+        background-color: #3597d3;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 
 .navItem:hover {
-  background-color: #1e3a8a;
+  background-color: #3597d3;
 }
 
 .activeNavItem {
-  color: #dbeafe;
-  background-color: #1e3a8a;
+  color: #000;
+  background-color: #3597d3;
 }
 
 .navIcon {
-  color: #d1d5db;
+  color: #000;
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 1rem;
 }
 
 .navLabel {
-  color: #d1d5db;
+  color: #000;
   font-size: 1rem;
 }
 
@@ -36,11 +54,11 @@
 }
 
 .navItemHeaderIcon {
-  color: #d1d5db;
+  color: #000;
   width: 1.5rem;
   height: 1.5rem;
   margin-left: auto;
-  transition: all 0.25s;
+  // transition: all 0.25s;
 }
 
 .itemExpanded {

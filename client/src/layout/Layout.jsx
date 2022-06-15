@@ -9,7 +9,7 @@ const Layout = (props) => {
         <Sidebar />
       </aside>
       <div className="content">
-        <header className="header">workplace name/collection name/block name</header>
+        {/* <header className="header">workplace name/collection name/block name</header> */}
         <main className="main">{children}</main>
       </div>
     </div>

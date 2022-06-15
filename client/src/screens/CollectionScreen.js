@@ -8,33 +8,41 @@ import Block from "../layout/components/Block/Block";
 
 const CollectionScreen = (props) => {
   const { collectionState, blockState } = props;
-  const dispatch = useDispatch();
+  const { collection } = collectionState;
 
+  const dispatch = useDispatch();
   const params = useParams();
+
   useEffect(() => {
-    // console.log('use effect 1', params.id)
     dispatch(loadCollection(params.id));
   }, [params.id]);
 
-  const { collection } = collectionState;
   useEffect(() => {
-    console.log('load blocks')
     if (collection?.blocks) {
       dispatch(loadBlocks(collection?.blocks));
     }
   }, [collection?.blocks]);
 
-
+  // console.log(collection)
   return (
     <div>
       <h1>{collection?.name}</h1>
       {blockState?.blocks?.map((block) => (
-        <Block collection={collection} block={block} user={props.auth.user} key={block._id} />
+        <Block
+          collection={collection}
+          block={block}
+          user={props.auth.user}
+          subBlocks={blockState.subBlocks}
+          key={block._id}
+        />
       ))}
 
       <input
         type="text"
         name="name"
+        id="add-block"
+        className="collections"
+        placeholder="Add new block"
         onKeyDown={(e) => {
           e.key === "Enter" &&
             dispatch(

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 const EditableDropdown = (props) => {
   const { options, value, onChange, placeholder, itemActions } = props;
@@ -30,6 +31,11 @@ const EditableDropdown = (props) => {
           </div>
 
           <div className="actions">
+            {isOpen ?
+            <MdKeyboardArrowUp onClick={toggling}/> : 
+            <MdKeyboardArrowDown onClick={toggling}/>
+          }
+
             {itemActions && defaultValue !== content ? (
               <>
                 {itemActions?.updateItem(content, value.value || value[0].value)}
