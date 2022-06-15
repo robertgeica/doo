@@ -83,32 +83,31 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
 
   try {
     await block.remove();
-    
+
     if (req.body.blockParent) {
-    const parent = await Block.findById(
-      mongoose.Types.ObjectId(block.parentId)
-    );
+      const parent = await Block.findById(
+        mongoose.Types.ObjectId(block.parentId)
+      );
 
-    const newBlocks = parent.blockContent.blocks.filter(
-      (block) => block.toString() !== req.params.id
-    );
+      const newBlocks = parent.blockContent.blocks.filter(
+        (block) => block.toString() !== req.params.id
+      );
 
-    parent.blockContent.blocks = newBlocks;
-    parent.markModified("blockContent");
-    console.log(parent.blockContent.blocks, parent)
-    parent.save();
-  } else {
-    
-    const collection = await Collection.findById(
-      mongoose.Types.ObjectId(block.parentId)
-    );
+      parent.blockContent.blocks = newBlocks;
+      parent.markModified("blockContent");
+      console.log(parent.blockContent.blocks, parent);
+      parent.save();
+    } else {
+      const collection = await Collection.findById(
+        mongoose.Types.ObjectId(block.parentId)
+      );
 
-    const newBlocks = collection.blocks.filter(
-      (block) => block.toString() !== req.params.id
-    );
+      const newBlocks = collection.blocks.filter(
+        (block) => block.toString() !== req.params.id
+      );
 
-    collection.blocks = newBlocks;
-    collection.save();
+      collection.blocks = newBlocks;
+      collection.save();
     }
     res.json({ message: "Block removed" });
   } catch (error) {

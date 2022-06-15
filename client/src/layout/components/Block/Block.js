@@ -29,8 +29,8 @@ import Recurrent from "./Recurrent";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import SubBlock from "./SubBlock";
+import AddBlockInput from "./AddBlockInput";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
 const Block = (props) => {
   const { block, collection, user, subBlocks } = props;
   const dispatch = useDispatch();
@@ -239,10 +239,23 @@ const Block = (props) => {
 
           <div className="modal-blocks">
             <h2>subtasks</h2>
-            <SubBlock
+            {typeof subBlocks !== "undefined" &&
+            subBlocks?.length !== 0 &&
+            subBlocks !== null
+              ? subBlocks.map((sub_block) => (
+                  <SubBlock
+                    parentId={block._id}
+                    sub_block={sub_block}
+                    userId={user._id}
+                  />
+                ))
+              : ""}
+
+            <AddBlockInput
               parentId={block._id}
-              subBlocks={subBlocks}
               userId={user._id}
+              fullWidth
+              isBlockParent
             />
           </div>
         </div>

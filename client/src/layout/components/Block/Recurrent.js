@@ -29,8 +29,17 @@ const Priority = ({ block, onChange, onUpdateBlock }) => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
 
+  const daysTemplate = {
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false
+  }
   const [newDays, setNewDays] = React.useState({
-    ...block.blockContent.isRecurrent.days,
+    ...block.blockContent.isRecurrent.days || daysTemplate,
   });
   const onChangee = (e) => {
     setNewDays({ ...newDays, [e.target.id]: !newDays[e.target.id] });
