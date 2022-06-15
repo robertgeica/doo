@@ -142,7 +142,7 @@ const Block = (props) => {
               }
             />
 
-            <BlockComments block={newBlock} user={user} />
+            <BlockComments block={newBlock} user={user} collection={collection}/>
           </div>
 
           <div className="modal-blocks">
@@ -164,7 +164,8 @@ const Block = (props) => {
               parentId={block._id}
               userId={user._id}
               fullWidth
-              isBlockParent
+              isBlockParent={true}
+              block={block}
             />
           </div>
         </div>

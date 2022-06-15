@@ -94,7 +94,8 @@ export const addBlock = (block) => async (dispatch) => {
         userId: block.userId,
         blockName: block.blockName,
         blockType: block.blockType || 'task',
-        blockParent: block.blockParent
+        blockParent: block.blockParent,
+        parentType: block.parentType
       },
       config
     );
@@ -108,11 +109,16 @@ export const addBlock = (block) => async (dispatch) => {
   }
 };
 
-export const deleteBlock = (blockId) => async (dispatch) => {
+export const deleteBlock = (blockId, parentType) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_DELETE_REQUEST });
     const res = await axios.delete(
-      `http://localhost:4000/api/block/${blockId}`
+      `http://localhost:4000/api/block/${blockId}`,
+      {
+        data: {
+          parentType: parentType
+        }
+      }
     );
 
     dispatch({

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { MdDeleteOutline } from "react-icons/md";
-import { updateBlock } from "../../../actions/blockActions";
+import { updateBlock, loadBlocks } from "../../../actions/blockActions";
 
-export default function BlockComments({ block, user }) {
+export default function BlockComments({ block, user, collection }) {
   const dispatch = useDispatch();
 
   const [newComment, setNewComment] = useState("");
@@ -42,7 +42,9 @@ export default function BlockComments({ block, user }) {
                     },
                     block._id
                   )
-                );
+                ).then(() =>
+                dispatch(loadBlocks(collection?.blocks))
+              );
               }}
             >
               comment
@@ -69,7 +71,9 @@ export default function BlockComments({ block, user }) {
                   },
                   block._id
                 )
-              )
+              ).then(() =>
+              dispatch(loadBlocks(collection?.blocks))
+            )
             }
           />
         </div>

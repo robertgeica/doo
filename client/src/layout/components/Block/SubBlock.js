@@ -3,7 +3,6 @@ import { FaRegComments } from "react-icons/fa";
 import { TbRadiusBottomLeft, TbRotateClockwise2 } from "react-icons/tb";
 import { BsCalendar2Date } from "react-icons/bs";
 import {
-  AiOutlineClockCircle,
   AiOutlineCloseCircle,
   AiOutlineDelete,
   AiOutlineSave,
@@ -12,20 +11,12 @@ import Modal from "react-modal";
 import {
   deleteBlock,
   updateBlock,
-  loadBlocks,
   loadSubBlocks,
 } from "../../../actions/blockActions";
 import { useDispatch, connect } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
 
-import Box from "@mui/material/Box";
-import Popper from "@mui/material/Popper";
-
-import DateTimePicker from "./DateTimePicker";
-import Estimation from "./Estimation";
-import Priority from "./Priority";
-import Status from "./Status";
-import Recurrent from "./Recurrent";
+import BlockComments from "./BlockComments";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import AddBlockInput from "./AddBlockInput";
@@ -117,7 +108,7 @@ const SubBlock = (props) => {
             <div className="modal-header-actions">
               <div className="action-item">
                 <AiOutlineDelete
-                  onClick={() => dispatch(deleteBlock(sub_block?._id))}
+                  onClick={() => dispatch(deleteBlock(sub_block?._id, 'block'))}
                 />
               </div>
               <div className="action-item">{saveIcon()}</div>
@@ -154,74 +145,8 @@ const SubBlock = (props) => {
                 }
               />
 
-              <div className="comments-container">
-                <p>Comments</p>
-                <div className="comment-input-container">
-                  <textarea
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="input comment-input"
-                    style={{
-                      width: "100%",
-                      height: "4em",
-                      resize: "vertical",
-                      padding: "10px 7px",
-                    }}
-                    placeholder="Add a comment..."
-                  />
-                  <div className="grey-bar">
-                    {newComment.length !== 0 && (
-                      <button
-                        className="button"
-                        onClick={(e) => {
-                          dispatch(
-                            updateBlock(
-                              {
-                                ...sub_block,
-                                comments: [
-                                  ...sub_block?.comments,
-                                  {
-                                    content: newComment,
-                                    accountId: user._id,
-                                    accountName: user.username,
-                                  },
-                                ],
-                              },
-                              sub_block?._id
-                            )
-                          );
-                        }}
-                      >
-                        comment
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {sub_block?.comments.map((comment) => (
-                  <div className="comment-container">
-                    <div style={{ width: "95%" }}>
-                      <span>{comment.accountName}</span>
-                      <p>{comment.content}</p>
-                    </div>
-                    <MdDeleteOutline
-                      style={{ fontSize: "1.2em", cursor: "pointer" }}
-                      onClick={(e) =>
-                        dispatch(
-                          updateBlock(
-                            {
-                              ...sub_block,
-                              comments: sub_block?.comments.filter(
-                                (com) => com.content !== comment.content
-                              ),
-                            },
-                            sub_block?._id
-                          )
-                        )
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
+             
+            <BlockComments block={newBlock} user={user} collection={collection}/>
             </div>
 
             <div className="modal-blocks">
@@ -243,7 +168,8 @@ const SubBlock = (props) => {
                 parentId={sub_block._id}
                 userId={user._id}
                 fullWidth
-                isBlockParent
+                isBlockParent={true}
+                block={sub_block}
               />
             </div>
           </div>

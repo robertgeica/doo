@@ -46,8 +46,8 @@ const createBlock = asyncHandler(async (req, res, next) => {
   });
 
   await block.save();
-
-  if (req.body.blockParent) {
+  if (req.body.parentType === 'block') {
+    
     const parent = await Block.findById(
       mongoose.Types.ObjectId(req.body.parentId)
     );
@@ -84,7 +84,8 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
   try {
     await block.remove();
 
-    if (req.body.blockParent) {
+    console.log(res.body, res.data, req.data, req.body)
+    if (req.body.parentType === 'block') {
       const parent = await Block.findById(
         mongoose.Types.ObjectId(block.parentId)
       );
@@ -93,8 +94,14 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
         (block) => block.toString() !== req.params.id
       );
 
+      // parent.blockContent.blocks = [
+      //   ...parent.blockContent.blocks,
+      //   block._id.toString(),
+      // ];
+      // parent.markModified("blockContent");
       parent.blockContent.blocks = newBlocks;
       parent.markModified("blockContent");
+      console.log(parent.blokContent)
       console.log(parent.blockContent.blocks, parent);
       parent.save();
     } else {

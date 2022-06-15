@@ -3,16 +3,16 @@ import { addBlock } from "../../../actions/blockActions";
 import { useDispatch } from "react-redux";
 import { loadCollection } from "../../../actions/collectionActions";
 import { Link, useParams } from "react-router-dom";
+import { loadSubBlocks } from "../../../actions/blockActions";
 
 export default function AddBlockInput(props) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const { parentId, userId, fullWidth, isBlockParent, collectionId } = props;
+  const { parentId, userId, fullWidth, isBlockParent, collectionId, block } = props;
   const [blockType, setBlockType] = useState("task");
-
   return (
-    <div className={fullWidth ? 'full-add-block' : 'add-block'}>
+    <div className={fullWidth ? "full-add-block" : "add-block"}>
       <select
         name="block-type"
         id="block-type"
@@ -37,9 +37,11 @@ export default function AddBlockInput(props) {
                 userId,
                 blockName: e.target.value,
                 blockType,
-                blockParent: isBlockParent ? true : false
+                parentType: isBlockParent ? "block" : "collection",
               })
-            ).then(() => dispatch(loadCollection(params.id)));
+            )
+              .then(() => dispatch(loadCollection(params.id)))
+              // .then((res) => dispatch(loadSubBlocks(block.blockContent.blocks)));
         }}
       />
     </div>
