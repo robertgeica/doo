@@ -28,7 +28,7 @@ import Status from "./Status";
 import Recurrent from "./Recurrent";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
-
+import SubBlock from "./SubBlock";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Block = (props) => {
@@ -98,7 +98,9 @@ const Block = (props) => {
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
-    isOpen && dispatch(loadSubBlocks(block.blockContent.blocks));
+    if (isOpen && block.blockContent.blocks.length !== 0) {
+      dispatch(loadSubBlocks(block.blockContent.blocks));
+    }
   }, [isOpen]);
 
   return (
@@ -237,59 +239,11 @@ const Block = (props) => {
 
           <div className="modal-blocks">
             <h2>subtasks</h2>
-            {typeof subBlocks !== "undefined" &&
-            subBlocks?.length !== 0 &&
-            subBlocks !== null
-              ? subBlocks.map((sub_block) => (
-                  <div
-                    className="block-row"
-                    style={{
-                      flexDirection: "column",
-                      margin: "0 0 1em 0",
-                      border: "1px solid grey",
-                      padding: "0.5em",
-                    }}
-                  >
-                    <div className="block-name" onClick={openModal}>
-                      {sub_block.blockName}
-                    </div>
-
-                    <div className="block-actions">
-                      <div className="block-item">
-                        <Priority
-                          block={sub_block}
-                          onChange={onChange}
-                          saveIcon={saveIcon}
-                        />
-                      </div>
-                      <div className="block-item">
-                        <Estimation
-                          block={sub_block}
-                          onChange={onChange}
-                          saveIcon={saveIcon}
-                        />
-                        {/* estimation */}
-                      </div>
-                      <div className="block-item">
-                        <DateTimePicker
-                          block={sub_block}
-                          onChange={onChange}
-                          saveIcon={saveIcon}
-                        />
-                        {/* deadline */}
-                      </div>
-                      <div className="block-item" type="button">
-                        <Recurrent
-                          block={sub_block}
-                          onChange={onChange}
-                          saveIcon={saveIcon}
-                        />
-                        {/* isRecurrent */}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              : ""}
+            <SubBlock
+              parentId={block._id}
+              subBlocks={subBlocks}
+              userId={user._id}
+            />
           </div>
         </div>
       </Modal>

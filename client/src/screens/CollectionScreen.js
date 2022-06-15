@@ -66,7 +66,6 @@ const CollectionScreen = (props) => {
       <AddBlockInput
         parentId={collection?._id}
         userId={props.auth.user._id}
-        style={{ maxWidth: "70%", border: "1px solid red" }}
       />
     </div>
   );

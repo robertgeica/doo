@@ -94,6 +94,7 @@ export const addBlock = (block) => async (dispatch) => {
         userId: block.userId,
         blockName: block.blockName,
         blockType: block.blockType || 'task',
+        blockParent: block.blockParent
       },
       config
     );

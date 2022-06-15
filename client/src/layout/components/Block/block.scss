@@ -14,7 +14,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 6px; 
+  border-radius: 6px;
   &:hover {
     background-color: #f9f9f9;
   }
@@ -144,10 +144,10 @@
 
   .grey-bar {
     button {
-      padding: .5em;
+      padding: 0.5em;
       text-align: center;
       color: #fff;
-      padding: .5em 2em;
+      padding: 0.5em 2em;
       font-weight: 600;
 
       &:hover {
@@ -193,44 +193,14 @@
   align-items: center;
 }
 
-.sub-block {
-  background-color: white;
-  color: white;
-  border-radius: 16px;
-  padding: 0 10px;
-  width: 100%;
-  margin: 0.5em 0;
-}
-.sub-block-header {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.additional-details {
-  font-size: 15px;
-  display: flex;
-  flex-direction: row;
-  .action-item {
-    padding: 0 3px;
-  }
-}
-
-.low {
-  background-color: green;
-}
-.high {
-  background-color: #eb4d4b;
-}
-.medium {
-  background-color: #f0932b;
-}
-
 .label {
   border-radius: 15px;
   padding: 0.2em 0.7em;
   color: #fff;
   width: 100%;
-  margin: .2em 0;
+  margin: 0.2em 0;
+}
+
+.sub-block-container {
+
 }

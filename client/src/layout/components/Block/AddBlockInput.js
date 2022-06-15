@@ -5,12 +5,12 @@ import { useDispatch } from "react-redux";
 export default function AddBlockInput(props) {
   const dispatch = useDispatch();
 
-  const { parentId, userId } = props;
+  const { parentId, userId, fullWidth, isBlockParent } = props;
   const [blockType, setBlockType] = useState("task");
 
 
   return (
-    <div className="add-block">
+    <div className={fullWidth ? 'full-add-block' : 'add-block'}>
       <select
         name="block-type"
         id="block-type"
@@ -35,6 +35,7 @@ export default function AddBlockInput(props) {
                 userId,
                 blockName: e.target.value,
                 blockType,
+                blockParent: isBlockParent ? true : false
               })
             );
         }}

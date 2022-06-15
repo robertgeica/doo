@@ -25,7 +25,7 @@ const getBlock = asyncHandler(async (req, res, next) => {
 });
 
 // @route         POST /api/user/block/:userId
-// @description   Create collection
+// @description   Create block
 // @access        Private
 const createBlock = asyncHandler(async (req, res, next) => {
   const blockType = req.body.blockType;
@@ -47,12 +47,26 @@ const createBlock = asyncHandler(async (req, res, next) => {
 
   await block.save();
 
-  const collection = await Collection.findById(
-    mongoose.Types.ObjectId(req.body.parentId)
-  );
+  if (req.body.blockParent) {
+    const parent = await Block.findById(
+      mongoose.Types.ObjectId(req.body.parentId)
+    );
 
-  collection.blocks = [...collection.blocks, block._id.toString()];
-  collection.save();
+    parent.blockContent.blocks = [
+      ...parent.blockContent.blocks,
+      block._id.toString(),
+    ];
+    parent.markModified("blockContent");
+
+    parent.save();
+  } else {
+    const collection = await Collection.findById(
+      mongoose.Types.ObjectId(req.body.parentId)
+    );
+
+    collection.blocks = [...collection.blocks, block._id.toString()];
+    collection.save();
+  }
 
   if (block) {
     res.status(201).json({ block });
@@ -69,7 +83,22 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
 
   try {
     await block.remove();
+    
+    if (req.body.blockParent) {
+    const parent = await Block.findById(
+      mongoose.Types.ObjectId(block.parentId)
+    );
 
+    const newBlocks = parent.blockContent.blocks.filter(
+      (block) => block.toString() !== req.params.id
+    );
+
+    parent.blockContent.blocks = newBlocks;
+    parent.markModified("blockContent");
+    console.log(parent.blockContent.blocks, parent)
+    parent.save();
+  } else {
+    
     const collection = await Collection.findById(
       mongoose.Types.ObjectId(block.parentId)
     );
@@ -80,7 +109,7 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
 
     collection.blocks = newBlocks;
     collection.save();
-
+    }
     res.json({ message: "Block removed" });
   } catch (error) {
     return next(new ErrorHandler("Block not found.", 404));
