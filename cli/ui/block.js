@@ -13,7 +13,7 @@ const renderBlocks = (blocks, blockId) => {
           ? `${chalk.hex(workplace).bold(`@${block.blockName}`)}`
           : `${chalk.hex(workplace)(`@${block.blockName}`)}`
       }`,
-      `\t${block.blockContent.status}`,
+      `\t${block.blockContent.status.label}`,
       `\t${block.blockContent.priority}`,
       `\t${block.blockContent.estimation}`,
       `\t${block.comments.length} comments`

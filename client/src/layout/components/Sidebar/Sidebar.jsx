@@ -8,6 +8,7 @@ import {
   addWorkplace,
   deleteWorkplace,
   updateWorkplace,
+  loadWorkplaces,
 } from "../../../actions/workplaceActions.js";
 import { logout } from "../../../actions/userActions";
 import {
@@ -20,7 +21,6 @@ import {
   MdEdit,
   MdAddCircleOutline,
   MdOutlinePowerSettingsNew,
-  
 } from "react-icons/md";
 const EditableDropdown = React.lazy(() =>
   import("../Dropdown/EditableDropdown.js")
@@ -45,7 +45,9 @@ const Sidebar = (props) => {
     };
   });
 
-  const [defaultValue, setDefaultValue] = useState(typeof options === 'undefined' ? {} : options[0]);
+  const [defaultValue, setDefaultValue] = useState(
+    typeof options === "undefined" ? {} : options[0]
+  );
   const userId = props.user._id;
 
   const selectItem = (id) => {
@@ -86,8 +88,8 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-      dispatch(loadWorkplace(defaultValue?.value));
-  }, [defaultValue]);
+    dispatch(loadWorkplace(defaultValue?.value));
+  }, [user]);
 
   const [collectionName, setCollectionName] = useState("");
   const onCollectionInputChange = (e) => {
@@ -95,7 +97,7 @@ const Sidebar = (props) => {
   };
 
   const removeCollection = (id) => {
-    dispatch(deleteCollection(id));
+    dispatch(deleteCollection(id)).then(() => dispatch(loadWorkplace(workplace.workplace._id)));
   };
 
   return (
@@ -137,7 +139,7 @@ const Sidebar = (props) => {
                   },
                   userId
                 )
-              );
+              ).then(() => dispatch(loadWorkplace(workplace.workplace._id)));
             }}
           />
         </div>

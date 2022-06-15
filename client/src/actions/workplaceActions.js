@@ -16,7 +16,7 @@ import {
   WORKPLACE_DELETE_SUCCESS,
   WORKPLACE_DELETE_FAIL,
 } from "../constants/workplaceConstants";
-
+import { loadUser } from "./userActions";
 export const loadWorkplace = (id) => async (dispatch) => {
   try {
     dispatch({ type: WORKPLACE_LOAD_REQUEST });
@@ -71,6 +71,7 @@ export const addWorkplace = (workplace, userId) => async (dispatch) => {
       type: WORKPLACE_ADD_SUCCESS,
       payload: data,
     });
+    dispatch(loadUser());
   } catch (error) {
     dispatch({ type: WORKPLACE_ADD_FAIL });
   }
@@ -112,6 +113,7 @@ export const updateWorkplace = (workplace, workplaceId) => async (dispatch) => {
       type: WORKPLACE_UPDATE_SUCCESS,
       payload: data,
     });
+    dispatch(loadUser());
   } catch (error) {
     dispatch({ type: WORKPLACE_UPDATE_FAIL });
   }

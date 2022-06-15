@@ -7,6 +7,7 @@ import { loadBlocks, addBlock } from "../actions/blockActions";
 import Block from "../layout/components/Block/Block";
 import AddBlockInput from "../layout/components/Block/AddBlockInput";
 import { AiOutlineSave } from "react-icons/ai";
+import { loadWorkplace } from "../actions/workplaceActions";
 
 const CollectionScreen = (props) => {
   const { collectionState, blockState } = props;
@@ -27,7 +28,6 @@ const CollectionScreen = (props) => {
     }
   }, [collection?.blocks]);
 
-
   return (
     <div>
       <div
@@ -47,7 +47,7 @@ const CollectionScreen = (props) => {
                     { ...collection, name: newCollectionName },
                     collection._id
                   )
-                )
+                ).then(() => dispatch(loadWorkplace(collection.workplaceId)))
               }
             />
           )}
@@ -63,10 +63,7 @@ const CollectionScreen = (props) => {
         />
       ))}
 
-      <AddBlockInput
-        parentId={collection?._id}
-        userId={props.auth.user._id}
-      />
+      <AddBlockInput parentId={collection?._id} userId={props.auth.user._id} />
     </div>
   );
 };

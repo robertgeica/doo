@@ -30,6 +30,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MdDeleteOutline, MdEdit, MdAddCircleOutline } from "react-icons/md";
 import SubBlock from "./SubBlock";
 import AddBlockInput from "./AddBlockInput";
+import { loadCollection } from "../../../actions/collectionActions";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Block = (props) => {
   const { block, collection, user, subBlocks } = props;
@@ -69,13 +70,19 @@ const Block = (props) => {
     setNewBlock({ ...block, [key]: value });
   };
 
+  useEffect(() => {
+    setNewBlock(block);
+  }, [block]);
+
   const isDifferentBlockName = block.blockName !== newBlock.blockName;
   const isDifferentBlockContent =
     JSON.stringify(block.blockContent) !==
     JSON.stringify(newBlock.blockContent);
 
   const onUpdateBlock = () => {
-    dispatch(updateBlock(newBlock, newBlock._id));
+    dispatch(updateBlock(newBlock, newBlock._id)).then(() =>
+      dispatch(loadBlocks(collection?.blocks))
+    );
     setNewBlock(block);
   };
 
@@ -115,7 +122,11 @@ const Block = (props) => {
           <div className="modal-header-actions">
             <div className="action-item">
               <AiOutlineDelete
-                onClick={() => dispatch(deleteBlock(block._id))}
+                onClick={() =>
+                  dispatch(deleteBlock(block._id)).then(() =>
+                    dispatch(loadCollection(collection._id))
+                  )
+                }
               />
             </div>
             <div className="action-item">{saveIcon()}</div>
