@@ -37,9 +37,9 @@ const Priority = ({ block, onChange, onUpdateBlock }) => {
   };
 
   const hasChanges =
-    JSON.stringify(newDays) !==
-    JSON.stringify(block.blockContent.isRecurrent.days);
-
+  JSON.stringify(newDays) !==
+  JSON.stringify(block.blockContent.isRecurrent.days);
+  
   return (
     <div className="action-item">
       <TbRotateClockwise2 aria-describedby={id} onClick={handleClick} />

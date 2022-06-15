@@ -52,21 +52,27 @@ const Priority = ({ block, onChange, saveIcon, showIcon }) => {
             onClick={(e) => onChange("low", "blockContent.priority")}
             className="icon"
             style={{
-              fontSize: `${block.blockContent.priority === "low" && "2em"}`,
+              fontSize: `${
+                block.blockContent.priority === "low" ? "2em" : "1.7em"
+              }`,
             }}
           />
           <FcMediumPriority
             onClick={(e) => onChange("medium", "blockContent.priority")}
             className="icon"
             style={{
-              fontSize: `${block.blockContent.priority === "medium" && "2em"}`,
+              fontSize: `${
+                block.blockContent.priority === "medium" ? "2em" : "1.7em"
+              }`,
             }}
           />
           <FcHighPriority
             onClick={(e) => onChange("high", "blockContent.priority")}
             className="icon"
             style={{
-              fontSize: `${block.blockContent.priority === "high" && "2em"}`,
+              fontSize: `${
+                block.blockContent.priority === "high" ? "2em" : "1.7em"
+              }`,
             }}
           />
           <Box sx={{ alignSelf: "center", marginTop: "1em" }}>

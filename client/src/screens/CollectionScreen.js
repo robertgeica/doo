@@ -27,22 +27,14 @@ const CollectionScreen = (props) => {
     }
   }, [collection?.blocks]);
 
-  console.log(collection, newCollectionName);
 
   return (
     <div>
       <div
         contentEditable
         suppressContentEditableWarning
-        style={{
-          maxWidth: "70%",
-          fontSize: "2em",
-          fontWeight: "600",
-          padding: ".2em 0",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
         onInput={(e) => setNewCollectionName(e.target.textContent)}
+        className="collection-input"
       >
         {collection?.name}
         {newCollectionName !== null &&

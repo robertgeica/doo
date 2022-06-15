@@ -100,6 +100,19 @@
     outline: none;
   }
 }
+
+.collection-input {
+  max-width: 70%;
+  font-size: 2em;
+  font-weight: 600;
+  padding: .2em 0;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
 .delete-collection {
   display: none;
 }

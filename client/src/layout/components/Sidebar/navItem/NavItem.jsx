@@ -20,7 +20,7 @@ const NavItem = (props) => {
         <span className="navLabel">{label}</span>
 
       <div>
-        <MdEdit className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}/>
+        <MdDeleteOutline className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}/>
       </div>
     </NavLink>
   );

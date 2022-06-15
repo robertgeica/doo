@@ -63,6 +63,7 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
   };
 
   const [newLabel, setNewLabel] = React.useState({ color: "", label: "" });
+  
   return (
     <div className="action-item">
       {showIcon ? (
@@ -110,7 +111,8 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
                       cursor: 'pointer'
                     }}
                   >
-                    <p
+                    <div
+                    className="label"
                       style={{
                         backgroundColor: `${label.color}`,
                         fontWeight: `${
@@ -124,7 +126,7 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
                       onClick={() => onChange(label, "blockContent.status")}
                     >
                       {label.label}
-                    </p>
+                    </div>
                     <AiOutlineDelete
                       onClick={() =>
                         dispatch(
@@ -199,7 +201,8 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <p
+                    <div
+                      className="label"
                       style={{
                         backgroundColor: `${label.color}`,
                         fontWeight: `${
@@ -213,7 +216,7 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
                       onClick={() => onChange(label, "blockContent.status")}
                     >
                       {label.label}
-                    </p>
+                    </div>
                     <AiOutlineDelete
                       onClick={() =>
                         dispatch(
@@ -292,8 +295,6 @@ const Priority = ({ collection, block, onChange, saveIcon, showIcon }) => {
               </div>
             </TabPanel>
           </Box>
-
-          {/* implement select label and then show save btn */}
 
           <Box sx={{ alignSelf: "center", marginTop: "1em" }}>
             {typeof saveIcon !== "undefined" && !showIcon && saveIcon()}

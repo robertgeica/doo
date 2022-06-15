@@ -2,13 +2,22 @@
   border: 1px solid #606776;
   max-width: 70%;
   margin: 0.5em 0;
+  border-radius: 6px;
   padding: 0.5em 1em;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
 }
 
 .block-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 6px; 
+  &:hover {
+    background-color: #f9f9f9;
+  }
 }
 
 .block-name {
@@ -222,4 +231,6 @@
   border-radius: 15px;
   padding: 0.2em 0.7em;
   color: #fff;
+  width: 100%;
+  margin: .2em 0;
 }

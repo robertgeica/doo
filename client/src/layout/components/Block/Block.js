@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaRegComments } from "react-icons/fa";
-import { TbRotateClockwise2 } from "react-icons/tb";
+import { TbRadiusBottomLeft, TbRotateClockwise2 } from "react-icons/tb";
 import { BsCalendar2Date } from "react-icons/bs";
 import {
   AiOutlineClockCircle,
@@ -288,44 +288,6 @@ const Block = (props) => {
                       </div>
                     </div>
                   </div>
-
-                  // <div className={`sub-block ${block.blockContent.priority}`}>
-                  //   <div>
-                  //     <div className="sub-block-header">
-                  //       {/* {subtask.icon ? <i>subtask.icon</i> : ''} */}
-                  //       <p
-                  //       // onClick={e => setNewBlock(sub_block)}
-                  //       >
-                  //         {sub_block.blockName}
-                  //       </p>
-                  //       <div className="additional-details">
-                  //         <Priority
-                  //           block={sub_block}
-                  //           onChange={onChange}
-                  //           saveIcon={saveIcon}
-                  //         />
-                  //         <Estimation
-                  //           block={sub_block}
-                  //           onChange={onChange}
-                  //           saveIcon={saveIcon}
-                  //         />
-                  //         {/* estimation */}
-                  //         <DateTimePicker
-                  //           block={sub_block}
-                  //           onChange={onChange}
-                  //           saveIcon={saveIcon}
-                  //         />
-                  //         {/* deadline */}
-                  //         <Recurrent
-                  //           block={sub_block}
-                  //           onChange={onChange}
-                  //           saveIcon={saveIcon}
-                  //         />
-                  //         {/* isRecurrent */}
-                  //       </div>
-                  //     </div>
-                  //   </div>
-                  // </div>
                 ))
               : ""}
           </div>
