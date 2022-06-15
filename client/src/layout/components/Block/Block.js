@@ -85,11 +85,12 @@ const Block = (props) => {
     </div>
   );
 
-  useEffect(() => {
-    if (isOpen && block.blockContent.blocks.length !== 0) {
-      dispatch(loadSubBlocks(block.blockContent.blocks));
-    }
-  }, [isOpen]);
+
+  // useEffect(() => {
+  //   if (isOpen && newBlock.blockContent.blocks.length !== 0) {
+  //     dispatch(loadSubBlocks(newBlock.blockContent.blocks));
+  //   }
+  // }, [isOpen]);
 
   return (
     <div className="block-container">
@@ -142,7 +143,11 @@ const Block = (props) => {
               }
             />
 
-            <BlockComments block={newBlock} user={user} collection={collection}/>
+            <BlockComments
+              block={newBlock}
+              user={user}
+              collection={collection}
+            />
           </div>
 
           <div className="modal-blocks">
@@ -180,7 +185,13 @@ const Block = (props) => {
             width: "30%",
           }}
         >
-          <div className="block-name" onClick={openModal}>
+          <div
+            className="block-name"
+            onClick={() => {
+              openModal();
+              dispatch(loadSubBlocks(newBlock.blockContent.blocks));
+            }}
+          >
             {block.blockName}
           </div>
 
