@@ -23,7 +23,6 @@ const Emoji = ({ onUpdate, parent }) => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
 
-  // console.log(chosenEmoji);
   return (
     <>
       <span
@@ -34,10 +33,10 @@ const Emoji = ({ onUpdate, parent }) => {
           alignItems: "center",
           margin: "0 .2em",
           cursor: "pointer",
-          fontSize: "1.5em",
+          fontSize: "1.3em",
         }}
       >
-        {parent?.icon || chosenEmoji.emoji || ':)'}
+        {parent?.icon || chosenEmoji.emoji || '📁'}
       </span>
       <Popper id={id} open={open} anchorEl={anchorEl}>
         <div>

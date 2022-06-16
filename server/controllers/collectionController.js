@@ -45,6 +45,7 @@ const createCollection = asyncHandler(async (req, res, next) => {
     const collectionObj = {
       collectionName: createdCollection.name,
       collectionId: mongoose.Types.ObjectId(createdCollection._id),
+      collectionIcon: createdCollection.icon,
     };
     workplace.collections = [...workplace.collections, collectionObj];
 
@@ -79,7 +80,7 @@ const updateCollection = asyncHandler(async (req, res, next) => {
       const newCollections = workplace.collections.map((coll) => {
         if (coll.collectionId.equals(collection._id)) {
           coll.collectionName = name || coll.collectionName;
-          coll.icon = icon || coll.icon
+          coll.collectionIcon = icon || coll.icon
         }
         return coll;
       });

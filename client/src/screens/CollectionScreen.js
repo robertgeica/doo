@@ -29,19 +29,16 @@ const CollectionScreen = (props) => {
     }
   }, [collection?.blocks]);
 
-
   const onIconUpdate = (emoji) => {
-    dispatch(
-      updateCollection(
-        { ...collection, icon: emoji },
-        collection._id
-      )
-    );
-  }
+    dispatch(updateCollection({ ...collection, icon: emoji }, collection._id));
+    // dispatch(loadWorkplace(collection.workplaceId));
+    // dispatch(loadCollection(params.id));
+  };
+
   return (
     <div>
-      <div style={{ display: "flex", maxWidth: '70%' }}>
-        <Emoji parent={collection} onUpdate={onIconUpdate}/>
+      <div style={{ display: "flex", maxWidth: "70%" }}>
+        <Emoji parent={collection} onUpdate={onIconUpdate} />
         <div
           contentEditable
           suppressContentEditableWarning

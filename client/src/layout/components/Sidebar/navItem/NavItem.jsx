@@ -7,7 +7,7 @@ import Emoji from "../../Emoji.js";
 
 const NavItem = (props) => {
   const { label, to, children, icon } = props.item;
-  console.log(props);
+  
   if (children) {
     return <NavItemHeader item={props.item} />;
   }
@@ -22,7 +22,7 @@ const NavItem = (props) => {
         <span className="navLabel">{label}</span>
 
       <div>
-        <MdEdit className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}/>
+        <MdDeleteOutline className="actionButton" onClick={() => props.deleteCollection(to.split("/")[1])}/>
       </div>
     </NavLink>
   );

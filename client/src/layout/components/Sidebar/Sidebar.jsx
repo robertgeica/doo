@@ -29,11 +29,10 @@ const EditableDropdown = React.lazy(() =>
 const Sidebar = (props) => {
   const dispatch = useDispatch();
   const { user, workplace } = props;
-
   const collections = workplace?.workplace?.collections?.map((collection) => {
     return {
       label: collection.collectionName,
-      icon: "icon",
+      icon: collection.collectionIcon,
       to: `collection/${collection.collectionId}`,
     };
   });
@@ -133,7 +132,7 @@ const Sidebar = (props) => {
                     collection: {
                       workplaceId: workplace?.workplace._id,
                       name: collectionName,
-                      icon: "icon.png",
+                      icon: "📁",
                       background: "default",
                     },
                   },

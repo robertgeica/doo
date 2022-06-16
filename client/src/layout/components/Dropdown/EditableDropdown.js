@@ -38,7 +38,7 @@ const EditableDropdown = (props) => {
 
             {itemActions && defaultValue !== content ? (
               <>
-                {itemActions?.updateItem(content, value.value || value[0].value)}
+                {itemActions?.updateItem(content, value?.value || value[0]?.value)}
                 {itemActions?.addItem(content)}
               </>
             ) : null}

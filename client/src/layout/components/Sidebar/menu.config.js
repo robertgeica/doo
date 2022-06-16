@@ -1,7 +1,7 @@
 export const sideMenu = (children) => [
   {
     label: "Home",
-    icon: "icon",
+    // icon: "icon",
     to: "/",
   },
   ...children

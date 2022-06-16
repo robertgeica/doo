@@ -23,6 +23,8 @@
 .block-name {
   display: flex;
   align-self: center;
+  margin: 0 .5em;
+  font-weight: 600;
   &:hover {
     // color: grey;
     cursor: pointer;

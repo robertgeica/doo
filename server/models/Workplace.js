@@ -11,7 +11,8 @@ const WorkplaceSchema = new Schema(
     collections: [
       {
         collectionId: { type: Object },
-        collectionName: { type: String }
+        collectionName: { type: String },
+        collectionIcon: { type: String }
       }
     ],
 
