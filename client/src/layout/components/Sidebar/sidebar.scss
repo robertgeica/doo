@@ -36,7 +36,6 @@
             color: #3597d3;
           }
         }
-      
       }
 
       svg {
@@ -51,7 +50,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    align-content:center ;
+    align-content: center;
     background-color: #f9f9f9;
 
     svg {
@@ -59,7 +58,7 @@
       font-size: 1.7em;
       background-color: #f9f9f9;
       cursor: pointer;
-      margin-bottom: .5em;
+      margin-bottom: 0.5em;
     }
 
     svg {
@@ -105,7 +104,7 @@
   width: 100%;
   font-size: 2em;
   font-weight: 600;
-  padding: .2em 0;
+  padding: 0.2em 0;
   display: flex;
   justify-content: space-between;
 
@@ -139,8 +138,12 @@
   max-width: 100%;
 }
 
-
 .block-type {
   width: 5em;
-  padding: .4em 0;
+  padding: 0.4em 0;
+}
+
+[contentEditable="true"]:empty:not(:focus):before {
+  content: attr(data-text);
+  color: grey;
 }

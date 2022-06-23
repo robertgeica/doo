@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaRegComments } from "react-icons/fa";
+import { connect } from "react-redux";
 import {
   AiOutlineCloseCircle,
   AiOutlineDelete,
@@ -25,14 +26,17 @@ import BlockComments from "./BlockComments";
 import Emoji from "../Emoji";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Block = (props) => {
-  const { block, collection, user, subBlocks } = props;
+  const { block, collection, user, subBlocks, blockState } = props;
   const dispatch = useDispatch();
 
+  const [newBlock, setNewBlock] = useState(block);
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const closeModal = () => {
+    setIsOpen(false);
+    setNewBlock(block);
+  };
 
-  const [newBlock, setNewBlock] = useState(block);
 
   const onChange = (value, key) => {
     if (key.split(".")[1] === "isRecurrent") {
@@ -45,7 +49,7 @@ const Block = (props) => {
         isRecurrent: newIsRecurrent,
       };
       setNewBlock({
-        ...block,
+        ...newBlock,
         blockContent: newBlockContent,
       });
       return;
@@ -53,18 +57,14 @@ const Block = (props) => {
 
     if (key.split(".")[0] === "blockContent") {
       setNewBlock({
-        ...block,
-        blockContent: { ...block.blockContent, [key.split(".")[1]]: value },
+        ...newBlock,
+        blockContent: { ...newBlock.blockContent, [key.split(".")[1]]: value },
       });
       return;
     }
 
-    setNewBlock({ ...block, [key]: value });
+    setNewBlock({ ...newBlock, [key]: value });
   };
-
-  useEffect(() => {
-    setNewBlock(block);
-  }, [block]);
 
   const isDifferentBlockName = block.blockName !== newBlock.blockName;
   const isDifferentBlockContent =
@@ -75,7 +75,7 @@ const Block = (props) => {
     dispatch(updateBlock(newBlock, newBlock._id)).then(() =>
       dispatch(loadBlocks(collection?.blocks))
     );
-    setNewBlock(block);
+    // setNewBlock(block);
   };
 
   const saveIcon = () => (
@@ -90,11 +90,11 @@ const Block = (props) => {
     dispatch(updateBlock({ ...newBlock, icon: emoji }, newBlock._id));
   };
 
-  // useEffect(() => {
-  //   if (isOpen && newBlock.blockContent.blocks.length !== 0) {
-  //     dispatch(loadSubBlocks(newBlock.blockContent.blocks));
-  //   }
-  // }, [isOpen]);
+  const triggerUpdate = (sub_block) => {
+    dispatch(loadSubBlocks(sub_block.blockContent.blocks));
+  };
+
+  console.log(block, newBlock)
 
   return (
     <div className="block-container">
@@ -155,26 +155,56 @@ const Block = (props) => {
           </div>
 
           <div className="modal-blocks">
-            <h2>subtasks</h2>
+            <h2>Blocks</h2>
             {typeof subBlocks !== "undefined" &&
             subBlocks?.length !== 0 &&
             subBlocks !== null
               ? subBlocks.map((sub_block) => (
-                  <SubBlock
-                    parentId={block._id}
-                    sub_block={sub_block}
-                    user={user}
-                    collection={collection}
-                  />
+                  <div
+                    className="block-row"
+                    style={{
+                      flexDirection: "column",
+                      margin: "0 0 1em 0",
+                      border: "1px solid grey",
+                      padding: "0.5em",
+                    }}
+                  >
+                    <div
+                      className="block-name"
+                      onClick={() => {
+                        openModal();
+                        // dispatch(loadSubBlocks(sub_block.blockContent.blocks));
+                        // triggerUpdate(sub_block)
+                        dispatch(loadBlock(sub_block));
+                        setNewBlock(sub_block);
+                      }}
+                    >
+                      {sub_block?.blockName}
+                    </div>
+
+                    <div className="block-actions">
+                      <BlockActions
+                        newBlock={sub_block}
+                        collection={collection}
+                        onChange={onChange}
+                        saveIcon={saveIcon}
+                        // showStatusIcon
+                        // showPriorityIcon
+                        hideStatusIcon
+                        block={sub_block}
+                        onUpdateBlock={onUpdateBlock}
+                      />
+                    </div>
+                  </div>
                 ))
               : ""}
 
             <AddBlockInput
-              parentId={block._id}
+              parentId={newBlock._id}
               userId={user._id}
               fullWidth
               isBlockParent={true}
-              block={block}
+              block={newBlock}
             />
           </div>
         </div>
@@ -189,18 +219,16 @@ const Block = (props) => {
             width: "30%",
           }}
         >
-          <div style={{display: 'flex'}}>
+          <div style={{ display: "flex" }}>
             <Emoji parent={newBlock} onUpdate={onIconUpdate} />
             <div
               className="block-name"
               onClick={() => {
                 openModal();
-                dispatch(loadSubBlocks(newBlock.blockContent.blocks));
-
                 dispatch(loadBlock(newBlock));
               }}
             >
-              {block.blockName}
+              {newBlock.blockName}
             </div>
           </div>
 
@@ -225,12 +253,14 @@ const Block = (props) => {
           />
 
           <div className="block-item">
-            {block.comments.length} <FaRegComments />
+            {newBlock.comments.length} <FaRegComments />
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-export default Block;
+const mapStateToProps = (state) => ({
+  blockState: state.blockReducer,
+});
+export default connect(mapStateToProps)(Block);

@@ -13,6 +13,7 @@ import {
   updateBlock,
   loadSubBlocks,
   loadBlock,
+  loadBlocks,
 } from "../../../actions/blockActions";
 import { useDispatch, connect } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
@@ -25,16 +26,14 @@ import BlockActions from "./BlockActions";
 import Block from "./Block";
 
 const SubBlock = (props) => {
-  const { parentId, user, collection, subBlocks, sub_block } = props;
+  const { parentId, user, collection, subBlocks, sub_block, triggerUpdate } = props;
   // const sub_block = props.block;
-  console.log(props);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
   const [newBlock, setNewBlock] = useState(sub_block);
-  console.log(newBlock.blockName, sub_block.blockName);
 
   const onChange = (value, key) => {
     if (key.split(".")[1] === "isRecurrent") {
@@ -90,16 +89,16 @@ const SubBlock = (props) => {
     </div>
   );
 
-  const [showBlocks, setShowBlocks] = useState(false);
 
-  useEffect(() => {
-    if (isOpen && sub_block.blockContent.blocks.length !== 0) {
-      console.log(sub_block.blockName);
-      // dispatch(loadBlock(sub_block));
-      // dispatch(loadSubBlocks(sub_block.blockContent.blocks));
-    }
-  }, [showBlocks, props.block]);
-
+  // useEffect(() => {
+  //   if (isOpen && sub_block.blockContent.blocks.length !== 0) {
+  //     console.log(sub_block.blockName);
+  //     // dispatch(loadBlock(sub_block));
+  //     dispatch(loadSubBlocks(sub_block.blockContent.blocks));
+  //   }
+  // }, [props.block]);
+  console.log('prop: ', sub_block.blockName, sub_block.blockContent.blocks.length)
+  console.log('state: ', newBlock.blockName, newBlock.blockContent.blocks.length)
   return (
     <div className="sub-block-container">
       <div key={sub_block?._id}>
@@ -158,17 +157,26 @@ const SubBlock = (props) => {
             </div>
 
             <div className="modal-blocks">
-              <h2>subtasks</h2>
+              <h2>Blocks</h2>
               {typeof subBlocks !== "undefined" &&
               subBlocks?.length !== 0 &&
               subBlocks !== null
-                ? subBlocks.map((sub_block) => (
-                    <SubBlock
-                      parentId={sub_block._id}
-                      sub_block={sub_block}
-                      user={user}
-                      collection={collection}
-                    />
+                ? subBlocks.map((sub_blockk) => (
+                    // <SubBlock
+                    //   parentId={sub_blockk._id}
+                    //   sub_block={sub_blockk}
+                    //   user={user}
+                    //   collection={collection}
+                    // />
+                    <></>
+
+                    // <Block
+                    //   collection={collection}
+                    //   block={sub_block}
+                    //   user={user}
+                    //   subBlocks={subBlocks}
+                    //   key={sub_block._id}
+                    // />
                   ))
                 : ""}
 
@@ -196,9 +204,9 @@ const SubBlock = (props) => {
             className="block-name"
             onClick={() => {
               openModal();
-              setShowBlocks(!showBlocks);
               // dispatch(loadSubBlocks(sub_block.blockContent.blocks));
-              // dispatch(loadBlock(sub_block));
+              // triggerUpdate(sub_block)
+              dispatch(loadBlock(sub_block));
             }}
           >
             {newBlock?.blockName}

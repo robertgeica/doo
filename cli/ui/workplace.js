@@ -17,7 +17,8 @@ const renderWorkplaces = (workplacesArr) => {
 };
 
 const renderWorkplace = (crtWorkplace) => {
-  const icon = "💾";
+  // const icon = "💾";
+  const icon = '';
   console.log(
     `${icon} ${chalk.hex(workplace).bold(`@${crtWorkplace.workplaceName}`)}`
   );
@@ -32,7 +33,7 @@ const renderCollections = (collectionsArr) => {
   console.log(line);
   collectionsArr.map((col) =>
     console.log(
-      `  ${icon} ${chalk.hex(workplace).bold(`@${col.collectionName}`)}`
+      `  ${col.collectionIcon} ${chalk.hex(workplace).bold(`@${col.collectionName}`)}`
     )
   );
 };

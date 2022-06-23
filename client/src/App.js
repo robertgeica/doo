@@ -13,10 +13,14 @@ const App = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(loadUser());
     if(!localStorage.token) {
       navigate('/welcome');
+
+      return;
     }
+
+    dispatch(loadUser());
+
   }, []);
 
   return (

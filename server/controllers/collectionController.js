@@ -7,9 +7,9 @@ const ErrorHandler = require("../utils/errorHandler");
 // @description   Get collection
 // @access        Private
 const getCollection = asyncHandler(async (req, res, next) => {
-  const collection = await Collection.findById(
-    mongoose.Types.ObjectId(req.params.id)
-  );
+  const collection = await Collection.findOne({
+    _id: mongoose.Types.ObjectId(req.params.id),
+  });
   if (collection) {
     res.json({
       collection,
@@ -80,7 +80,7 @@ const updateCollection = asyncHandler(async (req, res, next) => {
       const newCollections = workplace.collections.map((coll) => {
         if (coll.collectionId.equals(collection._id)) {
           coll.collectionName = name || coll.collectionName;
-          coll.collectionIcon = icon || coll.icon
+          coll.collectionIcon = icon || coll.icon;
         }
         return coll;
       });

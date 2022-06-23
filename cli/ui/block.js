@@ -6,7 +6,7 @@ const renderBlocks = (blocks, blockId) => {
     chalk.hex(normal)(`These are your blocks in current collection:`)
   );
   blocks.forEach((block) => {
-    const icon = "💽";
+    const icon = block.icon;
     console.log(
       `${icon} ${
         block._id === blockId

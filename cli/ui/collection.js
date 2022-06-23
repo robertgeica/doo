@@ -19,7 +19,7 @@ const renderCollections = (collections) => {
 };
 
 const renderCollection = ({ collection }) => {
-  const icon = "💽";
+  const icon = collection.collectionIcon;
   console.log(
     `${icon} ${chalk.hex(workplace).bold(`@${collection.name}`)}`,
     `\t${collection.blocks.length} blocks`,

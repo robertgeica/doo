@@ -20,7 +20,6 @@ import {
   SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
-
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {
     dispatch({ type: SUB_BLOCKS_LOAD_REQUEST });
@@ -47,12 +46,15 @@ export const loadBlock = (block) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_LOAD_REQUEST });
 
-    // const { data } = await axios.get(`http://localhost:4000/api/block/${id}`);
+    const { data } = await axios.get(
+      `http://localhost:4000/api/block/${block._id}`
+    );
 
     dispatch({
       type: BLOCK_LOAD_SUCCESS,
       payload: block,
     });
+    dispatch(loadSubBlocks(block.blockContent.blocks));
   } catch (error) {
     dispatch({ type: BLOCK_LOAD_FAIL });
   }
@@ -94,9 +96,9 @@ export const addBlock = (block) => async (dispatch) => {
         parentId: block.parentId,
         userId: block.userId,
         blockName: block.blockName,
-        blockType: block.blockType || 'task',
+        blockType: block.blockType || "task",
         blockParent: block.blockParent,
-        parentType: block.parentType
+        parentType: block.parentType,
       },
       config
     );
@@ -117,8 +119,8 @@ export const deleteBlock = (blockId, parentType) => async (dispatch) => {
       `http://localhost:4000/api/block/${blockId}`,
       {
         data: {
-          parentType: parentType
-        }
+          parentType: parentType,
+        },
       }
     );
 

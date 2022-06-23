@@ -120,8 +120,9 @@ const Sidebar = (props) => {
             suppressContentEditableWarning={true}
             className="collections"
             onInput={onCollectionInputChange}
+            data-text="Type new collection name..."
           >
-            Collection
+            
           </div>
           <MdAddCircleOutline
             className="actionButton edit-collection"
