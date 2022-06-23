@@ -113,6 +113,7 @@ export const updateCollection = (collection, collectionId) => async (dispatch) =
       type: COLLECTION_UPDATE_SUCCESS,
       payload: data,
     });
+    dispatch(loadCollection(collectionId))
   } catch (error) {
     dispatch({ type: COLLECTION_UPDATE_FAIL });
   }

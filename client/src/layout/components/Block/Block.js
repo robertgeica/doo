@@ -18,7 +18,6 @@ import { useDispatch } from "react-redux";
 import { DefaultEditor } from "react-simple-wysiwyg";
 import Status from "./Status";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import SubBlock from "./SubBlock";
 import AddBlockInput from "./AddBlockInput";
 import { loadCollection } from "../../../actions/collectionActions";
 import BlockActions from "./BlockActions";
@@ -30,6 +29,7 @@ const Block = (props) => {
   const dispatch = useDispatch();
 
   const [newBlock, setNewBlock] = useState(block);
+  // console.log(block, newBlock)
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => {
@@ -40,6 +40,7 @@ const Block = (props) => {
 
   const onChange = (value, key) => {
     if (key.split(".")[1] === "isRecurrent") {
+      console.log('isRecurrent')
       const newIsRecurrent = {
         ...newBlock.blockContent.isRecurrent,
         [value.id]: value.value,
@@ -75,7 +76,6 @@ const Block = (props) => {
     dispatch(updateBlock(newBlock, newBlock._id)).then(() =>
       dispatch(loadBlocks(collection?.blocks))
     );
-    // setNewBlock(block);
   };
 
   const saveIcon = () => (
@@ -88,13 +88,10 @@ const Block = (props) => {
 
   const onIconUpdate = (emoji) => {
     dispatch(updateBlock({ ...newBlock, icon: emoji }, newBlock._id));
+    setNewBlock({...newBlock, icon: emoji});
   };
 
-  const triggerUpdate = (sub_block) => {
-    dispatch(loadSubBlocks(sub_block.blockContent.blocks));
-  };
 
-  console.log(block, newBlock)
 
   return (
     <div className="block-container">
@@ -151,6 +148,7 @@ const Block = (props) => {
               block={newBlock}
               user={user}
               collection={collection}
+              onUpdateBlock={(block) => setNewBlock(block)}
             />
           </div>
 
@@ -173,8 +171,6 @@ const Block = (props) => {
                       className="block-name"
                       onClick={() => {
                         openModal();
-                        // dispatch(loadSubBlocks(sub_block.blockContent.blocks));
-                        // triggerUpdate(sub_block)
                         dispatch(loadBlock(sub_block));
                         setNewBlock(sub_block);
                       }}
@@ -249,7 +245,7 @@ const Block = (props) => {
             saveIcon={saveIcon}
             hideStatusIcon={false}
             block={block}
-            onUpdateBlock={onUpdateBlock}
+            onUpdateBlock={(block) => setNewBlock(block)}
           />
 
           <div className="block-item">

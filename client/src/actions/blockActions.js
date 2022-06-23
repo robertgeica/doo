@@ -31,7 +31,6 @@ export const loadSubBlocks = (blockIds) => async (dispatch) => {
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((data) => {
         const formatedData = data.map((item) => item.data.block);
-        console.log(formatedData);
         dispatch({
           type: SUB_BLOCKS_LOAD_SUCCESS,
           payload: formatedData,
@@ -54,7 +53,6 @@ export const loadBlock = (block) => async (dispatch) => {
       type: BLOCK_LOAD_SUCCESS,
       payload: block,
     });
-    dispatch(loadSubBlocks(block.blockContent.blocks));
   } catch (error) {
     dispatch({ type: BLOCK_LOAD_FAIL });
   }
@@ -152,9 +150,13 @@ export const updateBlock = (block, blockId) => async (dispatch) => {
     dispatch({
       type: BLOCK_UPDATE_SUCCESS,
       payload: data,
-    });
-    dispatch(loadBlock(blockId));
+    })
+// console.log(data.data, block)
+
+    // dispatch(loadBlock(data.data));
+
   } catch (error) {
+    console.log(error)
     dispatch({ type: BLOCK_UPDATE_FAIL });
   }
 };

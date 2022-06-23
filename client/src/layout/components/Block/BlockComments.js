@@ -3,7 +3,12 @@ import { useDispatch } from "react-redux";
 import { MdDeleteOutline } from "react-icons/md";
 import { updateBlock, loadBlocks } from "../../../actions/blockActions";
 
-export default function BlockComments({ block, user, collection }) {
+export default function BlockComments({
+  block,
+  user,
+  collection,
+  onUpdateBlock,
+}) {
   const dispatch = useDispatch();
 
   const [newComment, setNewComment] = useState("");
@@ -42,9 +47,18 @@ export default function BlockComments({ block, user, collection }) {
                     },
                     block._id
                   )
-                ).then(() =>
-                dispatch(loadBlocks(collection?.blocks))
-              );
+                );
+                onUpdateBlock({
+                  ...block,
+                  comments: [
+                    ...block.comments,
+                    {
+                      content: newComment,
+                      accountId: user._id,
+                      accountName: user.username,
+                    },
+                  ],
+                });
               }}
             >
               comment
@@ -60,7 +74,7 @@ export default function BlockComments({ block, user, collection }) {
           </div>
           <MdDeleteOutline
             style={{ fontSize: "1.2em", cursor: "pointer" }}
-            onClick={(e) =>
+            onClick={(e) => {
               dispatch(
                 updateBlock(
                   {
@@ -71,10 +85,14 @@ export default function BlockComments({ block, user, collection }) {
                   },
                   block._id
                 )
-              ).then(() =>
-              dispatch(loadBlocks(collection?.blocks))
-            )
-            }
+              );
+              onUpdateBlock({
+                ...block,
+                comments: block.comments.filter(
+                  (com) => com.content !== comment.content
+                ),
+              });
+            }}
           />
         </div>
       ))}

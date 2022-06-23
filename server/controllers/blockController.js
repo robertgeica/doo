@@ -153,7 +153,7 @@ const updateBlock = asyncHandler(async (req, res, next) => {
     blockToUpdate.icon = req.body.icon;
 
     await blockToUpdate.save();
-    res.json(block);
+    res.json(blockToUpdate);
   } else {
     return next(new ErrorHandler("Block not found.", 404));
   }

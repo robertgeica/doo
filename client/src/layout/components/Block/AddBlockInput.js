@@ -41,7 +41,7 @@ export default function AddBlockInput(props) {
               })
             )
               .then(() => dispatch(loadCollection(params.id)))
-              // .then((res) => dispatch(loadSubBlocks(block.blockContent.blocks)));
+              .then((res) => dispatch(loadSubBlocks(block.blockContent.blocks)));
         }}
       />
     </div>

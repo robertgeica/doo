@@ -46,7 +46,6 @@ export default function BlockActions({
       <div className="block-item">
         <Recurrent
           block={newBlock}
-          onChange={onChange}
           onUpdateBlock={onUpdateBlock}
         />
       </div>

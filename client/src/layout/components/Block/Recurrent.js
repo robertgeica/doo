@@ -18,7 +18,7 @@ import { AiOutlineSave } from "react-icons/ai";
 import { updateBlock } from "../../../actions/blockActions";
 import { useDispatch, connect } from "react-redux";
 
-const Priority = ({ block, onChange, onUpdateBlock }) => {
+const Priority = ({ block, onUpdateBlock }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -144,8 +144,21 @@ const Priority = ({ block, onChange, onUpdateBlock }) => {
             {hasChanges && (
               <AiOutlineSave
                 onClick={() =>
-                  dispatch(updateBlock(
-                    {
+                  {
+                    dispatch(updateBlock(
+                      {
+                        ...block,
+                        blockContent: {
+                          ...block.blockContent,
+                          isRecurrent: {
+                            ...block.blockContent.isRecurrent,
+                            days: newDays,
+                          },
+                        },
+                      },
+                      block._id
+                    ));
+                    onUpdateBlock({
                       ...block,
                       blockContent: {
                         ...block.blockContent,
@@ -154,9 +167,8 @@ const Priority = ({ block, onChange, onUpdateBlock }) => {
                           days: newDays,
                         },
                       },
-                    },
-                    block._id
-                  ))
+                    })
+                  }
                 }
               />
             )}
