@@ -92,11 +92,31 @@ const Sidebar = (props) => {
 
   const [collectionName, setCollectionName] = useState("");
   const onCollectionInputChange = (e) => {
-    setCollectionName(e.target.textContent);
+    if (e.key === "Enter") {
+      dispatch(
+        addCollection(
+          {
+            collection: {
+              workplaceId: workplace?.workplace._id,
+              name: e.target.value,
+              icon: "📁",
+              background: "default",
+            },
+          },
+          userId
+        )
+      ).then(() => {
+        e.target.value = '';
+        dispatch(loadWorkplace(workplace.workplace._id));
+      });
+    }
+    // setCollectionName(e.target.textContent);
   };
 
   const removeCollection = (id) => {
-    dispatch(deleteCollection(id)).then(() => dispatch(loadWorkplace(workplace.workplace._id)));
+    dispatch(deleteCollection(id)).then(() =>
+      dispatch(loadWorkplace(workplace.workplace._id))
+    );
   };
 
   return (
@@ -115,16 +135,15 @@ const Sidebar = (props) => {
 
       <div className="links">
         <div className="links-header">
-          <div
-            contentEditable="true"
-            suppressContentEditableWarning={true}
+          <input
+            // contentEditable="true"
+            // suppressContentEditableWarning={true}
             className="collections"
-            onInput={onCollectionInputChange}
-            data-text="Type new collection name..."
-          >
-            
-          </div>
-          <MdAddCircleOutline
+            onKeyDown={onCollectionInputChange}
+            // data-text="Type new collection name..."
+            placeholder="Type new collection name..."
+          ></input>
+          {/* <MdAddCircleOutline
             className="actionButton edit-collection"
             onClick={(e) => {
               dispatch(
@@ -141,7 +160,7 @@ const Sidebar = (props) => {
                 )
               ).then(() => dispatch(loadWorkplace(workplace.workplace._id)));
             }}
-          />
+          /> */}
         </div>
         {collections &&
           sideMenu(collections).map((item, index) => {

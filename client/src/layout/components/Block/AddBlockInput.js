@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addBlock } from "../../../actions/blockActions";
+import { addBlock, loadBlock, loadBlocks } from "../../../actions/blockActions";
 import { useDispatch } from "react-redux";
 import { loadCollection } from "../../../actions/collectionActions";
 import { Link, useParams } from "react-router-dom";
@@ -9,7 +9,8 @@ export default function AddBlockInput(props) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const { parentId, userId, fullWidth, isBlockParent, collectionId, block } = props;
+  const { parentId, userId, fullWidth, isBlockParent, collectionId, block } =
+    props;
   const [blockType, setBlockType] = useState("task");
   return (
     <div className={fullWidth ? "full-add-block" : "add-block"}>
@@ -30,18 +31,28 @@ export default function AddBlockInput(props) {
         className="collections"
         placeholder="Add new block"
         onKeyDown={(e) => {
-          e.key === "Enter" &&
+          if (e.key === "Enter") {
             dispatch(
-              addBlock({
-                parentId,
-                userId,
-                blockName: e.target.value,
-                blockType,
-                parentType: isBlockParent ? "block" : "collection",
-              })
-            )
-              .then(() => dispatch(loadCollection(params.id)))
-              .then((res) => dispatch(loadSubBlocks(block.blockContent.blocks)));
+              addBlock(
+                {
+                  parentId,
+                  userId,
+                  blockName: e.target.value,
+                  blockType,
+                  parentType: isBlockParent ? "block" : "collection",
+                },
+                block
+              )
+            ).then(() => {
+              if (isBlockParent) {
+                loadBlocks(block.blockContent.blocks)
+              } else {
+                dispatch(loadCollection(params.id));
+              }
+            });
+
+            e.target.value = '';
+          }
         }}
       />
     </div>
