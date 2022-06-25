@@ -53,6 +53,7 @@ export const loadBlock = (block) => async (dispatch) => {
       type: BLOCK_LOAD_SUCCESS,
       payload: block,
     });
+    dispatch(loadSubBlocks(block.blockContent.blocks));
   } catch (error) {
     dispatch({ type: BLOCK_LOAD_FAIL });
   }
@@ -79,7 +80,7 @@ export const loadBlocks = (blockIds) => async (dispatch) => {
   }
 };
 
-export const addBlock = (block) => async (dispatch) => {
+export const addBlock = (block, parentBlock) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_ADD_REQUEST });
 
@@ -101,11 +102,19 @@ export const addBlock = (block) => async (dispatch) => {
       config
     );
 
-    dispatch({
-      type: BLOCK_ADD_SUCCESS,
-      payload: data,
-    });
+    if (typeof parentBlock !== "undefined") {
+      dispatch(
+        loadBlock({
+          ...parentBlock,
+          blockContent: {
+            ...parentBlock.blockContent,
+            blocks: [...parentBlock.blockContent.blocks, data.data.block._id],
+          },
+        })
+      );
+    }
   } catch (error) {
+    console.log(error);
     dispatch({ type: BLOCK_ADD_FAIL });
   }
 };
@@ -150,13 +159,12 @@ export const updateBlock = (block, blockId) => async (dispatch) => {
     dispatch({
       type: BLOCK_UPDATE_SUCCESS,
       payload: data,
-    })
-// console.log(data.data, block)
+    });
+    // console.log(data.data, block)
 
     // dispatch(loadBlock(data.data));
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
     dispatch({ type: BLOCK_UPDATE_FAIL });
   }
 };
