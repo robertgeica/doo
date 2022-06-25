@@ -113,6 +113,8 @@ export const addBlock = (block, parentBlock) => async (dispatch) => {
         })
       );
     }
+
+    return data.data.block._id;
   } catch (error) {
     console.log(error);
     dispatch({ type: BLOCK_ADD_FAIL });

@@ -27,9 +27,10 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Block = (props) => {
   const { block, collection, user, subBlocks, blockState } = props;
   const dispatch = useDispatch();
-
+  
   const [newBlock, setNewBlock] = useState(block);
-  // console.log(block, newBlock)
+  console.log('block ', block, 'new block', newBlock, 'block state', blockState?.block);
+
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => {
@@ -67,15 +68,18 @@ const Block = (props) => {
     setNewBlock({ ...newBlock, [key]: value });
   };
 
-  const isDifferentBlockName = block.blockName !== newBlock.blockName;
+  const isDifferentBlockName = newBlock.blockName !== blockState?.block?.blockName;
+  
   const isDifferentBlockContent =
-    JSON.stringify(block.blockContent) !==
+    JSON.stringify(blockState?.block?.blockContent) !==
     JSON.stringify(newBlock.blockContent);
 
   const onUpdateBlock = () => {
     dispatch(updateBlock(newBlock, newBlock._id)).then(() =>
       dispatch(loadBlocks(collection?.blocks))
     );
+    dispatch(loadBlock(newBlock));
+
   };
 
   const saveIcon = () => (
@@ -90,6 +94,10 @@ const Block = (props) => {
     dispatch(updateBlock({ ...newBlock, icon: emoji }, newBlock._id));
     setNewBlock({...newBlock, icon: emoji});
   };
+
+  const updateLocalBlock = (block) => {
+    setNewBlock(block);
+  }
 
 
 
@@ -200,7 +208,9 @@ const Block = (props) => {
               userId={user._id}
               fullWidth
               isBlockParent={true}
-              block={newBlock}
+              // block={newBlock}
+              block={blockState?.block}
+              updateLocalBlock={updateLocalBlock}
             />
           </div>
         </div>

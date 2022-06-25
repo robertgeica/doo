@@ -9,8 +9,9 @@ export default function AddBlockInput(props) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const { parentId, userId, fullWidth, isBlockParent, collectionId, block } =
+  const { parentId, userId, fullWidth, isBlockParent, collectionId, block, updateLocalBlock } =
     props;
+
   const [blockType, setBlockType] = useState("task");
   return (
     <div className={fullWidth ? "full-add-block" : "add-block"}>
@@ -43,15 +44,22 @@ export default function AddBlockInput(props) {
                 },
                 block
               )
-            ).then(() => {
+            ).then((newBlockId) => {
               if (isBlockParent) {
-                loadBlocks(block.blockContent.blocks)
+                loadSubBlocks([...block?.blockContent?.blocks, newBlockId]);
+                updateLocalBlock({
+                  ...block,
+                  blockContent: {
+                    ...block.blockContent,
+                    blocks: [...block.blockContent.blocks, newBlockId],
+                  },
+                });
               } else {
                 dispatch(loadCollection(params.id));
               }
             });
 
-            e.target.value = '';
+            e.target.value = "";
           }
         }}
       />
