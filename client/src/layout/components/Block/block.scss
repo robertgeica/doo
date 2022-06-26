@@ -205,3 +205,18 @@
 .sub-block-container {
 
 }
+
+.block-title-input {
+  font-size: 1.4em;
+  border: 0;
+  padding: 0.4em 0;
+  margin: 1em 0;
+  font-weight: 600;
+  cursor: caret;
+  display: flex;
+  width: 100%;
+  &:focus {
+    outline: none;
+    background-color: #f9f9f9;
+  }
+}

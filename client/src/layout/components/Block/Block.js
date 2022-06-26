@@ -136,14 +136,16 @@ const Block = (props) => {
         </div>
         <div className="modal-container">
           <div className="modal-side">
-            <h1
+            <input
               style={{ color: "black" }}
-              contentEditable
-              suppressContentEditableWarning={true}
-              onInput={(e) => onChange(e.target.textContent, "blockName")}
-            >
-              {newBlock.blockName}
-            </h1>
+              // contentEditable
+              // suppressContentEditableWarning={true}
+              className="block-title-input"
+              onInput={(e) => onChange(e.target.value, "blockName")}
+              defaultValue={newBlock.blockName}
+            />
+              {/* {newBlock.blockName} */}
+            {/* </input> */}
 
             <DefaultEditor
               value={newBlock.blockContent.description}

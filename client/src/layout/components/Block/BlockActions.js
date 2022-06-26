@@ -26,6 +26,7 @@ export default function BlockActions({
           saveIcon={saveIcon}
           showIcon={showStatusIcon || true}
           hideStatusIcon={hideStatusIcon}
+          onUpdateBlock={onUpdateBlock}
         />
       </div>
       <div className="block-item">

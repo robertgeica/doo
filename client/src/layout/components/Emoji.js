@@ -22,7 +22,6 @@ const Emoji = ({ onUpdate, parent }) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
-
   return (
     <>
       <span
