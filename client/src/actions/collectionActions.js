@@ -17,7 +17,7 @@ import {
   COLLECTION_DELETE_FAIL,
 } from "../constants/collectionConstants";
 
-const url = process.env.URL || 'http://localhost:4000';
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4000';
 
 // load collection
 export const loadCollection = (id) => async (dispatch) => {
@@ -25,7 +25,7 @@ export const loadCollection = (id) => async (dispatch) => {
     dispatch({ type: COLLECTION_LOAD_REQUEST });
 
     const { data } = await axios.get(
-      `${url}/api/collection/${id}`
+      `${SERVER_URL}/api/collection/${id}`
     );
     dispatch({
       type: COLLECTION_LOAD_SUCCESS,
@@ -65,7 +65,7 @@ export const addCollection = (collection, userId) => async (dispatch) => {
     };
 
     const data = await axios.post(
-      `${url}/api/collection/${userId}`,
+      `${SERVER_URL}/api/collection/${userId}`,
       { ...collection.collection },
       config
     );
@@ -83,7 +83,7 @@ export const deleteCollection = (collectionId) => async (dispatch) => {
   try {
     dispatch({ type: COLLECTION_DELETE_REQUEST });
     const res = await axios.delete(
-      `${url}/api/collection/${collectionId}`
+      `${SERVER_URL}/api/collection/${collectionId}`
     );
 
     dispatch({
@@ -106,7 +106,7 @@ export const updateCollection = (collection, collectionId) => async (dispatch) =
     };
 
     const data = await axios.patch(
-      `${url}/api/collection/${collectionId}`,
+      `${SERVER_URL}/api/collection/${collectionId}`,
       { ...collection },
       config
     );

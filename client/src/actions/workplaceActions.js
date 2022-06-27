@@ -18,14 +18,14 @@ import {
 } from "../constants/workplaceConstants";
 import { loadUser } from "./userActions";
 
-const url = process.env.URL || 'http://localhost:4000';
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4000';
 
 export const loadWorkplace = (id) => async (dispatch) => {
   try {
     dispatch({ type: WORKPLACE_LOAD_REQUEST });
 
     const { data } = await axios.get(
-      `${url}/api/workplace/${id}`
+      `${SERVER_URL}/api/workplace/${id}`
     );
 
     dispatch({
@@ -65,7 +65,7 @@ export const addWorkplace = (workplace, userId) => async (dispatch) => {
     };
 
     const data = await axios.post(
-      `${url}/api/workplace/${userId}`,
+      `${SERVER_URL}/api/workplace/${userId}`,
       { ...workplace.workplace },
       config
     );
@@ -84,7 +84,7 @@ export const deleteWorkplace = (workplaceId) => async (dispatch) => {
   try {
     dispatch({ type: WORKPLACE_DELETE_REQUEST });
     const res = await axios.delete(
-      `${url}/api/workplace/${workplaceId}`
+      `${SERVER_URL}/api/workplace/${workplaceId}`
     );
 
     dispatch({
@@ -107,7 +107,7 @@ export const updateWorkplace = (workplace, workplaceId) => async (dispatch) => {
     };
 
     const data = await axios.patch(
-      `${url}/api/workplace/${workplaceId}`,
+      `${SERVER_URL}/api/workplace/${workplaceId}`,
       { ...workplace },
       config
     );

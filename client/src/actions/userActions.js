@@ -19,7 +19,7 @@ import {
 } from "../constants/userConstants";
 import setAuthToken from "../utils/setAuthToken";
 
-const url = process.env.URL || 'http://localhost:4000';
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4000';
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -29,7 +29,7 @@ export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: USER_LOAD_REQUEST });
 
-    const { data } = await axios.get(`${url}/api/user`);
+    const { data } = await axios.get(`${SERVER_URL}/api/user`);
 
     dispatch({
       type: USER_LOAD_SUCCESS,
@@ -53,7 +53,7 @@ export const login = (email, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `${url}/api/user/login`,
+      `${SERVER_URL}/api/user/login`,
       { email, password },
       config
     );
@@ -88,7 +88,7 @@ export const register = (username, email, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `${url}/api/user/register`,
+      `${SERVER_URL}/api/user/register`,
       { username, email, password },
       config
     );
@@ -115,7 +115,7 @@ export const sendResetPasswordEmail = (email) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const res = await axios.patch(`${url}/api/user/resetpassword`, {email}, config);
+    const res = await axios.patch(`${SERVER_URL}/api/user/resetpassword`, {email}, config);
 
     dispatch({
       type: SEND_RESET_PASSWORD_EMAIL_SUCCESS,
@@ -134,7 +134,7 @@ export const resetPassword = (id, token, newPassword) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const res = await axios.patch(`${url}/api/user/resetpassword/${id}/${token}`, {password: newPassword}, config);
+    const res = await axios.patch(`${SERVER_URL}/api/user/resetpassword/${id}/${token}`, {password: newPassword}, config);
 
     dispatch({
       type: RESET_PASSWORD_SUCCESS,
