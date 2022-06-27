@@ -20,7 +20,7 @@ import {
   SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
-const url = process.env.URL || 'http://localhost:4000/';
+const url = process.env.URL || 'http://localhost:4000';
 
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {

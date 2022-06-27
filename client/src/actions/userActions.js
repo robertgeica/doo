@@ -19,7 +19,7 @@ import {
 } from "../constants/userConstants";
 import setAuthToken from "../utils/setAuthToken";
 
-const url = process.env.URL || 'http://localhost:4000/';
+const url = process.env.URL || 'http://localhost:4000';
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {

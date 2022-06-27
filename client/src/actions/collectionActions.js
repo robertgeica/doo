@@ -17,7 +17,7 @@ import {
   COLLECTION_DELETE_FAIL,
 } from "../constants/collectionConstants";
 
-const url = process.env.URL || 'http://localhost:4000/';
+const url = process.env.URL || 'http://localhost:4000';
 
 // load collection
 export const loadCollection = (id) => async (dispatch) => {

@@ -17,6 +17,9 @@ import {
   WORKPLACE_DELETE_FAIL,
 } from "../constants/workplaceConstants";
 import { loadUser } from "./userActions";
+
+const url = process.env.URL || 'http://localhost:4000';
+
 export const loadWorkplace = (id) => async (dispatch) => {
   try {
     dispatch({ type: WORKPLACE_LOAD_REQUEST });
