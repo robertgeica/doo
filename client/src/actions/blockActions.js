@@ -20,7 +20,7 @@ import {
   SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4000';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:4000';
 
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {

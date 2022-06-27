@@ -17,7 +17,7 @@ import {
   COLLECTION_DELETE_FAIL,
 } from "../constants/collectionConstants";
 
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4000';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:4000';
 
 // load collection
 export const loadCollection = (id) => async (dispatch) => {
