@@ -125,7 +125,7 @@ const sendVerificationEmail = asyncHandler(async (req, res, next) => {
     to: user.email,
     subject: `Verify your email`,
     html: `
-    <p>http://localhost:3000/verifyemail/${token}</p>
+    <p>${process.env.URL}/verifyemail/${token}</p>
   `,
   };
 
@@ -176,7 +176,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
     to: req.body.email,
     subject: `Reset your password`,
     html: `
-    <p>http://localhost:3000/resetpassword/${user._id}/${token}</p>
+    <p>${process.env.URL}/resetpassword/${user._id}/${token}</p>
   `,
   };
 
@@ -210,7 +210,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 const createProfile = async (user, email) => {
-  const url = `http://localhost:4000/api/user/profile/${user._id}`;
+  const url = `${process.env.URL}/api/user/profile/${user._id}`;
   const profile = {
     image: "user.png",
     name: email,
@@ -228,7 +228,7 @@ const createProfile = async (user, email) => {
 };
 
 const createSettings = async (user) => {
-  const url = `http://localhost:4000/api/user/settings/${user._id}`;
+  const url = `${process.env.URL}/api/user/settings/${user._id}`;
   const settings = {
     preferences: {},
     theme: {},
@@ -242,7 +242,7 @@ const createSettings = async (user) => {
 };
 
 const createDefaultWorkplace = async (user) => {
-  const url = `http://localhost:4000/api/user/workplace/${user._id}`;
+  const url = `${process.env.URL}/api/user/workplace/${user._id}`;
   const defaultWorkplace = {
     userId: user._id,
     workplaceName: "Untitled",

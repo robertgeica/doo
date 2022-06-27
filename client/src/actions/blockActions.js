@@ -20,11 +20,13 @@ import {
   SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
+const url = process.env.URL || 'http://localhost:4000/';
+
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {
     dispatch({ type: SUB_BLOCKS_LOAD_REQUEST });
     const endpoints = blockIds.map(
-      (id) => `http://localhost:4000/api/block/${id}`
+      (id) => `${url}/api/block/${id}`
     );
 
     await axios
@@ -46,7 +48,7 @@ export const loadBlock = (block) => async (dispatch) => {
     dispatch({ type: BLOCK_LOAD_REQUEST });
 
     const { data } = await axios.get(
-      `http://localhost:4000/api/block/${block._id}`
+      `${url}/api/block/${block._id}`
     );
 
     dispatch({
@@ -63,7 +65,7 @@ export const loadBlocks = (blockIds) => async (dispatch) => {
   try {
     dispatch({ type: BLOCKS_LOAD_REQUEST });
     const endpoints = blockIds.map(
-      (id) => `http://localhost:4000/api/block/${id}`
+      (id) => `${url}/api/block/${id}`
     );
 
     await axios
@@ -90,7 +92,7 @@ export const addBlock = (block, parentBlock) => async (dispatch) => {
       },
     };
     const data = await axios.post(
-      `http://localhost:4000/api/block/${block.userId}`,
+      `${url}/api/block/${block.userId}`,
       {
         parentId: block.parentId,
         userId: block.userId,
@@ -125,7 +127,7 @@ export const deleteBlock = (blockId, parentType) => async (dispatch) => {
   try {
     dispatch({ type: BLOCK_DELETE_REQUEST });
     const res = await axios.delete(
-      `http://localhost:4000/api/block/${blockId}`,
+      `${url}/api/block/${blockId}`,
       {
         data: {
           parentType: parentType,
@@ -153,7 +155,7 @@ export const updateBlock = (block, blockId) => async (dispatch) => {
     };
 
     const data = await axios.patch(
-      `http://localhost:4000/api/block/${blockId}`,
+      `${url}/api/block/${blockId}`,
       { ...block },
       config
     );

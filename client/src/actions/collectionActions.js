@@ -17,13 +17,15 @@ import {
   COLLECTION_DELETE_FAIL,
 } from "../constants/collectionConstants";
 
+const url = process.env.URL || 'http://localhost:4000/';
+
 // load collection
 export const loadCollection = (id) => async (dispatch) => {
   try {
     dispatch({ type: COLLECTION_LOAD_REQUEST });
 
     const { data } = await axios.get(
-      `http://localhost:4000/api/collection/${id}`
+      `${url}/api/collection/${id}`
     );
     dispatch({
       type: COLLECTION_LOAD_SUCCESS,
@@ -63,7 +65,7 @@ export const addCollection = (collection, userId) => async (dispatch) => {
     };
 
     const data = await axios.post(
-      `http://localhost:4000/api/collection/${userId}`,
+      `${url}/api/collection/${userId}`,
       { ...collection.collection },
       config
     );
@@ -81,7 +83,7 @@ export const deleteCollection = (collectionId) => async (dispatch) => {
   try {
     dispatch({ type: COLLECTION_DELETE_REQUEST });
     const res = await axios.delete(
-      `http://localhost:4000/api/collection/${collectionId}`
+      `${url}/api/collection/${collectionId}`
     );
 
     dispatch({
@@ -104,7 +106,7 @@ export const updateCollection = (collection, collectionId) => async (dispatch) =
     };
 
     const data = await axios.patch(
-      `http://localhost:4000/api/collection/${collectionId}`,
+      `${url}/api/collection/${collectionId}`,
       { ...collection },
       config
     );

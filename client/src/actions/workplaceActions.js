@@ -22,7 +22,7 @@ export const loadWorkplace = (id) => async (dispatch) => {
     dispatch({ type: WORKPLACE_LOAD_REQUEST });
 
     const { data } = await axios.get(
-      `http://localhost:4000/api/workplace/${id}`
+      `${url}/api/workplace/${id}`
     );
 
     dispatch({
@@ -62,7 +62,7 @@ export const addWorkplace = (workplace, userId) => async (dispatch) => {
     };
 
     const data = await axios.post(
-      `http://localhost:4000/api/workplace/${userId}`,
+      `${url}/api/workplace/${userId}`,
       { ...workplace.workplace },
       config
     );
@@ -81,7 +81,7 @@ export const deleteWorkplace = (workplaceId) => async (dispatch) => {
   try {
     dispatch({ type: WORKPLACE_DELETE_REQUEST });
     const res = await axios.delete(
-      `http://localhost:4000/api/workplace/${workplaceId}`
+      `${url}/api/workplace/${workplaceId}`
     );
 
     dispatch({
@@ -104,7 +104,7 @@ export const updateWorkplace = (workplace, workplaceId) => async (dispatch) => {
     };
 
     const data = await axios.patch(
-      `http://localhost:4000/api/workplace/${workplaceId}`,
+      `${url}/api/workplace/${workplaceId}`,
       { ...workplace },
       config
     );
