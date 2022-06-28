@@ -14,7 +14,7 @@ import {
   SEND_RESET_PASSWORD_EMAIL_FAIL,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAIL
+  RESET_PASSWORD_FAIL,
 } from "../constants/userConstants";
 
 const userState = {
@@ -22,7 +22,7 @@ const userState = {
   user: null,
   error: null,
   email: null,
-  resetPassword: null
+  resetPassword: null,
 };
 
 export const userReducer = (state = userState, action) => {
@@ -36,14 +36,16 @@ export const userReducer = (state = userState, action) => {
     case RESET_PASSWORD_REQUEST:
       return { ...state, loading: true };
 
-    case USER_LOGIN_SUCCESS:
     case USER_REGISTER_SUCCESS:
+      return { ...state, loading: false };
+      
+    case USER_LOGIN_SUCCESS:
     case USER_LOAD_SUCCESS:
       return { loading: false, user: payload };
-    
+
     case SEND_RESET_PASSWORD_EMAIL_SUCCESS:
-      return {  ...state, loading: false, email: payload };
-    
+      return { ...state, loading: false, email: payload };
+
     case RESET_PASSWORD_SUCCESS:
       return { ...state, loading: false, resetPassword: payload };
 
@@ -53,9 +55,9 @@ export const userReducer = (state = userState, action) => {
     case SEND_RESET_PASSWORD_EMAIL_FAIL:
     case RESET_PASSWORD_FAIL:
       return { loading: false, error: payload };
-      
+
     case USER_LOGOUT:
-      return { loading: false, user: null, error: null}
+      return { loading: false, user: null, error: null };
     default:
       return state;
   }

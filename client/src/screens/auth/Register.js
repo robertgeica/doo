@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 import { register } from "../../actions/userActions";
 import Loader from '../../layout/utils/Loader';
 
 const Register = (state) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -20,12 +20,13 @@ const Register = (state) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(register(username, email, password));
+    return navigate('/login');
   };
 
   const { loading, error, user } = state.auth;
 
   if (user) {
-    return <Navigate replace to="/" />;
+    // return <Navigate replace to="/" />;
   }
 
   return (

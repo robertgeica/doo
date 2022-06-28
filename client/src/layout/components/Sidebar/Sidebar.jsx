@@ -87,7 +87,9 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-    dispatch(loadWorkplace(defaultValue?.value));
+    if(typeof defaultValue?.value !== 'undefined') {
+      dispatch(loadWorkplace(defaultValue?.value));
+    }
   }, [user]);
 
   const [collectionName, setCollectionName] = useState("");
@@ -118,6 +120,7 @@ const Sidebar = (props) => {
       dispatch(loadWorkplace(workplace.workplace._id))
     );
   };
+  console.log(props.user);
 
   return (
     <nav className="sidebar">
