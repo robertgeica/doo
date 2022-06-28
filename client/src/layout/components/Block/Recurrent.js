@@ -71,7 +71,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="monday"
               name="monday"
               value="monday"
-              checked={newDays.monday}
+              defaultChecked={newDays.monday}
             />
           </div>
 
@@ -82,7 +82,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="tuesday"
               name="tuesday"
               value="tuesday"
-              checked={newDays.tuesday}
+              defaultChecked={newDays.tuesday}
             />
           </div>
 
@@ -93,7 +93,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="wednesday"
               name="wednesday"
               value="wednesday"
-              checked={newDays.wednesday}
+              defaultChecked={newDays.wednesday}
             />
           </div>
 
@@ -104,7 +104,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="thursday"
               name="thursday"
               value="thursday"
-              checked={newDays.thursday}
+              defaultChecked={newDays.thursday}
             />
           </div>
 
@@ -115,7 +115,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="friday"
               name="friday"
               value="friday"
-              checked={newDays.friday}
+              defaultChecked={newDays.friday}
             />
           </div>
 
@@ -126,7 +126,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="saturday"
               name="saturday"
               value="saturday"
-              checked={newDays.saturday}
+              defaultChecked={newDays.saturday}
             />
           </div>
 
@@ -137,7 +137,7 @@ const Priority = ({ block, onUpdateBlock }) => {
               id="sunday"
               name="sunday"
               value="sunday"
-              checked={newDays.sunday}
+              defaultChecked={newDays.sunday}
             />
           </div>
           <Box sx={{ alignSelf: "center", marginTop: "1em" }}>
@@ -158,7 +158,7 @@ const Priority = ({ block, onUpdateBlock }) => {
                       },
                       block._id
                     ));
-                    onUpdateBlock({
+                    onUpdateBlock && onUpdateBlock({
                       ...block,
                       blockContent: {
                         ...block.blockContent,

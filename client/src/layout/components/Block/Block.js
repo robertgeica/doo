@@ -128,7 +128,7 @@ const Block = (props) => {
               saveIcon={saveIcon}
               showIcon
               block={block}
-              onUpdateBlock={onUpdateBlock}
+              onUpdateBlock={(block) => setNewBlock(block)}
             />
           </div>
 
@@ -138,14 +138,10 @@ const Block = (props) => {
           <div className="modal-side">
             <input
               style={{ color: "black" }}
-              // contentEditable
-              // suppressContentEditableWarning={true}
               className="block-title-input"
               onInput={(e) => onChange(e.target.value, "blockName")}
-              defaultValue={newBlock.blockName}
+              value={newBlock.blockName}
             />
-              {/* {newBlock.blockName} */}
-            {/* </input> */}
 
             <DefaultEditor
               value={newBlock.blockContent.description}
@@ -198,7 +194,9 @@ const Block = (props) => {
                         // showPriorityIcon
                         hideStatusIcon
                         block={sub_block}
-                        onUpdateBlock={onUpdateBlock}
+                        onUpdateBlock={() => {
+                          dispatch(loadSubBlocks(newBlock.blockContent.blocks));
+                        }}
                       />
                     </div>
                   </div>
