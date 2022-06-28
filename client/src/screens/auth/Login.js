@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 import { login } from "../../actions/userActions";
@@ -16,10 +16,7 @@ const Login = (state) => {
 
   const { loading, error, user } = state.auth;
 
-  if (user) {
-    console.log('navigated')
-    return navigate('/');
-  }
+
 
   const onChange = (e) =>
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -27,7 +24,10 @@ const Login = (state) => {
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
+    return navigate('/');
   };
+
+
   return (
     <div className="wave-wrapper">
       {error && <p>error: {error}</p>}

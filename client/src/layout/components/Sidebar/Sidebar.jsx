@@ -120,7 +120,6 @@ const Sidebar = (props) => {
       dispatch(loadWorkplace(workplace.workplace._id))
     );
   };
-  console.log(props.user);
 
   return (
     <nav className="sidebar">
