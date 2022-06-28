@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import NavItem from "./navItem/NavItem.jsx";
 import { connect } from "react-redux";
 import { sideMenu } from "./menu.config.js";
@@ -28,6 +29,8 @@ const EditableDropdown = React.lazy(() =>
 
 const Sidebar = (props) => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
   const { user, workplace } = props;
   const collections = workplace?.workplace?.collections?.map((collection) => {
     return {
@@ -87,7 +90,7 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-    if(typeof defaultValue?.value !== 'undefined') {
+    if (typeof defaultValue?.value !== "undefined") {
       dispatch(loadWorkplace(defaultValue?.value));
     }
   }, [user]);
@@ -108,7 +111,7 @@ const Sidebar = (props) => {
           userId
         )
       ).then(() => {
-        e.target.value = '';
+        e.target.value = "";
         dispatch(loadWorkplace(workplace.workplace._id));
       });
     }
@@ -179,7 +182,12 @@ const Sidebar = (props) => {
       </div>
 
       <div className="actions">
-        <MdOutlinePowerSettingsNew onClick={() => dispatch(logout())} />
+        <MdOutlinePowerSettingsNew
+          onClick={() => {
+            dispatch(logout());
+            navigate("/welcome");
+          }}
+        />
       </div>
     </nav>
   );
