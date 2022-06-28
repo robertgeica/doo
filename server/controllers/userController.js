@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorHandler = require("../utils/errorHandler");
 const generateAuthToken = require("../utils/generateAuthToken");
@@ -125,7 +126,7 @@ const sendVerificationEmail = asyncHandler(async (req, res, next) => {
     to: user.email,
     subject: `Verify your email`,
     html: `
-    <p>${process.env.URL}/verifyemail/${token}</p>
+    <p>${process.env.SERVER_URL}/verifyemail/${token}</p>
   `,
   };
 
@@ -176,7 +177,7 @@ const sendResetPasswordEmail = asyncHandler(async (req, res, next) => {
     to: req.body.email,
     subject: `Reset your password`,
     html: `
-    <p>${process.env.URL}/resetpassword/${user._id}/${token}</p>
+    <p>${process.env.SERVER_URL}/resetpassword/${user._id}/${token}</p>
   `,
   };
 
@@ -209,40 +210,53 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   }
 });
 
-const createProfile = async (user, email) => {
-  const url = `${process.env.URL}/api/user/profile/${user._id}`;
-  const profile = {
+const createProfile = async (createdUser, email) => {
+  const newProfile = {
     image: "user.png",
     name: email,
     notifications: [],
-    userId: user._id,
+    userId: createdUser._id,
   };
 
-  let config = {
-    headers: {
-      Authorization: "Bearer " + generateAuthToken(user._id),
-    },
-  };
+  const profile = new Profile({
+    ...newProfile,
+  });
 
-  await axios.post(url, profile, config);
+  const createdProfile = await profile.save();
+  const user = await User.findById(
+    mongoose.Types.ObjectId(createdUser._id)
+  ).select("-password");
+
+  if (user) {
+    user.profileId = createdProfile._id;
+    await user.save();
+  } else {
+    return next(new ErrorHandler("Cannot find user.", 404));
+  }
 };
 
-const createSettings = async (user) => {
-  const url = `${process.env.URL}/api/user/settings/${user._id}`;
-  const settings = {
+const createSettings = async (createdUser) => {
+  const newSettings = {
     preferences: {},
     theme: {},
   };
-  let config = {
-    headers: {
-      Authorization: "Bearer " + generateAuthToken(user._id),
-    },
-  };
-  await axios.post(url, settings, config);
+  const settings = new Settings({
+    ...newSettings,
+    userId: mongoose.Types.ObjectId(createdUser._id),
+  });
+
+  const createdSettings = await settings.save();
+  const user = await User.findById(mongoose.Types.ObjectId(createdUser._id)).select('-password');
+
+  if (user) {
+    user.settingsId = createdSettings._id;
+    await user.save();
+  } else {
+    return next(new ErrorHandler("Cannot find user.", 404));
+  }
 };
 
 const createDefaultWorkplace = async (user) => {
-  const url = `${process.env.URL}/api/user/workplace/${user._id}`;
   const defaultWorkplace = {
     userId: user._id,
     workplaceName: "Untitled",
