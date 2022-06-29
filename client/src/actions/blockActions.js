@@ -20,24 +20,29 @@ import {
   SUB_BLOCKS_LOAD_FAIL,
 } from "../constants/blockConstants";
 
-const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:4000/';
+const REACT_APP_SERVER_URL =
+  process.env.REACT_APP_SERVER_URL || "http://localhost:4000/";
 
 export const loadSubBlocks = (blockIds) => async (dispatch) => {
   try {
     dispatch({ type: SUB_BLOCKS_LOAD_REQUEST });
-    const endpoints = blockIds.map(
-      (id) => `${REACT_APP_SERVER_URL}api/block/${id}`
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.post(
+      `${REACT_APP_SERVER_URL}api/block/subblocks`,
+      { blockIds },
+      config
     );
 
-    await axios
-      .all(endpoints.map((endpoint) => axios.get(endpoint)))
-      .then((data) => {
-        const formatedData = data.map((item) => item.data.block);
-        dispatch({
-          type: SUB_BLOCKS_LOAD_SUCCESS,
-          payload: formatedData,
-        });
-      });
+    dispatch({
+      type: SUB_BLOCKS_LOAD_SUCCESS,
+      payload: data,
+    });
+
   } catch (error) {
     dispatch({ type: SUB_BLOCKS_LOAD_FAIL });
   }
