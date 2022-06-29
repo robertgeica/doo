@@ -1,13 +1,16 @@
 {
-  "name": "doocli",
+  "name": "d00",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
     "doo": "node app"
   },
+  "bin": {
+    "doo": "bin/doo"
+  },
   "author": "robertgeica",
   "license": "ISC",
-  "description": "command-line interface part of doocli application",
+  "description": "command-line interface part of doo application",
   "dependencies": {
     "axios": "^0.24.0",
     "chalk": "^4.1.2",

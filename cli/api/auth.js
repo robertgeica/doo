@@ -53,10 +53,13 @@ const getUser = async () => {
   };
   try {
     const res = await axios.get(`http://localhost:4000/api/user`, config);
-
     return res.data;
   } catch (error) {
-    if (error) apiError("Sorry, something went wrong.");
+    if (error) {
+      apiError("Sorry, something went wrong.");
+      keytar.deletePassword("doocli", "token");
+      keytar.deletePassword("doocli", "userId");
+    }
   }
 };
 

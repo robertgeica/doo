@@ -4,16 +4,23 @@ const {
   setWorkplace,
   getWorkplace,
   deleteWorkplace,
-  updateWorkplace
+  updateWorkplace,
 } = require("../api/workplace");
+const { getProfile } = require("../api/profile");
 const { renderWorkplaces, renderWorkplace } = require("../ui/workplace");
+
+const { actionNeededWarning } = require("../ui/util");
+const { checkConnectedUser } = require("../ui/user");
 
 const addWorkplaceCmd = {
   command: "aw",
   describe: "add workplace",
 
   async handler(argv) {
-    addWorkplace(argv._[1]);
+    const isConnectedUser = await checkConnectedUser();
+    if (isConnectedUser) {
+      addWorkplace(argv._[1]);
+    }
   },
 };
 
@@ -32,7 +39,15 @@ const setWorkplaceCmd = {
   describe: "set workplace",
 
   async handler(argv) {
-    setWorkplace(argv._[1]);
+    const isConnectedUser = await checkConnectedUser();
+    if (isConnectedUser) {
+      if (typeof argv._[1] === "undefined") {
+        return actionNeededWarning(
+          'Incomplete command. Tip: use "help" command for more info.'
+        );
+      }
+      setWorkplace(argv._[1]);
+    }
   },
 };
 
@@ -41,8 +56,19 @@ const viewWorkplaceCmd = {
   describe: "view current workplace",
 
   async handler() {
-    const crtWorkplace = await getWorkplace();
-    renderWorkplace(crtWorkplace);
+    const isConnectedUser = await checkConnectedUser();
+    const profile = await getProfile();
+
+    if (isConnectedUser) {
+      if (typeof profile.defaults.workplace === "undefined") {
+        return actionNeededWarning(
+          'Add a default workplace first. Tip: use "sw" command.'
+        );
+      }
+
+      const crtWorkplace = await getWorkplace();
+      renderWorkplace(crtWorkplace);
+    }
   },
 };
 
@@ -51,7 +77,16 @@ const editWorkplaceCmd = {
   describe: "edit workplace",
 
   async handler(argv) {
-    await updateWorkplace(argv._[1], argv._[2]);
+    const isConnectedUser = await checkConnectedUser();
+    const profile = await getProfile();
+    if (isConnectedUser) {
+      if (typeof argv._[1] === "undefined" || typeof argv._[2] === "undefined") {
+        return actionNeededWarning(
+          'Incomplete command. Tip: use "help" command for more info.'
+        );
+      }
+      await updateWorkplace(argv._[1], argv._[2]);
+    }
   },
 };
 
@@ -60,10 +95,18 @@ const deleteWorkplaceCmd = {
   describe: "delete workplace",
 
   async handler(argv) {
-    await deleteWorkplace(argv._[1]);
+    const isConnectedUser = await checkConnectedUser();
+    const profile = await getProfile();
+    if (isConnectedUser) {
+      if (typeof argv._[1] === "undefined") {
+        return actionNeededWarning(
+          'Incomplete command. Tip: use "help" command for more info.'
+        );
+      }
+      await deleteWorkplace(argv._[1]);
+    }
   },
 };
-
 
 module.exports = {
   addWorkplaceCmd,
@@ -71,5 +114,5 @@ module.exports = {
   setWorkplaceCmd,
   viewWorkplaceCmd,
   deleteWorkplaceCmd,
-  editWorkplaceCmd
+  editWorkplaceCmd,
 };

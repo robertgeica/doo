@@ -5,6 +5,8 @@ const { apiSuccess, apiError } = require("../ui/api");
 const { getWorkplace } = require("../api/workplace");
 const { getProfile } = require("./profile");
 
+const { actionNeededWarning } = require("../ui/util");
+
 const addCollection = async (name) => {
   const user = await getUser();
   const profile = await getProfile();
@@ -47,6 +49,11 @@ const getCollections = async () => {
   const profile = await getProfile();
   const crtWorkplace = await getWorkplace();
   const collectionId = profile.defaults.collection;
+
+  if (typeof profile.defaults.workplace === "undefined") {
+    return actionNeededWarning('Add a workplace first. Tip: use "sw" command.');
+  }
+
   const collections = crtWorkplace.collections.map((col) => {
     if (col.collectionId === collectionId) {
       return { name: col.collectionName, isDefault: true };
@@ -156,7 +163,7 @@ const updateCollection = async (name, newName) => {
     (collection) => collection.collectionName === name
   );
 
-  if (collection) {
+  if (collection.length !== 0) {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -164,8 +171,8 @@ const updateCollection = async (name, newName) => {
       },
     };
 
-    const id = await collection[0].collectionId;
     try {
+      const id = await collection[0].collectionId;
       await axios.patch(
         `http://localhost:4000/api/collection/${id}`,
         { name: newName },
@@ -176,13 +183,15 @@ const updateCollection = async (name, newName) => {
     } catch (error) {
       if (error) apiError("Sorry, something went wrong.");
     }
+  } else {
+    apiError("Sorry, something went wrong.");
   }
 };
 
-const addCollectionComment = async ( content) => {
+const addCollectionComment = async (content) => {
   const token = await keytar.getPassword("doocli", "token");
   const user = await getUser();
-  const {collection} = await getCollection();
+  const { collection } = await getCollection();
 
   if (collection) {
     const config = {
@@ -196,7 +205,7 @@ const addCollectionComment = async ( content) => {
 
     const body = {
       comments: [
-       ...collection.comments,
+        ...collection.comments,
         { accountId: user._id, accountName: user.username, content: content },
       ],
     };
@@ -215,7 +224,7 @@ const addCollectionComment = async ( content) => {
   }
 };
 
-const deleteCollectionComment = async ( commentIndex) => {
+const deleteCollectionComment = async (commentIndex) => {
   const token = await keytar.getPassword("doocli", "token");
   const { collection } = await getCollection();
   const filteredComments = await collection.comments.filter(
@@ -245,10 +254,10 @@ const deleteCollectionComment = async ( commentIndex) => {
   }
 };
 
-const addCollectionLabel = async ( text, color) => {
+const addCollectionLabel = async (text, color) => {
   const token = await keytar.getPassword("doocli", "token");
   const user = await getUser();
-  const {collection} = await getCollection();
+  const { collection } = await getCollection();
 
   if (collection) {
     const config = {
@@ -261,10 +270,7 @@ const addCollectionLabel = async ( text, color) => {
     const id = await collection._id;
 
     const body = {
-      labels: [
-       ...collection.labels,
-        { text, color },
-      ],
+      labels: [...collection.labels, { text, color }],
     };
 
     try {
@@ -274,15 +280,17 @@ const addCollectionLabel = async ( text, color) => {
         config
       );
 
-      apiSuccess(`Collection ${collection.name} has been updated with your label!`);
+      apiSuccess(
+        `Collection ${collection.name} has been updated with your label!`
+      );
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (error) apiError("Sorry, something went wrong.");
     }
   }
 };
 
-const deleteCollectionLabel = async ( labelIndex) => {
+const deleteCollectionLabel = async (labelIndex) => {
   const token = await keytar.getPassword("doocli", "token");
   const { collection } = await getCollection();
   const filteredLabels = await collection.labels.filter(
@@ -322,5 +330,5 @@ module.exports = {
   addCollectionComment,
   deleteCollectionComment,
   addCollectionLabel,
-  deleteCollectionLabel
+  deleteCollectionLabel,
 };
