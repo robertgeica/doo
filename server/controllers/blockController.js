@@ -159,10 +159,24 @@ const updateBlock = asyncHandler(async (req, res, next) => {
   }
 });
 
+const loadSubBlocks = asyncHandler(async (req, res, next) => {
+  const { blockIds } = req.body;
+
+  const records = await Block.find().where('_id').in(blockIds).exec();
+
+  if (records) {
+
+    res.json(records);
+  } else {
+    return next(new ErrorHandler("Block not found.", 404));
+  }
+});
+
 module.exports = {
   getBlock,
   createBlock,
   deleteBlock,
   getBlocks,
   updateBlock,
+  loadSubBlocks
 };
