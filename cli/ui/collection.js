@@ -19,7 +19,7 @@ const renderCollections = (collections) => {
 };
 
 const renderCollection = ({ collection }) => {
-  const icon = collection.collectionIcon;
+  const icon = collection.icon !== null ? collection.icon : "📁";
   console.log(
     `${icon} ${chalk.hex(workplace).bold(`@${collection.name}`)}`,
     `\t${collection.blocks.length} blocks`,
@@ -30,20 +30,31 @@ const renderCollection = ({ collection }) => {
 
 const renderCollectionComments = (collection) => {
   const { comments } = collection;
-  console.log(`Comments in ${chalk.hex(workplace).bold(collection.name)} collection:`)
+  console.log(
+    `Comments in ${chalk.hex(workplace).bold(collection.name)} collection:`
+  );
   comments.forEach((comment, index) => {
-      console.log(`${index}. ${comment.content}`, chalk.bold(`by ${comment.accountName}`));
+    console.log(
+      `${index}. ${comment.content}`,
+      chalk.bold(`by ${comment.accountName}`)
+    );
   });
-
 };
 
 const renderCollectionLabels = (collection) => {
   const { labels } = collection;
-  console.log(`Labels in ${chalk.hex(workplace).bold(collection.name)} collection:`)
-  labels.forEach((label, index) => {
-      console.log(chalk.hex(label.color)(`${index}. ${label.text}`));
-  });
 
+  console.log(
+    `Labels in ${chalk.hex(workplace).bold(collection.name)} collection:`
+  );
+  labels.forEach((label, index) => {
+    console.log(chalk.hex(label.color)(`${label.label}`));
+  });
 };
 
-module.exports = { renderCollections, renderCollection, renderCollectionComments, renderCollectionLabels };
+module.exports = {
+  renderCollections,
+  renderCollection,
+  renderCollectionComments,
+  renderCollectionLabels,
+};

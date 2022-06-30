@@ -5,20 +5,22 @@ const renderBlocks = (blocks, blockId) => {
   console.log(
     chalk.hex(normal)(`These are your blocks in current collection:`)
   );
-  blocks.forEach((block) => {
-    const icon = block.icon;
-    console.log(
-      `${icon} ${
-        block._id === blockId
-          ? `${chalk.hex(workplace).bold(`@${block.blockName}`)}`
-          : `${chalk.hex(workplace)(`@${block.blockName}`)}`
-      }`,
-      `\t${block.blockContent.status.label}`,
-      `\t${block.blockContent.priority}`,
-      `\t${block.blockContent.estimation}`,
-      `\t${block.comments.length} comments`
-    );
-  });
+
+    blocks.forEach((block) => {
+      const icon =  block.icon ? block.icon : "📁";
+      console.log(
+        `${icon} ${
+          block._id === blockId
+            ? `${chalk.hex(workplace).bold(`@${block.blockName}`)}`
+            : `${chalk.hex(workplace)(`@${block.blockName}`)}`
+        }`,
+        `\t${chalk
+          .hex(block.blockContent.status.color ? block.blockContent.status.color : '')
+          .bold(`${block.blockContent.status.label ? block.blockContent.status.label : ''}`)}`,
+        `\t${block.blockContent.priority}`,
+        `\t${block.comments.length} comments`
+      );
+    });
 
   console.log(
     chalk.hex(normal)(`Use 'doo sb [blockName]' to set a current block.`)
@@ -26,21 +28,22 @@ const renderBlocks = (blocks, blockId) => {
 };
 
 const renderBlock = (block) => {
-  const icon = "💽";
+  const icon = typeof block.icon !== "undefined" ? block.icon : "📁";
   console.log(
     `${icon} ${chalk.hex(workplace).bold(`@${block.blockName}`)}`,
-    `\t${block.blockContent.status}`,
+    `\t${chalk
+      .hex(block.blockContent.status.color ? block.blockContent.status.color : '')
+      .bold(`${block.blockContent.status.label ? block.blockContent.status.label : ''}`)}`,
     `\t${block.blockContent.priority}`,
-    `\t${block.blockContent.estimation}`,
-    `\t${block.blockType} type`,
+    `\t${block.blockContent.estimation}h`,
+    `\t${block.blockType.toUpperCase()}`,
     `\t${block.blockContent.deadline}`,
     `\t${block.blockContent.description}`,
     `\n${block.comments.length} comments`,
     `\t${block.blockContent.labels.length} labels`,
     `\t${block.blockContent.sessions.length} sessions`,
-    `\t${block.blockContent.milestones.length} milestones`,
-    `\t${block.blockContent.blocks.length} blocks`,
+    `\t${block.blockContent.blocks.length} blocks`
   );
-}
+};
 
 module.exports = { renderBlocks, renderBlock };

@@ -72,29 +72,26 @@ const getBlocks = async () => {
   const user = await getUser();
   const { collection } = await getCollection();
 
-  const blocks =  collection.blocks;
+  const blocks = collection.blocks;
   // console.log('get blocks api', blocks)
 
   if (user) {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
-      data: { ids: blocks}
+      data: { ids: blocks },
     };
     try {
-      const res = await axios.get(
-        `http://localhost:4000/api/block/`,
-        config,
-      );
+      const res = await axios.get(`http://localhost:4000/api/block/`, config);
 
       return res.data;
     } catch (error) {
       if (error) apiError("Sorry, something went wrong.");
     }
   }
-}
+};
 
 const setBlock = async (name) => {
   const user = await getUser();
@@ -129,32 +126,31 @@ const getBlock = async () => {
   const token = await keytar.getPassword("doocli", "token");
   const user = await getUser();
   const profile = await getProfile();
-
   const blockId = profile.defaults.block;
   if (user) {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
-      }
+        authorization: `Bearer ${token}`,
+      },
     };
     try {
       const res = await axios.get(
         `http://localhost:4000/api/block/${blockId}`,
-        config,
+        config
       );
       return res.data;
     } catch (error) {
       if (error) apiError("Sorry, something went wrong.");
     }
   }
-}
+};
 
 const deleteBlock = async (name) => {
   const token = await keytar.getPassword("doocli", "token");
   const { blocks } = await getBlocks();
 
-  const block = blocks.filter(block => block.blockName !== name);
+  const block = blocks.filter((block) => block.blockName === name);
   const blockId = block[0]._id;
 
   if (block) {
@@ -166,10 +162,7 @@ const deleteBlock = async (name) => {
     };
 
     try {
-      await axios.delete(
-        `http://localhost:4000/api/block/${blockId}`,
-        config
-      );
+      await axios.delete(`http://localhost:4000/api/block/${blockId}`, config);
 
       apiSuccess(`Block ${name} has been deleted!`);
     } catch (error) {
@@ -182,14 +175,15 @@ const updateBlock = async (updatedFields, blockName) => {
   const token = await keytar.getPassword("doocli", "token");
   // if blockName, call other api route
   const { block } = await getBlock();
-
+  const updatedContentFields = { ...updatedFields };
+  delete updatedContentFields.blockName;
 
   const newBlock = {
     ...block,
     blockName: updatedFields.blockName || block.blockName,
-    blockContent: { ...block.blockContent, ...updatedFields },
-  }
-  delete newBlock.blockContent.blockName;
+    blockContent: { ...block.blockContent, ...updatedContentFields },
+  };
+
   if (block) {
     const config = {
       headers: {
@@ -201,7 +195,7 @@ const updateBlock = async (updatedFields, blockName) => {
     try {
       await axios.patch(
         `http://localhost:4000/api/block/${block._id}`,
-        {block: newBlock},
+        { ...newBlock },
         config
       );
 
@@ -218,5 +212,5 @@ module.exports = {
   setBlock,
   getBlock,
   deleteBlock,
-  updateBlock
+  updateBlock,
 };

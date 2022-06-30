@@ -217,7 +217,7 @@ const addCollectionComment = async (content) => {
         config
       );
 
-      apiSuccess(`Collection ${name} has been updated with your comment!`);
+      apiSuccess(`Collection ${collection.name} has been updated with your comment!`);
     } catch (error) {
       if (error) apiError("Sorry, something went wrong.");
     }
@@ -269,8 +269,9 @@ const addCollectionLabel = async (text, color) => {
 
     const id = await collection._id;
 
+    const newLabel = { label: text, color: color};
     const body = {
-      labels: [...collection.labels, { text, color }],
+      labels: [...collection.labels, newLabel],
     };
 
     try {
