@@ -169,7 +169,6 @@ export const updateBlock = (block, blockId) => async (dispatch) => {
       type: BLOCK_UPDATE_SUCCESS,
       payload: data,
     });
-    // console.log(data.data, block)
 
     // dispatch(loadBlock(data.data));
   } catch (error) {

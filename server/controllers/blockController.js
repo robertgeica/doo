@@ -84,7 +84,6 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
   try {
     await block.remove();
 
-    console.log(res.body, res.data, req.data, req.body)
     if (req.body.parentType === 'block') {
       const parent = await Block.findById(
         mongoose.Types.ObjectId(block.parentId)
@@ -101,8 +100,6 @@ const deleteBlock = asyncHandler(async (req, res, next) => {
       // parent.markModified("blockContent");
       parent.blockContent.blocks = newBlocks;
       parent.markModified("blockContent");
-      console.log(parent.blokContent)
-      console.log(parent.blockContent.blocks, parent);
       parent.save();
     } else {
       const collection = await Collection.findById(

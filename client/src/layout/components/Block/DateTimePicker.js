@@ -8,7 +8,6 @@ const DateTimePicker = ({block, onChange, saveIcon}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
-    console.log(event.currentTarget)
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 

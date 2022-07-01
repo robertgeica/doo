@@ -23,7 +23,6 @@ const getSettings = asyncHandler(async (req, res, next) => {
 // @access        Private
 const createSettings = asyncHandler(async (req, res, next) => {
   const settingsExists = await Settings.find({ userId: mongoose.Types.ObjectId(req.params.userId) });
-  console.log(settingsExists.length)
 
   if (settingsExists.length !== 0) {
     return next(new ErrorHandler('Settings already exists.', 400));

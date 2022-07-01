@@ -6,7 +6,6 @@ import {
   AiOutlineDelete,
   AiOutlineSave,
 } from "react-icons/ai";
-import Modal from "react-modal";
 import {
   deleteBlock,
   updateBlock,
@@ -15,21 +14,16 @@ import {
   loadBlock,
 } from "../../../actions/blockActions";
 import { useDispatch } from "react-redux";
-import { DefaultEditor } from "react-simple-wysiwyg";
-import Status from "./Status";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import AddBlockInput from "./AddBlockInput";
-import { loadCollection } from "../../../actions/collectionActions";
-import BlockActions from "./BlockActions";
-import BlockComments from "./BlockComments";
-import Emoji from "../Emoji";
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
+import BlockModal from "./BlockModal";
+
+import BlockRow from "./BlockRow";
+
 const Block = (props) => {
   const { block, collection, user, subBlocks, blockState } = props;
   const dispatch = useDispatch();
-  
+
   const [newBlock, setNewBlock] = useState(block);
-  console.log('block ', block, 'new block', newBlock, 'block state', blockState?.block);
 
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
@@ -38,10 +32,8 @@ const Block = (props) => {
     setNewBlock(block);
   };
 
-
   const onChange = (value, key) => {
     if (key.split(".")[1] === "isRecurrent") {
-      console.log('isRecurrent')
       const newIsRecurrent = {
         ...newBlock.blockContent.isRecurrent,
         [value.id]: value.value,
@@ -68,201 +60,67 @@ const Block = (props) => {
     setNewBlock({ ...newBlock, [key]: value });
   };
 
-  const isDifferentBlockName = newBlock.blockName !== blockState?.block?.blockName;
-  
-  const isDifferentBlockContent =
-    JSON.stringify(blockState?.block?.blockContent) !==
-    JSON.stringify(newBlock.blockContent);
-
   const onUpdateBlock = () => {
     dispatch(updateBlock(newBlock, newBlock._id)).then(() =>
       dispatch(loadBlocks(collection?.blocks))
     );
     dispatch(loadBlock(newBlock));
-
   };
 
-  const saveIcon = () => (
-    <div className="action-item">
-      {(isDifferentBlockName || isDifferentBlockContent) && (
-        <AiOutlineSave onClick={() => onUpdateBlock()} />
-      )}
-    </div>
-  );
+  const saveIcon = () => {
+    const activeBlock =
+      blockState.block === null || newBlock.parentType === "collection"
+        ? block
+        : blockState.block;
+
+    const isDifferentBlockName = newBlock.blockName !== activeBlock.blockName;
+
+    const isDifferentBlockContent =
+      JSON.stringify(activeBlock.blockContent) !==
+      JSON.stringify(newBlock.blockContent);
+
+    return (
+      <div className="action-item">
+        {(isDifferentBlockName || isDifferentBlockContent) && (
+          <AiOutlineSave onClick={() => onUpdateBlock()} />
+        )}
+      </div>
+    );
+  };
 
   const onIconUpdate = (emoji) => {
     dispatch(updateBlock({ ...newBlock, icon: emoji }, newBlock._id));
-    setNewBlock({...newBlock, icon: emoji});
+    setNewBlock({ ...newBlock, icon: emoji });
   };
-
-  const updateLocalBlock = (block) => {
-    setNewBlock(block);
-  }
-
-
 
   return (
     <div className="block-container">
-      <Modal
+      <BlockModal
         isOpen={isOpen}
-        onRequestClose={closeModal}
-        contentLabel="Block modal"
-        ariaHideApp={false}
-      >
-        <div className="modal-header">
-          <div className="modal-header-actions">
-            <div className="action-item">
-              <AiOutlineDelete
-                onClick={() =>
-                  dispatch(deleteBlock(block._id)).then(() =>
-                    dispatch(loadCollection(collection._id))
-                  )
-                }
-              />
-            </div>
-            <div className="action-item">{saveIcon()}</div>
-            <BlockActions
-              newBlock={newBlock}
-              collection={collection}
-              onChange={onChange}
-              saveIcon={saveIcon}
-              showIcon
-              block={block}
-              onUpdateBlock={(block) => setNewBlock(block)}
-            />
-          </div>
+        openModal={openModal}
+        closeModal={closeModal}
+        block={block}
+        newBlock={newBlock}
+        collection={collection}
+        saveIcon={saveIcon}
+        onChange={onChange}
+        setNewBlock={setNewBlock}
+        subBlocks={subBlocks}
+        blockState={blockState}
+        user={user}
+        updateLocalBlock={() => setNewBlock(block)}
+      />
 
-          <AiOutlineCloseCircle onClick={closeModal} />
-        </div>
-        <div className="modal-container">
-          <div className="modal-side">
-            <input
-              style={{ color: "black" }}
-              className="block-title-input"
-              onInput={(e) => onChange(e.target.value, "blockName")}
-              value={newBlock.blockName}
-            />
-
-            <DefaultEditor
-              value={newBlock.blockContent.description}
-              onChange={(e) =>
-                onChange(e.target.value, "blockContent.description")
-              }
-            />
-
-            <BlockComments
-              block={newBlock}
-              user={user}
-              collection={collection}
-              onUpdateBlock={(block) => setNewBlock(block)}
-            />
-          </div>
-
-          <div className="modal-blocks">
-            <h2>Blocks</h2>
-            {typeof subBlocks !== "undefined" &&
-            subBlocks?.length !== 0 &&
-            subBlocks !== null
-              ? subBlocks.map((sub_block) => (
-                  <div
-                    className="block-row"
-                    style={{
-                      flexDirection: "column",
-                      margin: "0 0 1em 0",
-                      border: "1px solid grey",
-                      padding: "0.5em",
-                    }}
-                  >
-                    <div
-                      className="block-name"
-                      onClick={() => {
-                        openModal();
-                        dispatch(loadBlock(sub_block));
-                        setNewBlock(sub_block);
-                      }}
-                    >
-                      {sub_block?.blockName}
-                    </div>
-
-                    <div className="block-actions">
-                      <BlockActions
-                        newBlock={sub_block}
-                        collection={collection}
-                        onChange={onChange}
-                        saveIcon={saveIcon}
-                        // showStatusIcon
-                        // showPriorityIcon
-                        hideStatusIcon
-                        block={sub_block}
-                        onUpdateBlock={() => {
-                          dispatch(loadSubBlocks(newBlock.blockContent.blocks));
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))
-              : ""}
-
-            <AddBlockInput
-              parentId={newBlock._id}
-              userId={user._id}
-              fullWidth
-              isBlockParent={true}
-              // block={newBlock}
-              block={blockState?.block}
-              updateLocalBlock={updateLocalBlock}
-            />
-          </div>
-        </div>
-      </Modal>
-
-      <div className="block-row">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "30%",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            <Emoji parent={newBlock} onUpdate={onIconUpdate} />
-            <div
-              className="block-name"
-              onClick={() => {
-                openModal();
-                dispatch(loadBlock(newBlock));
-              }}
-            >
-              {newBlock.blockName}
-            </div>
-          </div>
-
-          <Status
-            block={newBlock}
-            collection={collection}
-            onChange={onChange}
-            saveIcon={saveIcon}
-            showIcon={false}
-          />
-        </div>
-
-        <div className="block-actions">
-          <BlockActions
-            newBlock={newBlock}
-            collection={collection}
-            onChange={onChange}
-            saveIcon={saveIcon}
-            hideStatusIcon={false}
-            block={block}
-            onUpdateBlock={(block) => setNewBlock(block)}
-          />
-
-          <div className="block-item">
-            {newBlock.comments.length} <FaRegComments />
-          </div>
-        </div>
-      </div>
+      <BlockRow
+        openModal={openModal}
+        block={block}
+        newBlock={newBlock}
+        collection={collection}
+        onIconUpdate={onIconUpdate}
+        saveIcon={saveIcon}
+        onChange={onChange}
+        setNewBlock={setNewBlock}
+      />
     </div>
   );
 };

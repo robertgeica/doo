@@ -15,9 +15,10 @@ export default function BlockActions({
   hideStatusIcon,
   block,
   onUpdateBlock,
+  styles
 }) {
   return (
-    <div className="block-actions">
+    <div className="block-actions" style={{...styles}}>
       <div className="block-item">
         <Status
           block={newBlock}
