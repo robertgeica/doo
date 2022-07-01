@@ -43,6 +43,22 @@ body {
   }
 }
 
+.button-welcome {
+  cursor: pointer;
+  border: 0;
+  border-radius: 10px;
+  background-color: #0099ff;
+  padding: .7em 1.5em;
+  margin: .5em;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+
+  &:hover {
+    background-color: darken($color: #0099ff, $amount: 10);
+  }
+}
+
 .wave-wrapper {
   height: 100vh;
   background: url(./assets/wave.svg) no-repeat;

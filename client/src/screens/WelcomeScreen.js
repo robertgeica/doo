@@ -8,18 +8,31 @@ const WelcomeScreen = (state) => {
   const { loading, error, user } = state.auth;
 
   return (
-    <div>
-      <h1>Hi, {user ? user.email : 'traveler'}</h1>
-      {user 
-      ? <button onClick={() => dispatch(logout())}>Logout</button>
-      : <div>
-        <Link to="/register">Register</Link><br/>
-        <Link to="/login">Login</Link>
+    <div className="wave-wrapper">
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {user ? (
+          <button onClick={() => dispatch(logout())}>Logout</button>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Link className="button-welcome" to="/register">
+              Register
+            </Link>
+            <br />
+            <Link className="button-welcome" to="/login">
+              Login
+            </Link>
+          </div>
+        )}
       </div>
-      }
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   auth: state.userReducer,
