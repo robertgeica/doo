@@ -1,12 +1,12 @@
 {
   "name": "d00",
-  "version": "1.0.7",
-  "main": "app.js",
+  "version": "1.0.11",
   "scripts": {
-    "doo": "node app"
+    "doo": "node app.js"
   },
+  "main": "bin/app.js",
   "bin": {
-    "doo": "bin/doo"
+    "doo": "./app.js"
   },
   "author": "robertgeica",
   "license": "ISC",
@@ -14,7 +14,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
-    "d00": "^1.0.2",
     "inquirer": "^7.3.3",
     "keytar": "^7.7.0",
     "yargs": "^17.2.1"
